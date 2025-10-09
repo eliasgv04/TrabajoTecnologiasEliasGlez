@@ -1,0 +1,18 @@
+<div class="card">
+  <h2>Crear cuenta</h2>
+  <div class="form">
+    <label for="email">Email</label>
+    <input id="email" type="email" [(ngModel)]="email" name="email" />
+
+    <label for="pwd1">Contraseña</label>
+    <input id="pwd1" type="password" [(ngModel)]="pwd1" name="pwd1" />
+
+    <label for="pwd2">Confirmar contraseña</label>
+    <input id="pwd2" type="password" [(ngModel)]="pwd2" name="pwd2" />
+
+    <button class="btn btn-primary" (click)="registrar()">Registrarme</button>
+  </div>
+  <p class="ok" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <div class="meta"><a class="btn btn-outline" routerLink="/login">¿Ya tienes cuenta? Inicia sesión</a></div>
+</div>

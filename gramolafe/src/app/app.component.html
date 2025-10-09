@@ -1,0 +1,37 @@
+<header class="topbar">
+  <div class="brand">
+    <span class="disc"></span>
+    <a routerLink="/home" class="title" routerLinkActive="active">Gramola</a>
+  </div>
+  <nav class="links" aria-label="Main navigation">
+    <a *ngIf="!(isLoggedIn$ | async) || !router.url.startsWith('/queue')" routerLink="/home" routerLinkActive="active">Inicio</a>
+    <a *ngIf="(isLoggedIn$ | async)" routerLink="/queue" routerLinkActive="active">Cola</a>
+  </nav>
+  <div class="actions">
+    <ng-template [ngIf]="(isLoggedIn$ | async)">
+      <button class="btn outline" (click)="onLogout()">Salir</button>
+    </ng-template>
+  </div>
+</header>
+
+<main class="page">
+  <router-outlet />
+</main>
+
+<footer class="foot">© {{ year }} Gramola — Música para tu bar</footer>
+
+<style>
+  .topbar{display:flex;align-items:center;gap:1rem;padding:.75rem 1rem;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:10}
+  .brand{display:flex;align-items:center;gap:.5rem}
+  .title{text-decoration:none;color:#222;font-weight:700}
+  .disc{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ff4bc7,#7a57ff)}
+  .links{display:flex;gap:1rem;margin-left:1rem}
+  .links a{text-decoration:none;color:#333}
+  .links a.active{color:#7a57ff}
+  .actions{margin-left:auto}
+  .btn{display:inline-block;padding:.45rem .9rem;border-radius:999px;background:#7a57ff;color:#fff;text-decoration:none;border:0}
+  .btn.outline{background:transparent;color:#7a57ff;border:1px solid #7a57ff}
+  .btn:hover{filter:brightness(.95)}
+  .page{padding:1rem}
+  .foot{border-top:1px solid #eee;margin-top:2rem;padding:1rem;color:#777;text-align:center}
+</style>

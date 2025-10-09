@@ -1,0 +1,6 @@
+.card{max-width:420px;margin:2rem auto;padding:1.5rem;border-radius:14px;background:var(--card);border:1px solid rgba(255,255,255,.06)}
+label{display:block;margin:.5rem 0 .25rem}
+input{width:100%;max-width:100%;box-sizing:border-box;padding:.5rem .75rem;border:1px solid rgba(255,255,255,.15);border-radius:8px;background:transparent;color:inherit}
+.card form{display:block}
+.meta{display:flex;justify-content:space-between;margin-top:.75rem;gap:.5rem}
+.error{color:#ff7b7e;margin-top:.75rem}
