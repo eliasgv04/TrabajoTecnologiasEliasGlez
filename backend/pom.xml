@@ -46,6 +46,13 @@
       <artifactId>spring-security-crypto</artifactId>
     </dependency>
 
+    <!-- Stripe Java SDK for real (test-mode) payments -->
+    <dependency>
+      <groupId>com.stripe</groupId>
+      <artifactId>stripe-java</artifactId>
+      <version>24.10.0</version>
+    </dependency>
+
     <!-- Devtools (optional at runtime) -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false)
     private boolean verified = true;
 
+    @Column(nullable = false)
+    private int coins = 0; // saldo de monedas para pagos simulados
+
     @Column(name = "created_at", nullable = true)
     private LocalDateTime createdAt;
 
@@ -50,6 +53,9 @@ public class User {
 
     public boolean isVerified() { return verified; }
     public void setVerified(boolean verified) { this.verified = verified; }
+
+    public int getCoins() { return coins; }
+    public void setCoins(int coins) { this.coins = coins; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -34,4 +34,16 @@ export class AppComponent {
       }
     });
   }
+
+  onBrandClick(evt: MouseEvent) {
+    // If logged in, clicking the brand logs out; if not, allow the routerLink to navigate to /home
+    const sub = this.isLoggedIn$.subscribe(is => {
+      if (is) {
+        evt.preventDefault();
+        this.onLogout();
+      }
+    });
+    // Ensure subscription is short-lived
+    setTimeout(() => sub.unsubscribe(), 0);
+  }
 }

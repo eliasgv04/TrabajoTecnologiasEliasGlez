@@ -1,7 +1,13 @@
 <header class="topbar">
   <div class="brand">
     <span class="disc"></span>
-    <a routerLink="/home" class="title" routerLinkActive="active">Gramola</a>
+    <a
+      class="title"
+      [class.clickable]="(isLoggedIn$ | async)"
+      (click)="onBrandClick($event)"
+      routerLink="/home"
+      routerLinkActive="active"
+      >Gramola</a>
   </div>
   <nav class="links" aria-label="Main navigation">
     <a *ngIf="!(isLoggedIn$ | async) || !router.url.startsWith('/queue')" routerLink="/home" routerLinkActive="active">Inicio</a>
@@ -24,6 +30,7 @@
   .topbar{display:flex;align-items:center;gap:1rem;padding:.75rem 1rem;border-bottom:1px solid #eee;position:sticky;top:0;background:#fff;z-index:10}
   .brand{display:flex;align-items:center;gap:.5rem}
   .title{text-decoration:none;color:#222;font-weight:700}
+  .title.clickable{cursor:pointer}
   .disc{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#ff4bc7,#7a57ff)}
   .links{display:flex;gap:1rem;margin-left:1rem}
   .links a{text-decoration:none;color:#333}

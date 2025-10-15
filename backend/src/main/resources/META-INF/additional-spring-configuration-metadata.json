@@ -1,0 +1,41 @@
+{
+  "groups": [
+    {
+      "name": "spotify",
+      "type": "edu.uclm.esi.gramola.config.SpotifyProperties",
+      "sourceType": "edu.uclm.esi.gramola.config.SpotifyProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "spotify.clientId",
+      "type": "java.lang.String",
+      "description": "Spotify API Client ID used for app authentication."
+    },
+    {
+      "name": "spotify.clientSecret",
+      "type": "java.lang.String",
+      "description": "Spotify API Client Secret used for app authentication."
+    },
+    {
+      "name": "spotify.redirectUri",
+      "type": "java.lang.String",
+      "description": "Redirect URI for Spotify OAuth callback (must be whitelisted in Spotify Dashboard)."
+    },
+    {
+      "name": "app.pricePerSong",
+      "type": "java.lang.Integer",
+      "description": "Precio por canción en monedas para pago simulado."
+    },
+    {
+      "name": "stripe.secretKey",
+      "type": "java.lang.String",
+      "description": "Stripe Secret Key (sk_test_...) para modo real de pruebas."
+    },
+    {
+      "name": "stripe.publishableKey",
+      "type": "java.lang.String",
+      "description": "Stripe Publishable Key (pk_test_...) para el front-end."
+    }
+  ]
+}
