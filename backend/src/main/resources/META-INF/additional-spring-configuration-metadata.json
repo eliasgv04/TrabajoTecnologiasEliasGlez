@@ -4,6 +4,16 @@
       "name": "spotify",
       "type": "edu.uclm.esi.gramola.config.SpotifyProperties",
       "sourceType": "edu.uclm.esi.gramola.config.SpotifyProperties"
+    },
+    {
+      "name": "app",
+      "type": "java.lang.Object",
+      "sourceType": "java.lang.Object"
+    },
+    {
+      "name": "stripe",
+      "type": "java.lang.Object",
+      "sourceType": "java.lang.Object"
     }
   ],
   "properties": [
