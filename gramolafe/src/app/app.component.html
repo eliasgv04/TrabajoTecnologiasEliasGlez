@@ -10,11 +10,13 @@
       >Gramola</a>
   </div>
   <nav class="links" aria-label="Main navigation">
-    <a *ngIf="!(isLoggedIn$ | async) || !router.url.startsWith('/queue')" routerLink="/home" routerLinkActive="active">Inicio</a>
     <a *ngIf="(isLoggedIn$ | async)" routerLink="/queue" routerLinkActive="active">Cola</a>
+    <a routerLink="/plans" routerLinkActive="active">Planes</a>
+    <a *ngIf="!(isLoggedIn$ | async)" routerLink="/home" routerLinkActive="active">Inicio</a>
   </nav>
   <div class="actions">
     <ng-template [ngIf]="(isLoggedIn$ | async)">
+      <a class="btn outline" routerLink="/account" routerLinkActive="active">Cuenta</a>
       <button class="btn outline" (click)="onLogout()">Salir</button>
     </ng-template>
   </div>
@@ -36,7 +38,7 @@
   .links a{text-decoration:none;color:#333}
   .links a.active{color:#7a57ff}
   .actions{margin-left:auto}
-  .btn{display:inline-block;padding:.45rem .9rem;border-radius:999px;background:#7a57ff;color:#fff;text-decoration:none;border:0}
+  .btn{display:inline-block;padding:.45rem .9rem;border-radius:999px;background:#7a57ff;color:#fff;text-decoration:none;border:0;margin-left:.5rem}
   .btn.outline{background:transparent;color:#7a57ff;border:1px solid #7a57ff}
   .btn:hover{filter:brightness(.95)}
   .page{padding:1rem}

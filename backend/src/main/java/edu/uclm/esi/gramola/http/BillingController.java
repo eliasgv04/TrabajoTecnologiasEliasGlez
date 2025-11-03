@@ -3,6 +3,7 @@ package edu.uclm.esi.gramola.http;
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.entities.User;
 import org.springframework.beans.factory.annotation.Value;
+import edu.uclm.esi.gramola.services.SpotifyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
@@ -13,12 +14,14 @@ import java.util.Map;
 @RequestMapping("/billing")
 public class BillingController {
     private final UserRepository users;
+    private final SpotifyService spotifyService;
 
     @Value("${app.pricePerSong:1}")
     private int pricePerSong;
 
-    public BillingController(UserRepository users) {
+    public BillingController(UserRepository users, SpotifyService spotifyService) {
         this.users = users;
+        this.spotifyService = spotifyService;
     }
 
     @GetMapping("/price")
@@ -46,5 +49,15 @@ public class BillingController {
         u.setCoins(u.getCoins() + amount);
         users.save(u);
         return ResponseEntity.ok(Map.of("coins", u.getCoins()));
+    }
+
+    @GetMapping("/estimate")
+    public Map<String, Object> estimate(HttpSession session, @RequestParam("trackId") String trackId) {
+        int popularity = 0;
+        try {
+            popularity = spotifyService.getTrackPopularity(session, trackId);
+        } catch (Exception ignored) {}
+        int price = (popularity <= 40) ? 1 : (popularity <= 70 ? 2 : 3);
+        return Map.of("trackId", trackId, "price", price, "popularity", popularity);
     }
 }

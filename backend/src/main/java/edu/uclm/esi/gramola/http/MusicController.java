@@ -30,4 +30,12 @@ public class MusicController {
         return spotify.getTrackById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Track no encontrado"));
     }
+
+    @GetMapping("/playlist")
+    public ResponseEntity<?> playlist(@RequestParam("uri") String uri) {
+        if (uri == null || uri.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Parámetro uri requerido");
+        }
+        return ResponseEntity.ok(spotify.getPlaylistTracks(uri.trim()));
+    }
 }

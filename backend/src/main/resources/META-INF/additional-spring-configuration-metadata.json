@@ -46,6 +46,11 @@
       "name": "stripe.publishableKey",
       "type": "java.lang.String",
       "description": "Stripe Publishable Key (pk_test_...) para el front-end."
+    },
+    {
+      "name": "spring.mail.from",
+      "type": "java.lang.String",
+      "description": "Dirección remitente por defecto para los emails salientes."
     }
   ]
 }

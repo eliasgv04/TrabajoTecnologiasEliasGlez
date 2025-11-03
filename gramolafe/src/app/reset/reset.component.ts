@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 
 @Component({
@@ -12,20 +12,27 @@ import { UserService } from '../user.service';
   styleUrls: ['./reset.component.css']
 })
 export class ResetComponent {
-  email = '';
+  token = '';
   pwd1 = '';
   pwd2 = '';
   message = '';
   error = '';
   loading = false;
 
-  constructor(private service: UserService, private router: Router) {}
+  constructor(private service: UserService, private router: Router, private route: ActivatedRoute) {
+    this.route.queryParamMap.subscribe(params => {
+      this.token = (params.get('token') || '').trim();
+      if (!this.token) {
+        this.error = 'Token no encontrado. Abre esta página desde el enlace del correo de restablecimiento.';
+      }
+    });
+  }
 
   submit() {
     this.message = '';
     this.error = '';
-    if (!this.email) {
-      this.error = 'El correo es obligatorio';
+    if (!this.token) {
+      this.error = 'Falta el token. Usa el enlace recibido por correo.';
       return;
     }
     if (this.pwd1 !== this.pwd2) {
@@ -33,7 +40,7 @@ export class ResetComponent {
       return;
     }
     this.loading = true;
-    this.service.reset(this.email, this.pwd1, this.pwd2).subscribe({
+    this.service.reset(this.token, this.pwd1, this.pwd2).subscribe({
       next: () => {
         this.message = 'Contraseña actualizada. Ahora puedes iniciar sesión';
         this.loading = false;

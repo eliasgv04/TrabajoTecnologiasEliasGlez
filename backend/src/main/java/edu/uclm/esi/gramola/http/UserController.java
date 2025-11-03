@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import edu.uclm.esi.gramola.entities.User;
-import edu.uclm.esi.gramola.services.RegisterResult;
 import edu.uclm.esi.gramola.services.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -38,11 +41,10 @@ public class UserController {
             String email = body.getOrDefault("email", "").trim();
             String pwd1 = body.getOrDefault("pwd1", "").trim();
             String pwd2 = body.getOrDefault("pwd2", "").trim();
-            RegisterResult res = userService.register(email, pwd1, pwd2);
-            // Auto-login after registration (session auth)
-            session.setAttribute("userId", res.id());
-            log.info("Registro correcto");
-            return Map.of("message", "Registro correcto");
+            userService.register(email, pwd1, pwd2);
+            // No auto-login: requerir verificación por email antes de poder iniciar sesión
+            log.info("Registro correcto, verificación requerida");
+            return Map.of("message", "Registro correcto. Revisa tu correo para verificar la cuenta");
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (DataIntegrityViolationException e) {
@@ -52,16 +54,21 @@ public class UserController {
     }
 
     @PutMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, String> login(HttpSession session, @RequestBody Map<String, Object> info) {
+    public Map<String, Object> login(HttpSession session, @RequestBody Map<String, Object> info) {
         String email = (info.getOrDefault("email", "") + "").trim();
         String pwd = (info.getOrDefault("pwd", "") + "").trim();
+        var opt = this.userService.findUserByEmail(email);
+        if (opt.isPresent() && !opt.get().isVerified()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+                "Tu cuenta no está verificada. Revisa tu correo y haz clic en el enlace de verificación.");
+        }
         User user = this.userService.loginByEmail(email, pwd);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Credenciales inválidas");
         }
     session.setAttribute("userId", user.getId());
     log.info("Login correcto");
-        return Map.of("message", "Login correcto");
+        return Map.of("message", "Login correcto", "email", user.getEmail());
     }
 
     @DeleteMapping(path = "/removeUser", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -83,6 +90,15 @@ public class UserController {
         return Map.of("message", "Logout correcto");
     }
 
+    @GetMapping(path = "/verify")
+    public ResponseEntity<Void> verify(@RequestParam("token") String token) {
+        boolean ok = this.userService.verifyToken(token);
+        if (!ok) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido o caducado");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "http://localhost:4200/login?verified=1");
+        return ResponseEntity.status(302).headers(headers).build();
+    }
+
     @PostMapping(path = "/reset", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> resetByEmail(@RequestBody Map<String, String> body) {
         String email = body.getOrDefault("email", "").trim();
@@ -101,6 +117,35 @@ public class UserController {
             boolean ok = this.userService.resetPasswordByEmail(email, pwd1);
             if (!ok) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado");
             log.info("Contraseña actualizada");
+            return Map.of("message", "Contraseña actualizada");
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
+        }
+    }
+
+    @PostMapping(path = "/reset/request", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> requestReset(@RequestBody Map<String, String> body) {
+        String email = body.getOrDefault("email", "").trim();
+        if (email.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email obligatorio");
+        }
+        this.userService.requestPasswordReset(email);
+        // No revelar si existe o no
+        return Map.of("message", "Si el correo existe, hemos enviado un enlace para restablecer la contraseña");
+    }
+
+    @PostMapping(path = "/reset/confirm", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> confirmReset(@RequestBody Map<String, String> body) {
+        String token = body.getOrDefault("token", "").trim();
+        String pwd1 = body.getOrDefault("pwd1", "").trim();
+        String pwd2 = body.getOrDefault("pwd2", "").trim();
+        if (token.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campos obligatorios");
+        }
+        try {
+            boolean ok = this.userService.resetPasswordByToken(token, pwd1, pwd2);
+            if (!ok) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido o caducado");
+            log.info("Contraseña restablecida por token");
             return Map.of("message", "Contraseña actualizada");
         } catch (IllegalArgumentException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());

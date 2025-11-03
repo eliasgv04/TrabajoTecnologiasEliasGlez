@@ -21,8 +21,8 @@ export class ForgotComponent {
     this.message = '';
     this.error = '';
     this.service.forgot(this.email).subscribe({
-      next: () => this.message = 'Si el correo existe, recibirás un enlace para restablecer la contraseña (simulado).',
-      error: () => this.message = 'Si el correo existe, recibirás un enlace para restablecer la contraseña (simulado).'
+      next: () => this.message = 'Si el correo existe, recibirás un enlace para restablecer la contraseña.',
+      error: () => this.message = 'Si el correo existe, recibirás un enlace para restablecer la contraseña.'
     });
   }
 }

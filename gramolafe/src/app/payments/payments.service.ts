@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentsService {
-  private baseUrl = 'http://localhost:8000/payments';
+  private baseUrl = '/api/payments';
   constructor(private http: HttpClient) {}
 
   getPublicKey(): Observable<{ publishableKey: string }> {

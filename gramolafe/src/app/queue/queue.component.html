@@ -1,9 +1,8 @@
 <section class="queue container">
   <h2>Tu Gramola</h2>
   <div class="billing">
-    <span>Precio por canción: {{ pricePerSong }} moneda(s)</span>
+    <span>Precio por canción: 1–3 monedas según popularidad</span>
     <span>• Saldo: {{ coins }}</span>
-    <button class="btn" (click)="demoRecharge()" type="button">Añadir saldo</button>
   </div>
 
   <form (ngSubmit)="search()" class="search">
@@ -21,11 +20,19 @@
         <div class="meta">
           <div class="title">{{ t.title }}</div>
           <div class="sub">{{ t.artists.join(', ') }} — {{ t.album }}</div>
+          <div class="price-pill" *ngIf="priceFor(t.id) as p">Coste: <strong>{{ p }}</strong> moneda(s) <span class="muted" *ngIf="popularityFor(t.id) as pop">(popularidad {{ pop }})</span></div>
         </div>
-        <div class="actions-inline">
+        <div class="actions-inline" *ngIf="pendingAddId !== t.id">
           <button class="btn outline" (click)="add(t)" [disabled]="isInQueue(t.id)">
-            {{ isInQueue(t.id) ? ('En cola (pos. ' + (inQueuePosition(t.id)+1) + ')' ) : 'Añadir a cola' }}
+            {{ isInQueue(t.id) ? ('En cola (pos. ' + (inQueuePosition(t.id)+1) + ')' ) : ('Añadir a cola' + (priceFor(t.id) ? ' (' + priceFor(t.id) + ' moneda/s)' : '')) }}
           </button>
+        </div>
+        <div class="confirm" *ngIf="pendingAddId === t.id">
+          <span>Esta canción costará <strong>{{ priceFor(t.id) }}</strong> moneda(s).</span>
+          <div class="confirm-actions">
+            <button class="btn" (click)="performAdd(t, priceFor(t.id)!)">Confirmar</button>
+            <button class="btn outline" (click)="cancelAdd()">Cancelar</button>
+          </div>
         </div>
       </li>
     </ul>
@@ -33,15 +40,17 @@
 
   <div class="current">
     <div class="header">
-      <h3>Cola actual</h3>
-      <button class="btn outline" (click)="clear()" [disabled]="!queue.length">Vaciar</button>
+  <h3>Cola actual</h3>
+  <button class="btn outline" (click)="clear()" [disabled]="!queue.length">Vaciar</button>
     </div>
+    <p class="muted" *ngIf="!queue.length && fallbackTracks?.length">Reproduciendo lista por defecto cuando la cola está vacía.</p>
     <ul>
       <li *ngFor="let i of queue">
         <img *ngIf="i.imageUrl" [src]="i.imageUrl" alt="" />
         <div class="meta">
           <div class="title">{{ i.title }}</div>
           <div class="sub">{{ i.artists }} — {{ i.album }}</div>
+          <div class="price-pill" *ngIf="i.chargedPrice">Cobró: <strong>{{ i.chargedPrice }}</strong> moneda(s) <span class="muted" *ngIf="i.popularity">(popularidad {{ i.popularity }})</span></div>
         </div>
         <div class="actions-inline">
           <button class="btn outline" (click)="remove(i)">Quitar</button>
@@ -53,7 +62,7 @@
 
   <div class="toast" *ngIf="toast.visible">{{ toast.message }}</div>
 
-  <app-payments *ngIf="showPayments" (paid)="onPaid()" (closed)="showPayments=false"></app-payments>
+  
 
   <!-- Playback bar (simulated) -->
   <div class="player" *ngIf="current">
@@ -78,6 +87,30 @@
     </div>
     <div class="meta">
       <span class="muted">Quedan {{ remainingSongs }} canción(es) — Tiempo estimado {{ formatTime(remainingQueueMs) }}</span>
+    </div>
+  </div>
+  <!-- Fallback player UI when playing default playlist -->
+  <div class="player" *ngIf="!current && currentFallback as fb">
+    <img *ngIf="fb.imageUrl" class="cover" [src]="fb.imageUrl" alt="" />
+    <div class="info">
+      <div class="title">{{ fb.title }}</div>
+      <div class="sub">{{ fb.artists.join(', ') }} — {{ fb.album }}</div>
+    </div>
+    <div class="controls">
+      <button class="btn icon circle" (click)="previous()" title="Anterior">⏮</button>
+      <button class="btn icon circle" (click)="togglePause()" [attr.title]="isPaused ? 'Reanudar' : 'Pausar'">{{ isPaused ? '▶' : '⏸' }}</button>
+      <button class="btn icon circle" (click)="next()" title="Siguiente">⏭</button>
+      <button class="btn icon circle" (click)="stop()" title="Detener">⏹</button>
+    </div>
+    <div class="progress" (click)="seek($event)" (mousedown)="onProgressDown($event)">
+      <div class="bar"><span [style.width.%]="progressPercent"></span></div>
+      <div class="times">
+        <span>{{ formatTime(totalMs - remainingMs) }}</span>
+        <span>{{ formatTime(totalMs) }}</span>
+      </div>
+    </div>
+    <div class="meta">
+      <span class="muted">Reproduciendo lista por defecto</span>
     </div>
   </div>
 </section>

@@ -1,0 +1,16 @@
+<div class="card">
+  <h2>Mi cuenta</h2>
+  <p class="muted">Correo: <strong>{{ info?.email || '—' }}</strong></p>
+  <p class="muted">Suscripción activa hasta: <strong>{{ info && info.activeUntil ? (info.activeUntil.split('T')[0]) : '—' }}</strong></p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <div class="sep" aria-hidden="true"></div>
+  <h3>Lista por defecto</h3>
+  <p class="muted">Si la cola está vacía, la app reproducirá de forma automática esta lista de Spotify.</p>
+  <label>
+    <span class="muted">URI/URL de playlist</span>
+    <input type="text" [(ngModel)]="settings!.spotifyPlaylistUri" (change)="saveSettings()" (keyup.enter)="saveSettings()" placeholder="spotify:playlist:... o https://open.spotify.com/playlist/..." aria-label="URI o URL de playlist de Spotify" />
+  </label>
+  <div class="actions">
+    <button type="button" class="btn" (click)="saveSettings()" [disabled]="saving" aria-label="Guardar playlist por defecto">{{ saving ? 'Guardando…' : 'Guardar' }}</button>
+  </div>
+</div>

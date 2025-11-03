@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private baseUrl = 'http://localhost:8000/users';
+  private baseUrl = '/api/users';
 
   constructor(private http: HttpClient) {}
 
@@ -13,9 +13,9 @@ export class UserService {
     return this.http.post<any>(`${this.baseUrl}/register`, info);
   }
 
-  login(email: string, pwd: string): Observable<void> {
+  login(email: string, pwd: string): Observable<{ message: string; email: string }> {
     const info = { email, pwd };
-    return this.http.put<void>(`${this.baseUrl}/login`, info);
+    return this.http.put<{ message: string; email: string }>(`${this.baseUrl}/login`, info);
   }
 
   logout(): Observable<void> {
@@ -27,11 +27,10 @@ export class UserService {
   }
 
   forgot(email: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/forgot`, { email });
+    return this.http.post<void>(`${this.baseUrl}/reset/request`, { email });
   }
 
   reset(token: string, pwd1: string, pwd2: string): Observable<void> {
-    // Simplified reset by email (no token)
-    return this.http.post<void>(`${this.baseUrl}/reset`, { email: token, pwd1, pwd2 });
+    return this.http.post<void>(`${this.baseUrl}/reset/confirm`, { token, pwd1, pwd2 });
   }
 }

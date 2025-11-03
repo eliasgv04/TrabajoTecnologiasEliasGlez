@@ -1,0 +1,7 @@
+.card{max-width:720px;margin:2rem auto;padding:2rem;border-radius:16px;background:var(--card,#fff);border:1px solid rgba(0,0,0,.06)}
+.muted{color:#666}
+.error{color:#ff7b7e}
+label{display:flex;flex-direction:column;gap:.4rem;margin:.75rem 0}
+input[type="text"]{padding:.55rem .7rem;border:1px solid #ddd;border-radius:10px;background:var(--input,#111);color:var(--text,#fff)}
+.actions{margin-top:.5rem}
+.btn{display:inline-block;padding:.45rem .9rem;border-radius:999px;border:0;background:#7a57ff;color:#fff;font-size:14px;line-height:1;min-width:110px;text-align:center}

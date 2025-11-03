@@ -22,12 +22,14 @@ export interface QueueItem {
   imageUrl?: string;
   durationMs?: number;
   uri?: string;
+  chargedPrice?: number;
+  popularity?: number;
   createdAt: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class MusicService {
-  private baseUrl = 'http://localhost:8000';
+  private baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -37,6 +39,10 @@ export class MusicService {
 
   getTrackById(id: string): Observable<TrackDTO> {
     return this.http.get<TrackDTO>(`${this.baseUrl}/music/tracks/${id}`);
+  }
+
+  getPlaylist(uri: string): Observable<TrackDTO[]> {
+    return this.http.get<TrackDTO[]>(`${this.baseUrl}/music/playlist`, { params: { uri } });
   }
 
   getQueue(): Observable<QueueItem[]> {

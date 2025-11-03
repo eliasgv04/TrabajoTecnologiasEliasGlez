@@ -19,7 +19,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean verified = true;
+    private boolean verified = false;
 
     @Column(nullable = false)
     private int coins = 0; // saldo de monedas para pagos simulados

@@ -19,6 +19,9 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 
+import edu.uclm.esi.gramola.services.SubscriptionService;
+import edu.uclm.esi.gramola.services.SpotifyService;
+
 @RestController
 @RequestMapping("/spotify")
 public class SpotifyAuthController {
@@ -26,6 +29,8 @@ public class SpotifyAuthController {
 
     private final RestTemplate http = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final SubscriptionService subscriptionService;
+    private final SpotifyService spotifyService;
 
     @Value("${spotify.clientId:${spring.security.oauth2.client.registration.spotify.client-id:}}")
     private String clientId;
@@ -36,35 +41,9 @@ public class SpotifyAuthController {
     @Value("${spotify.redirectUri:http://localhost:8000/spotify/callback}")
     private String redirectUri;
 
-    private String ensureAccessToken(HttpSession session) {
-        String access = (String) session.getAttribute("spotify_access_token");
-        Instant exp = (Instant) session.getAttribute("spotify_expires_at");
-        if (access != null && exp != null && Instant.now().isBefore(exp.minusSeconds(30))) {
-            return access;
-        }
-        String refresh = (String) session.getAttribute("spotify_refresh_token");
-        if (refresh == null) throw new RuntimeException("No hay token de Spotify en sesión");
-        // refresh
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        String basic = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
-        headers.set("Authorization", "Basic " + basic);
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("grant_type", "refresh_token");
-        form.add("refresh_token", refresh);
-        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token", new HttpEntity<>(form, headers), String.class);
-        if (!res.getStatusCode().is2xxSuccessful())
-            throw new RuntimeException("No se pudo refrescar el token de Spotify");
-        try {
-            JsonNode node = mapper.readTree(res.getBody());
-            String newAccess = node.path("access_token").asText();
-            int expiresIn = node.path("expires_in").asInt(3600);
-            session.setAttribute("spotify_access_token", newAccess);
-            session.setAttribute("spotify_expires_at", Instant.now().plusSeconds(expiresIn));
-            return newAccess;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public SpotifyAuthController(SubscriptionService subscriptionService, SpotifyService spotifyService) {
+        this.subscriptionService = subscriptionService;
+        this.spotifyService = spotifyService;
     }
 
     @GetMapping("/login")
@@ -125,7 +104,7 @@ public class SpotifyAuthController {
     @GetMapping("/token")
     public ResponseEntity<?> token(HttpSession session) {
         try {
-            String token = ensureAccessToken(session);
+            String token = spotifyService.ensureAccessToken(session);
             Instant exp = (Instant) session.getAttribute("spotify_expires_at");
             long expiresIn = exp != null ? Math.max(0, exp.getEpochSecond() - Instant.now().getEpochSecond()) : 0;
             return ResponseEntity.ok(Map.of("accessToken", token, "expiresIn", expiresIn));
@@ -137,7 +116,10 @@ public class SpotifyAuthController {
     @PutMapping("/transfer")
     public ResponseEntity<?> transfer(HttpSession session, @RequestBody Map<String, Object> body) {
         try {
-            String token = ensureAccessToken(session);
+            Object userIdObj = session.getAttribute("userId");
+            if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
+            subscriptionService.requireActive((Long) userIdObj);
+            String token = spotifyService.ensureAccessToken(session);
             String deviceId = (String) body.get("deviceId");
             boolean play = Boolean.TRUE.equals(body.get("play"));
             HttpHeaders h = new HttpHeaders();
@@ -155,7 +137,10 @@ public class SpotifyAuthController {
     @PostMapping("/play")
     public ResponseEntity<?> play(HttpSession session, @RequestBody Map<String, Object> body) {
         try {
-            String token = ensureAccessToken(session);
+            Object userIdObj = session.getAttribute("userId");
+            if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
+            subscriptionService.requireActive((Long) userIdObj);
+            String token = spotifyService.ensureAccessToken(session);
             String deviceId = (String) body.get("deviceId");
             HttpHeaders h = new HttpHeaders();
             h.setBearerAuth(token);
@@ -173,7 +158,10 @@ public class SpotifyAuthController {
     @PutMapping("/pause")
     public ResponseEntity<?> pause(HttpSession session, @RequestBody(required = false) Map<String, Object> body) {
         try {
-            String token = ensureAccessToken(session);
+            Object userIdObj = session.getAttribute("userId");
+            if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
+            subscriptionService.requireActive((Long) userIdObj);
+            String token = spotifyService.ensureAccessToken(session);
             String deviceId = body != null ? (String) body.get("deviceId") : null;
             HttpHeaders h = new HttpHeaders();
             h.setBearerAuth(token);

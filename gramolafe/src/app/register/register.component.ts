@@ -30,8 +30,7 @@ export class RegisterComponent {
     }
     this.service.register(this.email, this.pwd1, this.pwd2).subscribe({
       next: (res) => {
-        this.message = 'Registro exitoso. Entrando…';
-        setTimeout(() => this.router.navigateByUrl('/queue'), 300);
+        this.message = 'Registro correcto. Revisa tu correo y haz clic en el enlace de verificación.';
       },
       error: (err) => {
         const backendMsg = err?.error?.message || err?.message;

@@ -24,8 +24,9 @@ export class LoginComponent {
     this.error = '';
     this.loading = true;
     this.userService.login(this.email, this.pwd).subscribe({
-      next: () => {
+      next: (res) => {
         this.auth.setLoggedIn(true);
+        this.auth.setEmail(res?.email || this.email);
         this.loading = false;
         this.router.navigateByUrl('/queue');
       },

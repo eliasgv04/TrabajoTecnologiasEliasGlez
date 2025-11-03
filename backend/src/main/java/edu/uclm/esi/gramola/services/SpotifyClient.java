@@ -78,6 +78,69 @@ public class SpotifyClient {
         }
     }
 
+    public List<TrackDTO> getPlaylistTracks(String uriOrUrl) {
+        ensureAppToken();
+        String playlistId = extractPlaylistId(uriOrUrl);
+        if (playlistId == null || playlistId.isBlank()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.BAD_REQUEST,
+                "URI de playlist inválida"
+            );
+        }
+        String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=50";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(appAccessToken);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        HttpEntity<Void> req = new HttpEntity<>(headers);
+        try {
+            ResponseEntity<String> res = http.exchange(url, HttpMethod.GET, req, String.class);
+            if (!res.getStatusCode().is2xxSuccessful()) {
+                log.warn("Spotify playlist non-2xx: {}", res.getStatusCode());
+                return List.of();
+            }
+            JsonNode root = mapper.readTree(res.getBody());
+            JsonNode items = root.path("items");
+            if (items == null || !items.isArray()) {
+                log.warn("Spotify playlist items missing or not array");
+                return List.of();
+            }
+            List<TrackDTO> out = new ArrayList<>();
+            for (JsonNode item : items) {
+                if (item == null || item.isNull() || item.isMissingNode()) continue;
+                JsonNode t = item.path("track");
+                if (t != null && !t.isMissingNode() && !t.isNull()) {
+                    try { out.add(toDto(t)); } catch (Exception ex) { log.debug("Skipping track due to parse issue", ex); }
+                }
+            }
+            return out;
+        } catch (Exception e) {
+            log.error("Spotify playlist error", e);
+            throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.BAD_GATEWAY,
+                "No se pudo leer la playlist de Spotify"
+            );
+        }
+    }
+
+    private String extractPlaylistId(String uriOrUrl) {
+        if (uriOrUrl == null) return null;
+        String s = uriOrUrl.trim();
+        try {
+            if (s.startsWith("spotify:playlist:")) {
+                return s.substring("spotify:playlist:".length());
+            }
+            if (s.contains("open.spotify.com/playlist/")) {
+                // e.g. https://open.spotify.com/playlist/{id}?si=...
+                String after = s.substring(s.indexOf("/playlist/") + "/playlist/".length());
+                int q = after.indexOf('?');
+                return q >= 0 ? after.substring(0, q) : after;
+            }
+            // allow raw id
+            if (s.matches("[A-Za-z0-9]{10,}")) return s;
+        } catch (Exception ignore) {}
+        return null;
+    }
+
     private void ensureAppToken() {
         if (appAccessToken != null && Instant.now().isBefore(appTokenExpiresAt.minusSeconds(30))) {
             return;
@@ -85,7 +148,9 @@ public class SpotifyClient {
         String effClientId = getEffectiveClientId();
         String effClientSecret = getEffectiveClientSecret();
         if (effClientId == null || effClientId.isBlank() || effClientSecret == null || effClientSecret.isBlank()) {
-            throw new IllegalStateException("Faltan credenciales de Spotify: define spotify.clientId/spotify.clientSecret o variables de entorno SPOTIFY_CLIENT_ID/SPOTIFY_CLIENT_SECRET");
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Faltan credenciales de Spotify: configura spotify.clientId/spotify.clientSecret o variables de entorno SPOTIFY_CLIENT_ID/SPOTIFY_CLIENT_SECRET");
         }
         String url = "https://accounts.spotify.com/api/token";
         HttpHeaders headers = new HttpHeaders();
@@ -107,7 +172,9 @@ public class SpotifyClient {
             this.appTokenExpiresAt = Instant.now().plusSeconds(expiresIn);
             log.info("Spotify app token acquired (expires in {}s)", expiresIn);
         } catch (Exception e) {
-            throw new RuntimeException("No se pudo obtener el token de Spotify", e);
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_GATEWAY,
+                    "No se pudo obtener el token de Spotify");
         }
     }
 

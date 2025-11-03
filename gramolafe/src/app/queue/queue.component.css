@@ -16,7 +16,12 @@
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#222;color:#fff;padding:.6rem 1rem;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 .billing{display:flex;gap:1rem;align-items:center;justify-content:space-between;margin:.5rem 0;padding:.5rem .75rem;background:#fafafa;border:1px solid #eee;border-radius:10px}
 .billing span{color:#555}
+.price-pill{margin-top:.25rem;font-size:.9rem;color:#555}
 .actions-inline{display:flex;gap:.5rem;margin-left:auto}
+
+/* Inline confirmation box */
+.confirm{display:flex;align-items:center;gap:.75rem;margin-left:auto;margin-right:0;background:#fff8f0;border:1px solid #ffe3c2;color:#7a3b00;padding:.4rem .6rem;border-radius:10px}
+.confirm .confirm-actions{display:flex;gap:.4rem}
 
 /* Player bar */
 .player{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:linear-gradient(180deg,#ffffff,#fbfaff);border:1px solid #eee;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.15);padding:.6rem .9rem;display:flex;gap:.9rem;align-items:center;min-width:min(720px,92vw);} 

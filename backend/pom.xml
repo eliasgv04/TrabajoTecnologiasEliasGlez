@@ -74,6 +74,12 @@
       <optional>true</optional>
     </dependency>
 
+    <!-- Spring Boot Mail starter -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
     <!-- JUnit Jupiter (explicit as in the book) -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>

@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MusicService, TrackDTO, QueueItem } from '../music.service';
 import { ToastService } from '../toast.service';
-import { PaymentsComponent } from '../payments/payments.component';
 import { BillingService } from '../billing.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-queue',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaymentsComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './queue.component.html',
   styleUrls: ['./queue.component.css']
 })
@@ -22,6 +22,8 @@ export class QueueComponent {
 
   pricePerSong = 1;
   coins = 0;
+  estimated: Record<string, { price: number; popularity: number }> = {};
+  pendingAddId: string | null = null;
 
   // Simulated player state
   current: QueueItem | null = null;
@@ -47,11 +49,12 @@ export class QueueComponent {
     return rest;
   }
 
-  constructor(private music: MusicService, private billing: BillingService, public toast: ToastService) {}
+  constructor(private music: MusicService, private billing: BillingService, private settings: SettingsService, public toast: ToastService) {}
 
   ngOnInit() {
     this.loadQueue();
     this.loadBilling();
+    this.loadFallbackPlaylist();
   }
 
   loadBilling() {
@@ -65,6 +68,7 @@ export class QueueComponent {
         this.queue = items;
         // Try to restore player state from localStorage; if not possible, start next
         if (!this.tryRestoreState() && !this.current && this.queue.length) this.startNext();
+        if (!this.current && !this.queue.length) this.startNextFallback();
       },
       error: (e) => (this.error = this.pickMsg(e))
     });
@@ -77,6 +81,14 @@ export class QueueComponent {
     this.music.search(this.q).subscribe({
       next: (tracks) => {
         this.results = tracks;
+        // fetch per-song estimates (1-3 coins) for transparency
+        this.estimated = {};
+        for (const t of tracks) {
+          this.billing.estimate(t.id).subscribe({
+            next: (e) => (this.estimated[t.id] = { price: e.price, popularity: e.popularity }),
+            error: () => {}
+          });
+        }
         this.loading = false;
       },
       error: (e) => {
@@ -87,24 +99,46 @@ export class QueueComponent {
   }
 
   add(track: TrackDTO) {
+    const p = this.priceFor(track.id);
+    if (p != null) {
+      this.pendingAddId = track.id; // muestra confirmación inline
+      return;
+    }
+    this.performAdd(track, null);
+  }
+
+  performAdd(track: TrackDTO, priceHint: number | null) {
+    this.pendingAddId = null;
     this.music.addToQueue(track).subscribe({
-      next: () => { this.loadQueue(); this.loadBilling(); this.toast.show('Añadido a la cola'); },
+      next: (item) => { 
+        this.loadQueue(); this.loadBilling();
+        const charged = (item as any)?.chargedPrice ?? priceHint ?? this.pricePerSong;
+        this.toast.show(`Añadido a la cola (−${charged} moneda(s))`);
+      },
       error: (e: any) => {
         if (e?.status === 402) {
-          this.toast.show('Saldo insuficiente. Recarga para añadir.');
-          this.showPayments = true;
+          const msg = (e?.error || '').toString().toLowerCase();
+          if (msg.includes('suscripci')) {
+            this.toast.show('Necesitas una suscripción activa. Revisa "Planes".');
+          } else {
+            this.toast.show('Saldo insuficiente. Mira los "Planes": incluyen monedas mensuales.');
+          }
         }
         this.error = this.pickMsg(e);
       }
     });
   }
 
+  cancelAdd() { this.pendingAddId = null; }
+
   clear() {
     this.music.clearQueue().subscribe({
-      next: () => { this.queue = []; this.toast.show('Cola vaciada'); },
+      next: () => { this.queue = []; this.toast.show('Cola vaciada'); if (!this.current) this.startNextFallback(); },
       error: (e: any) => (this.error = this.pickMsg(e))
     });
   }
+
+  // Eliminado confirm dialog del navegador; usamos solo toast de éxito
 
   remove(item: QueueItem) {
     this.music.deleteFromQueue(item.id).subscribe({
@@ -121,6 +155,8 @@ export class QueueComponent {
     });
   }
 
+  // Eliminado confirm dialog del navegador; usamos solo toast de éxito
+
   // Simulated playback engine
   private startNext() {
     if (this.current || !this.queue.length) return;
@@ -132,6 +168,46 @@ export class QueueComponent {
     this.toast.show(`Reproduciendo: ${next.title}`);
     this.startTick();
     this.saveState();
+  }
+
+  // ==== Fallback playlist (when queue is empty) ====
+  fallbackTracks: TrackDTO[] = [];
+  private fallbackIndex = 0;
+  currentFallback: TrackDTO | null = null;
+
+  private loadFallbackPlaylist() {
+    // 1) Intentar desde localStorage para reaccionar al guardado sin recargar
+    const uriLS = ((): string | null => { try { return localStorage.getItem('gramolaPlaylistUri'); } catch { return null; } })();
+    if (uriLS && uriLS.trim()) {
+      this.music.getPlaylist(uriLS).subscribe({
+        next: (tracks) => { this.fallbackTracks = tracks || []; this.fallbackIndex = 0; if (!this.current && !this.queue.length) this.startNextFallback(); },
+        error: (e) => { this.toast.show(this.pickMsg(e)); }
+      });
+    }
+    // 2) También desde settings del servidor por si LS no está o cambia en otro dispositivo
+    this.settings.get().subscribe({
+      next: (s) => {
+        const uri = s.spotifyPlaylistUri || '';
+        if (!uri) return;
+        this.music.getPlaylist(uri).subscribe({
+          next: (tracks) => { this.fallbackTracks = tracks || []; this.fallbackIndex = 0; if (!this.current && !this.queue.length) this.startNextFallback(); },
+          error: (e) => { this.toast.show(this.pickMsg(e)); }
+        });
+      },
+      error: (e) => { /* no toast here to avoid noise when not logged in */ }
+    });
+  }
+
+  private startNextFallback() {
+    if (this.current || this.queue.length || !this.fallbackTracks.length) return;
+    if (this.fallbackIndex >= this.fallbackTracks.length) this.fallbackIndex = 0;
+    const t = this.fallbackTracks[this.fallbackIndex++];
+    this.currentFallback = t;
+    this.totalMs = Math.max(10_000, (t.durationMs || 180_000));
+    this.remainingMs = this.totalMs;
+    this.isPaused = false;
+    this.toast.show(`Reproduciendo (lista): ${t.title}`);
+    this.startTick();
   }
 
   togglePause() {
@@ -158,12 +234,21 @@ export class QueueComponent {
     this.stopTick();
     this.current = null; this.totalMs = 0; this.remainingMs = 0; this.isPaused = false;
     this.saveState();
-    if (!finished) return;
+    if (!finished) {
+      // Could be finishing a fallback track
+      if (this.currentFallback) {
+        const just = this.currentFallback;
+        this.currentFallback = null;
+        this.toast.show(`Terminó: ${just.title}`);
+        if (this.queue.length) this.startNext(); else this.startNextFallback();
+      }
+      return;
+    }
     this.music.deleteFromQueue(finished.id).subscribe({
       next: () => {
         this.queue = this.queue.filter(q => q.id !== finished.id);
         this.toast.show(`Terminó: ${finished.title}`);
-        this.startNext();
+        if (this.queue.length) this.startNext(); else this.startNextFallback();
       },
       error: () => this.loadQueue()
     });
@@ -239,7 +324,7 @@ export class QueueComponent {
 
   // Keyboard shortcuts
   @HostListener('window:keydown', ['$event']) handleKey(e: KeyboardEvent) {
-    if (!this.current) return;
+    if (!this.current && !this.currentFallback) return;
     switch (e.key) {
       case ' ': e.preventDefault(); this.togglePause(); break;
       case 'ArrowLeft': e.preventDefault(); this.seekBySeconds(-5); break;
@@ -260,6 +345,8 @@ export class QueueComponent {
   // Duplicate detection helpers for results list
   isInQueue(trackId: string): boolean { return this.queue.some(q => q.trackId === trackId); }
   inQueuePosition(trackId: string): number { return this.queue.findIndex(q => q.trackId === trackId); }
+  priceFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.price : null; }
+  popularityFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.popularity : null; }
 
   // Persistence
   private saveState() {
@@ -296,10 +383,7 @@ export class QueueComponent {
     return (item.durationMs && item.durationMs > 0) ? item.durationMs : 180_000;
   }
 
-  demoRecharge() { this.showPayments = true; }
-
-  showPayments = false;
-  onPaid() { this.showPayments = false; this.loadBilling(); }
+  // Pagos directos desactivados en la UI.
 
   private pickMsg(e: any): string {
     const msg = e?.error ?? e?.message ?? 'Error';

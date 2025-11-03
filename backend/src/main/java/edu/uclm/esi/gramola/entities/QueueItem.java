@@ -26,6 +26,13 @@ public class QueueItem {
     private Integer durationMs;
     private String uri; // spotify:track:...
 
+    // transparency: store what the user paid and the popularity used
+    @Column(name = "charged_price")
+    private Integer chargedPrice;
+
+    @Column(name = "popularity")
+    private Integer popularity;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
@@ -45,6 +52,10 @@ public class QueueItem {
     public void setDurationMs(Integer durationMs) { this.durationMs = durationMs; }
     public String getUri() { return uri; }
     public void setUri(String uri) { this.uri = uri; }
+    public Integer getChargedPrice() { return chargedPrice; }
+    public void setChargedPrice(Integer chargedPrice) { this.chargedPrice = chargedPrice; }
+    public Integer getPopularity() { return popularity; }
+    public void setPopularity(Integer popularity) { this.popularity = popularity; }
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }
