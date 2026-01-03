@@ -75,7 +75,7 @@ public class UserService {
         vt.setExpiresAt(LocalDateTime.now().plusDays(2));
         tokenRepo.save(vt);
 
-        String verifyUrl = "http://localhost:8000/users/verify?token=" + tokenStr;
+        String verifyUrl = "https://localhost:8000/users/verify?token=" + tokenStr;
         mail.sendVerificationEmail(u.getEmail(), verifyUrl);
 
         return new RegisterResult(u.getId(), u.getEmail(), null);
@@ -152,7 +152,7 @@ public class UserService {
         prt.setExpiresAt(LocalDateTime.now().plusHours(2));
         resetRepo.save(prt);
 
-        String resetUrl = "http://localhost:4200/reset?token=" + tokenStr;
+        String resetUrl = "https://localhost:4200/reset?token=" + tokenStr;
         mail.sendPasswordResetEmail(u.getEmail(), resetUrl);
     }
 

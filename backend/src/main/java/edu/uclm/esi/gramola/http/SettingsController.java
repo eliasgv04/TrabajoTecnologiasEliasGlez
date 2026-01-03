@@ -26,6 +26,7 @@ public class SettingsController {
         java.util.Map<String, Object> resp = new java.util.LinkedHashMap<>();
         resp.put("pricePerSong", s.getPricePerSong());
         resp.put("spotifyPlaylistUri", s.getSpotifyPlaylistUri()); // puede ser null; Jackson lo serializa bien
+        resp.put("barName", s.getBarName());
         return resp;
     }
 
@@ -34,6 +35,7 @@ public class SettingsController {
         Long userId = requireSession(session);
         Integer price = (Integer) body.getOrDefault("pricePerSong", null);
         String playlist = (String) body.getOrDefault("spotifyPlaylistUri", null);
+        String barName = (String) body.getOrDefault("barName", null);
         BarSettings s = settings.getOrCreate(userId);
         if (price != null) {
             s = settings.updatePricePerSong(userId, price);
@@ -41,9 +43,13 @@ public class SettingsController {
         if (playlist != null) {
             s = settings.updatePlaylist(userId, playlist);
         }
+        if (barName != null) {
+            s = settings.updateBarName(userId, barName);
+        }
         java.util.Map<String, Object> resp = new java.util.LinkedHashMap<>();
         resp.put("pricePerSong", s.getPricePerSong());
         resp.put("spotifyPlaylistUri", s.getSpotifyPlaylistUri());
+        resp.put("barName", s.getBarName());
         return resp;
     }
 

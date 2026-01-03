@@ -46,4 +46,11 @@ public class SettingsService {
         s.setSpotifyPlaylistUri(playlistUri);
         return repo.save(s);
     }
+
+    @Transactional
+    public BarSettings updateBarName(Long userId, String barName) {
+        BarSettings s = getOrCreate(userId);
+        s.setBarName(barName);
+        return repo.save(s);
+    }
 }

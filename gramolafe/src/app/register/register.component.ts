@@ -16,6 +16,7 @@ export class RegisterComponent {
   email = '';
   pwd1 = '';
   pwd2 = '';
+  barName = '';
   message = '';
   error = '';
 
@@ -28,7 +29,7 @@ export class RegisterComponent {
       this.error = 'Las contraseñas no coinciden';
       return;
     }
-    this.service.register(this.email, this.pwd1, this.pwd2).subscribe({
+    this.service.register(this.email, this.pwd1, this.pwd2, this.barName).subscribe({
       next: (res) => {
         this.message = 'Registro correcto. Revisa tu correo y haz clic en el enlace de verificación.';
       },

@@ -28,11 +28,13 @@
           </button>
         </div>
         <div class="confirm" *ngIf="pendingAddId === t.id">
-          <span>Esta canción costará <strong>{{ priceFor(t.id) }}</strong> moneda(s).</span>
-          <div class="confirm-actions">
-            <button class="btn" (click)="performAdd(t, priceFor(t.id)!)">Confirmar</button>
-            <button class="btn outline" (click)="cancelAdd()">Cancelar</button>
-          </div>
+          <ng-container *ngIf="priceFor(t.id) as p">
+            <span>Esta canción costará <strong>{{ p }}</strong> moneda(s).</span>
+            <div class="confirm-actions">
+              <button class="btn" (click)="performAdd(t, p)">Confirmar</button>
+              <button class="btn outline" (click)="cancelAdd()">Cancelar</button>
+            </div>
+          </ng-container>
         </div>
       </li>
     </ul>
@@ -43,7 +45,8 @@
   <h3>Cola actual</h3>
   <button class="btn outline" (click)="clear()" [disabled]="!queue.length">Vaciar</button>
     </div>
-    <p class="muted" *ngIf="!queue.length && fallbackTracks?.length">Reproduciendo lista por defecto cuando la cola está vacía.</p>
+    <p class="muted" *ngIf="!queue.length && fallbackTracks.length">Reproduciendo lista por defecto cuando la cola está vacía.</p>
+    <p class="muted" *ngIf="!queue.length && !fallbackTracks.length">No hay lista por defecto configurada para este bar.</p>
     <ul>
       <li *ngFor="let i of queue">
         <img *ngIf="i.imageUrl" [src]="i.imageUrl" alt="" />

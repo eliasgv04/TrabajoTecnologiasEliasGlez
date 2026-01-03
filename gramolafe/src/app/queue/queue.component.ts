@@ -5,6 +5,7 @@ import { MusicService, TrackDTO, QueueItem } from '../music.service';
 import { ToastService } from '../toast.service';
 import { BillingService } from '../billing.service';
 import { SettingsService } from '../settings/settings.service';
+import { SpotifyService } from '../spotify.service';
 
 @Component({
   selector: 'app-queue',
@@ -34,6 +35,9 @@ export class QueueComponent {
   private dragging = false;
   private dragRect: DOMRect | null = null;
 
+  private spotifyDeviceId: string | null = null;
+  private noFallbackMsgShown = false;
+
   // Helpers for counters/ETA
   get currentIndex(): number {
     if (!this.current) return -1;
@@ -49,9 +53,18 @@ export class QueueComponent {
     return rest;
   }
 
-  constructor(private music: MusicService, private billing: BillingService, private settings: SettingsService, public toast: ToastService) {}
+  constructor(
+    private music: MusicService,
+    private billing: BillingService,
+    private settings: SettingsService,
+    private spotify: SpotifyService,
+    public toast: ToastService
+  ) {}
 
   ngOnInit() {
+    // Pedir login de Spotify después de login en la Gramola.
+    // No bloquea la UI: si hace falta, redirige al flujo OAuth.
+    this.spotify.connectOrLogin().then(id => { if (id) this.spotifyDeviceId = id; }).catch(() => {});
     this.loadQueue();
     this.loadBilling();
     this.loadFallbackPlaylist();
@@ -117,14 +130,18 @@ export class QueueComponent {
       },
       error: (e: any) => {
         if (e?.status === 402) {
-          const msg = (e?.error || '').toString().toLowerCase();
-          if (msg.includes('suscripci')) {
-            this.toast.show('Necesitas una suscripción activa. Revisa "Planes".');
-          } else {
-            this.toast.show('Saldo insuficiente. Mira los "Planes": incluyen monedas mensuales.');
-          }
+          this.toast.show('Saldo insuficiente para añadir esta canción.');
+          this.error = '';
+          return;
         }
-        this.error = this.pickMsg(e);
+        if (e?.status === 401) {
+          this.toast.show('Sesión caducada. Vuelve a iniciar sesión.');
+          this.error = '';
+          return;
+        }
+        const msg = this.pickMsg(e);
+        this.toast.show(msg);
+        this.error = msg;
       }
     });
   }
@@ -166,6 +183,7 @@ export class QueueComponent {
     this.remainingMs = this.totalMs;
     this.isPaused = false;
     this.toast.show(`Reproduciendo: ${next.title}`);
+    this.startSpotifyPlaybackQueueItem(next);
     this.startTick();
     this.saveState();
   }
@@ -211,9 +229,15 @@ export class QueueComponent {
   }
 
   togglePause() {
-    if (!this.current) return;
+    if (!this.current && !this.currentFallback) return;
     this.isPaused = !this.isPaused;
-    if (this.isPaused) this.stopTick(); else this.startTick();
+    if (this.isPaused) {
+      this.stopTick();
+      this.pauseSpotify();
+    } else {
+      this.startTick();
+      this.resumeSpotify();
+    }
     this.saveState();
   }
 
@@ -254,8 +278,70 @@ export class QueueComponent {
     });
   }
 
+  private async ensureSpotifyDevice(): Promise<string | null> {
+    if (this.spotifyDeviceId) return this.spotifyDeviceId;
+    try {
+      const id = await this.spotify.connectOrLogin();
+      if (id) this.spotifyDeviceId = id;
+      return this.spotifyDeviceId;
+    } catch {
+      return null;
+    }
+  }
+
+  private buildSpotifyUriFromQueueItem(item: QueueItem): string {
+    return (item.uri && item.uri.trim()) ? item.uri.trim() : (item.trackId ? `spotify:track:${item.trackId}` : '');
+  }
+
+  private buildSpotifyUriFromTrack(t: TrackDTO): string {
+    return (t.uri && t.uri.trim()) ? t.uri.trim() : (t.id ? `spotify:track:${t.id}` : '');
+  }
+
+  private async startSpotifyPlaybackUri(uri: string) {
+    if (!uri) return;
+
+    const deviceId = await this.ensureSpotifyDevice();
+    if (!deviceId) {
+      this.toast.show('Spotify: no se detecta el dispositivo. Espera 1–2s y reintenta.');
+      return;
+    }
+
+    // 1) Transfer playback to the web player device, then play
+    this.spotify.transfer(deviceId, true).subscribe({
+      next: () => {
+        this.spotify.playUris([uri], deviceId).subscribe({
+          next: () => {},
+          error: (e) => {
+            this.toast.show(`Spotify: no se pudo reproducir. ${this.pickMsg(e)}`);
+          }
+        });
+      },
+      error: (e) => {
+        this.toast.show(`Spotify: no se pudo transferir el dispositivo. ${this.pickMsg(e)}`);
+      }
+    });
+  }
+
+  private startSpotifyPlaybackQueueItem(item: QueueItem) {
+    this.startSpotifyPlaybackUri(this.buildSpotifyUriFromQueueItem(item));
+  }
+
+  private startSpotifyPlaybackTrack(t: TrackDTO) {
+    this.startSpotifyPlaybackUri(this.buildSpotifyUriFromTrack(t));
+  }
+
+  private pauseSpotify() {
+    const deviceId = this.spotifyDeviceId || undefined;
+    this.spotify.pause(deviceId).subscribe({ next: () => {}, error: () => {} });
+  }
+
+  private resumeSpotify() {
+    const deviceId = this.spotifyDeviceId || undefined;
+    this.spotify.resume(deviceId).subscribe({ next: () => {}, error: () => {} });
+  }
+
   get progressPercent(): number {
-    if (!this.current || this.totalMs <= 0) return 0;
+    if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return 0;
     return Math.max(0, Math.min(100, ((this.totalMs - this.remainingMs) / this.totalMs) * 100));
   }
 
@@ -268,18 +354,35 @@ export class QueueComponent {
 
   // Controls
   restart() {
-    if (!this.current) return;
+    if (!this.current && !this.currentFallback) return;
     this.remainingMs = this.totalMs;
-    if (!this.isPaused) this.startTick();
+    if (!this.isPaused) {
+      this.startTick();
+      if (this.current) this.startSpotifyPlaybackQueueItem(this.current);
+      else if (this.currentFallback) this.startSpotifyPlaybackTrack(this.currentFallback);
+    }
     this.saveState();
   }
-  previous() { this.restart(); }
+  previous() {
+    if (this.current) {
+      this.restart();
+      return;
+    }
+    if (this.currentFallback && this.fallbackTracks.length) {
+      this.stopTick();
+      this.isPaused = false;
+      this.fallbackIndex = Math.max(0, this.fallbackIndex - 2);
+      this.currentFallback = null;
+      this.startNextFallback();
+    }
+  }
   next() { this.onTrackEnd(); }
   stop() {
-    if (!this.current) return;
+    if (!this.current && !this.currentFallback) return;
     this.stopTick();
     this.isPaused = true;
     this.remainingMs = this.totalMs;
+    this.pauseSpotify();
     this.saveState();
   }
   removeCurrent() {
@@ -287,7 +390,7 @@ export class QueueComponent {
     this.remove(this.current);
   }
   seek(evt: MouseEvent) {
-    if (!this.current || this.totalMs <= 0) return;
+    if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     const el = evt.currentTarget as HTMLElement;
     const rect = el.getBoundingClientRect();
     const x = Math.max(0, Math.min(rect.width, evt.clientX - rect.left));
@@ -299,7 +402,7 @@ export class QueueComponent {
 
   // Drag-to-seek
   onProgressDown(evt: MouseEvent) {
-    if (!this.current || this.totalMs <= 0) return;
+    if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     this.dragRect = (evt.currentTarget as HTMLElement).getBoundingClientRect();
     this.dragging = true;
     this.updateSeekFromClientX(evt.clientX);
@@ -312,9 +415,9 @@ export class QueueComponent {
   @HostListener('document:mouseup') onDocUp() {
     this.dragging = false;
     this.dragRect = null;
-  }
+    }
   private updateSeekFromClientX(clientX: number) {
-    if (!this.dragRect || !this.current || this.totalMs <= 0) return;
+    if (!this.dragRect || (!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     const x = Math.max(0, Math.min(this.dragRect.width, clientX - this.dragRect.left));
     const ratio = x / this.dragRect.width;
     const elapsed = Math.floor(this.totalMs * ratio);
@@ -335,12 +438,13 @@ export class QueueComponent {
     }
   }
   private seekBySeconds(deltaSec: number) {
-    if (!this.current || this.totalMs <= 0) return;
+    if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     const elapsed = this.totalMs - this.remainingMs;
     const newElapsed = Math.max(0, Math.min(this.totalMs, elapsed + deltaSec * 1000));
     this.remainingMs = this.totalMs - newElapsed;
     this.saveState();
   }
+
 
   // Duplicate detection helpers for results list
   isInQueue(trackId: string): boolean { return this.queue.some(q => q.trackId === trackId); }
@@ -386,8 +490,22 @@ export class QueueComponent {
   // Pagos directos desactivados en la UI.
 
   private pickMsg(e: any): string {
-    const msg = e?.error ?? e?.message ?? 'Error';
-    return typeof msg === 'string' ? msg : (msg?.message || 'Error');
+    if (!e) return 'Error';
+    const raw = e?.error ?? e?.message ?? e;
+    if (typeof raw === 'string') {
+      try {
+        const parsed = JSON.parse(raw);
+        const m = parsed?.message || parsed?.error || parsed?.reason;
+        return (m && typeof m === 'string') ? m : raw;
+      } catch {
+        return raw;
+      }
+    }
+    if (typeof raw === 'object') {
+      const m = (raw as any)?.message || (raw as any)?.error || (raw as any)?.reason;
+      if (typeof m === 'string' && m.trim()) return m;
+    }
+    return 'Error';
   }
 
   // No Spotify integration (simulated playback only)

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
+import { SpotifyService } from '../spotify.service';
 
 @Component({
   selector: 'app-login',
@@ -18,17 +19,20 @@ export class LoginComponent {
   loading = false;
   error = '';
 
-  constructor(private userService: UserService, private auth: AuthService, private router: Router) {}
+  constructor(private userService: UserService, private auth: AuthService, private router: Router, private spotify: SpotifyService, private route: ActivatedRoute) {}
 
   login() {
     this.error = '';
     this.loading = true;
     this.userService.login(this.email, this.pwd).subscribe({
-      next: (res) => {
+      next: async (res) => {
         this.auth.setLoggedIn(true);
         this.auth.setEmail(res?.email || this.email);
         this.loading = false;
-        this.router.navigateByUrl('/queue');
+        // Navegar siempre a la cola tras login.
+        // La autenticación de Spotify se dispara al entrar en /queue.
+        const nextUrl = this.route.snapshot.queryParamMap.get('next') || '/queue';
+        this.router.navigateByUrl(nextUrl);
       },
       error: (err) => {
         this.loading = false;

@@ -20,6 +20,9 @@ public class BarSettings {
     @Column(name = "spotify_playlist_uri", length = 120)
     private String spotifyPlaylistUri;
 
+    @Column(name = "bar_name", length = 120)
+    private String barName;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -49,6 +52,9 @@ public class BarSettings {
 
     public String getSpotifyPlaylistUri() { return spotifyPlaylistUri; }
     public void setSpotifyPlaylistUri(String spotifyPlaylistUri) { this.spotifyPlaylistUri = spotifyPlaylistUri; }
+
+    public String getBarName() { return barName; }
+    public void setBarName(String barName) { this.barName = barName; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

@@ -51,6 +51,11 @@
       "name": "spring.mail.from",
       "type": "java.lang.String",
       "description": "Dirección remitente por defecto para los emails salientes."
+    },
+    {
+      "name": "spotify.stateSecret",
+      "type": "java.lang.String",
+      "description": "A description for 'spotify.stateSecret'"
     }
   ]
 }

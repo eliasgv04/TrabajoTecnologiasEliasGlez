@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import edu.uclm.esi.gramola.entities.User;
+import edu.uclm.esi.gramola.services.SettingsService;
 import edu.uclm.esi.gramola.services.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -28,10 +29,12 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final SettingsService settingsService;
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SettingsService settingsService) {
         this.userService = userService;
+        this.settingsService = settingsService;
     }
 
     @PostMapping(path = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,7 +44,11 @@ public class UserController {
             String email = body.getOrDefault("email", "").trim();
             String pwd1 = body.getOrDefault("pwd1", "").trim();
             String pwd2 = body.getOrDefault("pwd2", "").trim();
-            userService.register(email, pwd1, pwd2);
+            String barName = body.getOrDefault("barName", "").trim();
+            var result = userService.register(email, pwd1, pwd2);
+            if (!barName.isBlank()) {
+                try { settingsService.updateBarName(result.id(), barName); } catch (Exception ex) { log.warn("No se pudo guardar el nombre del bar en registro", ex); }
+            }
             // No auto-login: requerir verificación por email antes de poder iniciar sesión
             log.info("Registro correcto, verificación requerida");
             return Map.of("message", "Registro correcto. Revisa tu correo para verificar la cuenta");
@@ -95,7 +102,7 @@ public class UserController {
         boolean ok = this.userService.verifyToken(token);
         if (!ok) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido o caducado");
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://localhost:4200/login?verified=1");
+        headers.add("Location", "https://localhost:4200/login?verified=1");
         return ResponseEntity.status(302).headers(headers).build();
     }
 

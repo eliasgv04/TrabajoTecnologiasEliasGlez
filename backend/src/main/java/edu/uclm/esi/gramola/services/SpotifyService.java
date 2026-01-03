@@ -3,12 +3,16 @@ package edu.uclm.esi.gramola.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import edu.uclm.esi.gramola.dao.SpotifyTokenRepository;
+import edu.uclm.esi.gramola.entities.SpotifyToken;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -18,6 +22,7 @@ import java.util.Base64;
 public class SpotifyService {
     private final RestTemplate http = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final SpotifyTokenRepository spotifyTokens;
 
     @Value("${spotify.clientId:${spring.security.oauth2.client.registration.spotify.client-id:}}")
     private String clientId;
@@ -28,14 +33,41 @@ public class SpotifyService {
     private volatile String appAccessToken;
     private volatile Instant appAccessExpiresAt;
 
-    public String ensureAccessToken(HttpSession session) {
-        String access = (String) session.getAttribute("spotify_access_token");
-        Instant exp = (Instant) session.getAttribute("spotify_expires_at");
-        if (access != null && exp != null && Instant.now().isBefore(exp.minusSeconds(30))) {
-            return access;
+    public SpotifyService(SpotifyTokenRepository spotifyTokens) {
+        this.spotifyTokens = spotifyTokens;
+    }
+
+    @Transactional
+    public void storeUserTokens(long userId, String accessToken, String refreshToken, Instant expiresAt) {
+        SpotifyToken t = spotifyTokens.findById(userId).orElseGet(() -> new SpotifyToken(userId));
+        t.setAccessToken(accessToken);
+        if (refreshToken != null && !refreshToken.isBlank()) {
+            t.setRefreshToken(refreshToken);
         }
-        String refresh = (String) session.getAttribute("spotify_refresh_token");
-        if (refresh == null) throw new RuntimeException("No hay token de Spotify en sesión");
+        t.setExpiresAt(expiresAt);
+        spotifyTokens.save(t);
+    }
+
+    public Instant getExpiresAt(long userId) {
+        return spotifyTokens.findById(userId).map(SpotifyToken::getExpiresAt).orElse(null);
+    }
+
+    public String ensureAccessToken(HttpSession session) {
+        Object userIdObj = session.getAttribute("userId");
+        if (userIdObj == null) throw new RuntimeException("Sesión no iniciada");
+        long userId = (Long) userIdObj;
+
+        SpotifyToken current = spotifyTokens.findById(userId).orElse(null);
+        if (current != null) {
+            String access = current.getAccessToken();
+            Instant exp = current.getExpiresAt();
+            if (access != null && exp != null && Instant.now().isBefore(exp.minusSeconds(30))) {
+                return access;
+            }
+        }
+
+        String refresh = current != null ? current.getRefreshToken() : null;
+        if (refresh == null || refresh.isBlank()) throw new RuntimeException("No hay token de Spotify guardado");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         String basic = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
@@ -50,8 +82,8 @@ public class SpotifyService {
             JsonNode node = mapper.readTree(res.getBody());
             String newAccess = node.path("access_token").asText();
             int expiresIn = node.path("expires_in").asInt(3600);
-            session.setAttribute("spotify_access_token", newAccess);
-            session.setAttribute("spotify_expires_at", Instant.now().plusSeconds(expiresIn));
+            Instant newExp = Instant.now().plusSeconds(expiresIn);
+            storeUserTokens(userId, newAccess, null, newExp);
             return newAccess;
         } catch (Exception e) {
             throw new RuntimeException(e);

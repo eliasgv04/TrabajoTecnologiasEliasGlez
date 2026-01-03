@@ -8,8 +8,9 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  register(email: string, pwd1: string, pwd2: string): Observable<any> {
-    const info = { email, pwd1, pwd2 };
+  register(email: string, pwd1: string, pwd2: string, barName?: string): Observable<any> {
+    const info: any = { email, pwd1, pwd2 };
+    if (barName && barName.trim().length) info.barName = barName.trim();
     return this.http.post<any>(`${this.baseUrl}/register`, info);
   }
 

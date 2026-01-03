@@ -67,7 +67,7 @@ export class AccountComponent implements OnInit {
 
   saveSettings() {
     if (!this.settings) return;
-    const uri = (this.settings.spotifyPlaylistUri || '').trim();
+       const uri = (this.settings.spotifyPlaylistUri || '').trim();
     // Validación rápida: si está vacío, guardamos como "limpiar" y listo
     if (!uri) {
       this.saving = true;
@@ -106,4 +106,5 @@ export class AccountComponent implements OnInit {
       }
     });
   }
+
 }

@@ -4,7 +4,7 @@
     <p class="muted">Gestiona la música de tu bar como en los viejos tiempos, con la comodidad de hoy.</p>
     <div class="cta">
       <ng-container *ngIf="!(auth.isLoggedIn$ | async); else logged">
-        <a routerLink="/login" class="btn">Entrar</a>
+        <a routerLink="/queue" class="btn">Entrar</a>
         <a routerLink="/register" class="btn outline" style="margin-left:.5rem">Crear cuenta</a>
       </ng-container>
       <ng-template #logged>

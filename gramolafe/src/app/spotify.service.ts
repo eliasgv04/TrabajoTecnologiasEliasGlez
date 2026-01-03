@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, filter, take } from 'rxjs';
 
 declare global {
   interface Window { onSpotifyWebPlaybackSDKReady?: () => void; Spotify?: any; }
@@ -8,7 +8,7 @@ declare global {
 
 @Injectable({ providedIn: 'root' })
 export class SpotifyService {
-  private baseUrl = 'http://localhost:8000';
+  private baseUrl = '/api';
   private deviceId$ = new BehaviorSubject<string | null>(null);
   private player: any;
 
@@ -36,26 +36,46 @@ export class SpotifyService {
       this.player.addListener('account_error', ({ message }: any) => console.error(message));
       await this.player.connect();
     }
-    return firstValueFrom(this.deviceId$);
+    // Wait until the SDK reports a real device id (BehaviorSubject starts as null)
+    return firstValueFrom(this.deviceId$.pipe(filter((v): v is string => !!v && v.length > 0), take(1)));
   }
 
-  async connectOrLogin(returnUrl: string = 'http://localhost:4200/queue') {
-    const id = await this.ensurePlayer();
-    if (id) return id;
-    // Try to fetch token: if 401, redirect to login
+  async connectOrLogin(returnUrl?: string) {
+    const finalReturnUrl = returnUrl || `${window.location.origin}/queue`;
+
+    // 1) First check if we are authenticated with Spotify.
+    // Do NOT depend on the Web Playback SDK to decide whether to redirect.
     try {
-      await this.getToken();
+      const token = await this.getToken();
+      if (!token) {
+        window.location.href = `${this.baseUrl}/spotify/login?returnUrl=${encodeURIComponent(finalReturnUrl)}`;
+        return null;
+      }
     } catch {
-      window.location.href = `${this.baseUrl}/spotify/login?returnUrl=${encodeURIComponent(returnUrl)}`;
+      window.location.href = `${this.baseUrl}/spotify/login?returnUrl=${encodeURIComponent(finalReturnUrl)}`;
+      return null;
+    }
+
+    // 2) We have a token: now try to bring up the player/device.
+    // Guard against SDK load hanging forever.
+    try {
+      const id = await this.withTimeout(this.ensurePlayer(), 7000);
+      if (id) return id;
+    } catch {
+      // Token exists but player not ready; caller can retry later.
     }
     return null;
   }
 
   playUris(uris: string[], deviceId?: string) {
-    return this.http.post(`${this.baseUrl}/spotify/play${deviceId ? '' : ''}`, { uris, deviceId });
+    return this.http.post(`${this.baseUrl}/spotify/play`, { uris, deviceId });
   }
+  resume(deviceId?: string) {
+    return this.http.post(`${this.baseUrl}/spotify/play`, { deviceId });
+  }
+  
   pause(deviceId?: string) {
-    return this.http.put(`${this.baseUrl}/spotify/pause${deviceId ? '' : ''}`, { deviceId });
+    return this.http.put(`${this.baseUrl}/spotify/pause`, { deviceId });
   }
   transfer(deviceId: string, play = true) {
     return this.http.put(`${this.baseUrl}/spotify/transfer`, { deviceId, play });
@@ -70,13 +90,48 @@ export class SpotifyService {
     });
   }
 
-  private injectSdk(): Promise<void> {
-    return new Promise((resolve) => {
+  private injectSdk(timeoutMs = 7000): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // If already available, resolve immediately
+      if ('Spotify' in window) {
+        resolve();
+        return;
+      }
+
+      // If already injecting, just wait for the ready callback (with timeout)
+      const existing = document.getElementById('spotify-player-sdk');
+      const timer = setTimeout(() => reject(new Error('Spotify SDK load timeout')), timeoutMs);
+      window.onSpotifyWebPlaybackSDKReady = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      if (existing) return;
+
       const script = document.createElement('script');
+      script.id = 'spotify-player-sdk';
       script.src = 'https://sdk.scdn.co/spotify-player.js';
       script.async = true;
+      script.onerror = () => {
+        clearTimeout(timer);
+        reject(new Error('Spotify SDK load error'));
+      };
       document.body.appendChild(script);
-      window.onSpotifyWebPlaybackSDKReady = () => resolve();
+    });
+  }
+
+  private withTimeout<T>(p: Promise<T>, timeoutMs: number): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('timeout')), timeoutMs);
+      p.then(
+        (v) => {
+          clearTimeout(timer);
+          resolve(v);
+        },
+        (e) => {
+          clearTimeout(timer);
+          reject(e);
+        }
+      );
     });
   }
 }
