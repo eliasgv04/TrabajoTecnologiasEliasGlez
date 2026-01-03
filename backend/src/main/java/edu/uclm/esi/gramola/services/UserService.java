@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.dao.VerificationTokenRepository;
 import edu.uclm.esi.gramola.dao.PasswordResetTokenRepository;
+import edu.uclm.esi.gramola.dao.BarSettingsRepository;
 import edu.uclm.esi.gramola.entities.User;
+import edu.uclm.esi.gramola.entities.BarSettings;
 import edu.uclm.esi.gramola.entities.VerificationToken;
 import edu.uclm.esi.gramola.entities.PasswordResetToken;
 
@@ -21,6 +23,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final BarSettingsRepository settingsRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository tokenRepo;
     private final PasswordResetTokenRepository resetRepo;
@@ -28,10 +31,11 @@ public class UserService {
 
     private static final Pattern EMAIL_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+    public UserService(UserRepository userRepository, BarSettingsRepository settingsRepository, PasswordEncoder passwordEncoder,
                        VerificationTokenRepository tokenRepo, PasswordResetTokenRepository resetRepo,
                        MailService mail) {
         this.userRepository = userRepository;
+        this.settingsRepository = settingsRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
         this.resetRepo = resetRepo;
@@ -58,7 +62,7 @@ public class UserService {
         if (pwd1.length() <= 5) {
             throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
         }
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             throw new DataIntegrityViolationException("Ese correo electrónico ya está siendo utilizado");
         }
         User u = new User();
@@ -83,12 +87,25 @@ public class UserService {
 
     public Optional<User> findUserByEmail(String email) {
         if (email == null) return Optional.empty();
-        return userRepository.findByEmail(email.trim());
+        return userRepository.findByEmailIgnoreCase(email.trim());
+    }
+
+    public Optional<User> findUserByIdentifier(String identifier) {
+        if (identifier == null) return Optional.empty();
+        String id = identifier.trim();
+        if (id.isEmpty()) return Optional.empty();
+
+        // 1) Email
+        Optional<User> byEmail = userRepository.findByEmailIgnoreCase(id);
+        if (byEmail.isPresent()) return byEmail;
+
+        // 2) Bar name (stored in bar_settings)
+        return settingsRepository.findFirstByBarNameIgnoreCase(id).map(BarSettings::getUser);
     }
 
     public User loginByEmail(String email, String rawPassword) {
         if (email == null || rawPassword == null) return null;
-        Optional<User> opt = userRepository.findByEmail(email.trim());
+        Optional<User> opt = userRepository.findByEmailIgnoreCase(email.trim());
         if (opt.isEmpty()) return null;
         User u = opt.get();
         if (!u.isVerified()) {
@@ -98,6 +115,15 @@ public class UserService {
             return u;
         }
         return null;
+    }
+
+    public User loginByIdentifier(String identifier, String rawPassword) {
+        if (identifier == null || rawPassword == null) return null;
+        Optional<User> opt = findUserByIdentifier(identifier);
+        if (opt.isEmpty()) return null;
+        User u = opt.get();
+        if (!u.isVerified()) return null;
+        return passwordEncoder.matches(rawPassword.trim(), u.getPassword()) ? u : null;
     }
 
     @Transactional

@@ -1,59 +1,40 @@
-# Gramolafe
+# Gramolafe (Frontend)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
+Frontend Angular (standalone) de la Gramola.
 
-## Development server
+## Requisitos
 
-To start a local development server, run:
+- Node.js + npm
+- Backend levantado en `https://localhost:8000`
 
-```bash
-ng serve
-```
+## Desarrollo
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Instalar dependencias:
 
-## Code scaffolding
+- `npm install`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Arranque (HTTP):
 
-```bash
-ng generate component component-name
-```
+- `npm run start`
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Arranque recomendado (HTTPS):
 
-```bash
-ng generate --help
-```
+- `npm run start:https`
 
-## Building
+El frontend usa el proxy de `proxy.conf.json` para llamar al backend a través de `/api`:
 
-To build the project run:
+- Front: `https://localhost:4200`
+- Backend (proxy): `/api/*` -> `https://localhost:8000/*`
 
-```bash
-ng build
-```
+### Certificados para `start:https`
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El script espera estos ficheros en la raíz de `gramolafe/`:
 
-## Running unit tests
+- `localhost.pem`
+- `localhost-key.pem`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Puedes generarlos con una herramienta tipo `mkcert` (recomendado en Windows) o con OpenSSL si lo tienes disponible.
 
-```bash
-ng test
-```
+## Build
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `npm run build`

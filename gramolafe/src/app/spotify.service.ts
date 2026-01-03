@@ -73,6 +73,10 @@ export class SpotifyService {
   resume(deviceId?: string) {
     return this.http.post(`${this.baseUrl}/spotify/play`, { deviceId });
   }
+
+  seek(positionMs: number, deviceId?: string) {
+    return this.http.put(`${this.baseUrl}/spotify/seek`, { positionMs, deviceId });
+  }
   
   pause(deviceId?: string) {
     return this.http.put(`${this.baseUrl}/spotify/pause`, { deviceId });

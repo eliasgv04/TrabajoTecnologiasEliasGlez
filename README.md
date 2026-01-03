@@ -1,95 +1,77 @@
 # Gramola Virtual (Jukebox) con Spotify
 
-Proyecto para desarrollar una gramola virtual para bares y locales, usando la API de Spotify para ofrecer catálogo y reproducir en el dispositivo del establecimiento.
+Aplicación web (Angular + Spring Boot + MySQL) para que un bar gestione una “cola” de canciones de Spotify y las reproduzca en su dispositivo mediante Spotify Connect.
 
-Estado: Backend y Frontend en marcha (MVP auth+UI) y documentación actualizada (ver `docs/`).
+## Estado actual
 
-## Objetivo (MVP)
+- HTTPS end-to-end (backend y front en local)
+- OAuth Spotify (Authorization Code) estable con `state` firmado y tokens persistidos en MySQL (`spotify_tokens`)
+- Reproducción real con Spotify Web Playback SDK (dispositivo “Gramola Player”) + endpoints backend de control
+- Búsqueda de canciones y encolado con cobro por “monedas” (packs con Stripe test)
+- Registro con verificación por email (Mailtrap en dev) y reset de contraseña por token
+- Login aceptando “correo o nombre del bar”
 
-- Clientes del local pueden buscar canciones (Spotify), pagar (simulado) y encolarlas.
-- El dispositivo del bar (con Spotify Premium del propietario) reproduce la cola.
-- El bar puede moderar la cola y aplicar reglas anti-spam.
-
-## Alcance actual y decisiones recientes
-
-- Autenticación simplificada (MVP):
-  - Registro, login, logout y borrado de cuenta con sesiones (HttpSession).
-  - Sin verificación por email ni tokens; reset de contraseña por email directo.
-  - Respuestas JSON homogéneas `{ "message": "..." }` para Postman y UI.
-- UI/UX:
-  - Navbar con lógica de visibilidad (oculta Inicio en la cola si estás logueado).
-  - Botones y enlaces auditados (Registro/Login/Reset) y estilos unificados.
-  - Vista de “Restablecer contraseña” modernizada y funcional.
-- Limpieza:
-  - Eliminadas entidades/repos de tokens (verificación y reset) en backend.
-  - Eliminado componente `Forgot` en frontend; `/forgot` redirige a `/reset`.
-  - Silenciado el SQL de Hibernate y añadido logs informativos breves.
-
-- Pagos 100% simulados: no habrá cobros reales ni integración con pasarelas en el MVP de la práctica. Se registrarán "pagos" en base de datos a modo de simulación y los precios se gestionarán desde la base de datos (no hardcodeados).
-- Gestión de cuentas del bar: registro, verificación por email (token), login, recuperación de contraseña y suscripción mensual/anual almacenada en base de datos. En desarrollo se usará un servicio de correo de pruebas (p. ej., Mailtrap) para no enviar emails reales.
-- Gramola para clientes: búsqueda vía backend (Spotify API), inserción en cola tras "pago" simulado, cola prioritaria por delante de la playlist base, moderación por el bar y reglas anti-spam (límites y cooldown).
-- Continuidad: cuando la cola de la gramola queda vacía, continúa la playlist base del bar.
-- Privacidad y seguridad: no se manejan datos de tarjeta ni dinero real; no se guardan datos personales innecesarios. Los tokens de Spotify del bar se gestionan sólo en el backend.
-
-## Estructura
-
-- `docs/`
-  - `01_requisitos_mvp.md`: Requisitos y alcance del MVP
-  - `02_roles_flujos.md`: Actores, casos de uso y flujos
-- `practica.docx` y `practica.pdf`: Documentos de la asignatura
+Documentación detallada en `docs/`.
 
 ## Tecnologías
 
-- Frontend: Angular (v17+), arquitectura de vistas, modelos y servicios.
-- Backend: Java con Spring Boot, capas de controladores, servicios y repositorios (Spring Data JPA).
-- Base de datos: MySQL.
+- Frontend: Angular 19 (standalone, routing)
+- Backend: Java 17 + Spring Boot (MVC + JPA)
+- DB: MySQL
+- Integraciones: Spotify (OAuth + Web API + Web Playback SDK), Mailtrap (SMTP), Stripe (test)
 
-## Funcionalidades del MVP actual (resumen)
+## Arranque rápido (desarrollo)
 
-- Cuentas (propietario):
-  - Registro con auto-login, login/logout, borrado de cuenta.
-  - Restablecimiento de contraseña por email (sin tokens).
-- UI:
-  - Home, Login, Registro, Reset y Cola con navegación coherente.
-  - Estilo moderno unificado y botones funcionales.
-- Backend:
-  - Endpoints con respuestas `{message}` y logs claros en consola.
-  - Mapeo de timestamps en `users` y compatibilidad con MySQL.
+### 1) Requisitos
 
-En preparación (Spotify): búsqueda de canciones mediante Client Credentials y API de cola.
+- Java 17, Maven
+- Node.js + npm
+- MySQL en `localhost:3306` con una BD `gramola`
 
-- Front (Propietario del bar):
-  - Crear cuenta (nombre del bar, email, contraseña/confirmación) con verificación por email.
-  - Loguearse y cerrar sesión.
-  - Recuperar contraseña (solicitud y cambio mediante token enviado por email).
-  - Suscripción mensual/anual (planes y precios en base de datos; registro de alta en DB, sin cobro real).
-- Front (Cliente del bar):
-  - Buscar canciones.
-  - Insertar canción en la cola tras confirmar el importe (simulado) definido en la base de datos.
-  - Al insertar, la canción se "cuela" y sonará a continuación de la actual.
-- Back (Spring Boot):
-  - Contrapartes de todas las funcionalidades anteriores.
-  - Guardar en MySQL las canciones que se solicitan y los pagos simulados.
-  - Integración con proveedor de correo para verificación y recuperación.
-  - Integración con Spotify para búsqueda y control del dispositivo del bar (Add to Queue / control de reproducción).
+### 2) Backend
 
-## Criterios de valoración (resumen)
+Desde `backend/`:
 
-- Gestión de cuentas (front y back) — 2 puntos. Si falla, suspenso.
-- Buscar e insertar en cola — 2 puntos. Si falla, suspenso.
-- Reproducir canción — 2 puntos. Si no hay Premium, se admite simulación de reproducción.
-- Casos de prueba funcionales — 2 puntos.
-- Interfaz responsive — 1 punto.
-- Buen diseño arquitectónico — 1 punto.
+- `mvn spring-boot:run`
 
-Detalles en `docs/08_criterios_valoracion.md` y plan de pruebas en `docs/09_plan_pruebas_funcionales.md`.
+El backend levanta en `https://localhost:8000` (SSL habilitado). En el primer acceso el navegador puede pedir aceptar el certificado de desarrollo.
 
-## Próximos pasos
+Config principal: `backend/src/main/resources/application.properties`.
 
-1. Definir DTO de Track y contratos de `/music/search` y `/queue` (MVP con Spotify Client Credentials).
-2. Implementar backend de búsqueda (proxy a Spotify) con cache corta y manejo de rate limit.
-3. Implementar API de cola (POST/GET) y UI de búsqueda + añadir a cola en la vista de Cola.
-4. Sprint 2: eliminar de cola, y posterior OAuth para reproducción Premium (si procede).
+### 3) Frontend
 
----
-Nota legal/técnica: Controlar reproducción requiere Spotify Premium y cumplir términos de Spotify. Para fines académicos se pueden usar previews de 30s cuando no haya dispositivo controlable.
+Desde `gramolafe/`:
+
+- `npm install`
+- `npm run start:https`
+
+El front usa proxy en `gramolafe/proxy.conf.json` (`/api` -> `https://localhost:8000`).
+
+Nota: el script `start:https` requiere certificados `localhost.pem` y `localhost-key.pem` en `gramolafe/`. Puedes generarlos con una herramienta tipo `mkcert` o con OpenSSL (si lo tienes instalado).
+
+## Configuración Spotify (dev)
+
+- En Spotify Developer Dashboard, añade como Redirect URI:
+  - `https://127.0.0.1:8000/spotify/callback`
+- Asegúrate de tener en `application.properties`:
+  - `spring.security.oauth2.client.registration.spotify.client-id`
+  - `spring.security.oauth2.client.registration.spotify.client-secret`
+  - `spotify.redirectUri=https://127.0.0.1:8000/spotify/callback`
+  - `spotify.stateSecret=...` (obligatorio, firma el parámetro `state`)
+
+## Endpoints principales (backend)
+
+- Auth: `POST /users/register`, `PUT /users/login`, `GET /users/verify?token=...`, `POST /users/reset/request`, `POST /users/reset/confirm`
+- Spotify OAuth/control: `GET /spotify/login`, `GET /spotify/callback`, `GET /spotify/token`, `PUT /spotify/transfer`, `POST /spotify/play`, `PUT /spotify/pause`, `PUT /spotify/seek`
+- Música: `GET /music/search?q=...`, `GET /music/tracks/{id}`, `GET /music/playlist?uri=...`
+- Cola: `GET /queue`, `POST /queue`, `DELETE /queue/clear`, `DELETE /queue/{id}`
+- Ajustes: `GET /settings`, `PUT /settings` (precio, playlist, nombre del bar)
+- Suscripciones: `GET /subscriptions/plans`, `GET /subscriptions/status`, `GET /subscriptions/prepay`, `GET /subscriptions/confirm`
+- Pagos/monedas: `GET /payments/prepay`, `GET /payments/confirm`
+
+## Notas
+
+- Los errores de backend se devuelven en JSON homogéneo: `{ "status": number, "error": string, "path": string }`.
+- Controlar reproducción en Spotify requiere cuenta Premium y un dispositivo disponible.
+
+Ver también: `docs/03_arquitectura_stack.md`, `docs/05_plan_integracion_spotify.md`, `docs/09_plan_pruebas_funcionales.md`.

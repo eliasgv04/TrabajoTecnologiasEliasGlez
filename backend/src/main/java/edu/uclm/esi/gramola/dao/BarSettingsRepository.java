@@ -6,4 +6,6 @@ import edu.uclm.esi.gramola.entities.BarSettings;
 
 public interface BarSettingsRepository extends JpaRepository<BarSettings, Long> {
     Optional<BarSettings> findByUserId(Long userId);
+
+    Optional<BarSettings> findFirstByBarNameIgnoreCase(String barName);
 }

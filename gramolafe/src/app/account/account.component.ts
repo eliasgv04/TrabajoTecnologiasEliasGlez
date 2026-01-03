@@ -19,7 +19,7 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 export class AccountComponent implements OnInit {
   info: AccountInfo | null = null;
   error = '';
-  settings: AppSettings | null = null;
+  settings: AppSettings = { pricePerSong: 1, spotifyPlaylistUri: '', barName: '' };
   saving = false;
 
   constructor(
@@ -39,7 +39,9 @@ export class AccountComponent implements OnInit {
     this.api.me().subscribe({
       next: (i) => (this.info = i),
       error: (e) => {
-        const msg = (typeof e?.error === 'string' ? e.error : e?.error?.message) || e?.message || 'Error cargando la cuenta';
+        const msg = (typeof e?.error === 'string'
+          ? e.error
+          : (e?.error?.error || e?.error?.message)) || e?.message || 'Error cargando la cuenta';
         this.error = msg;
         // No redirigimos: mantenemos los datos locales si existen
       }
@@ -60,14 +62,38 @@ export class AccountComponent implements OnInit {
       error: () => {}
     });
     this.settingsApi.get().subscribe({
-      next: (s) => (this.settings = s),
+      next: (s) => {
+        this.settings = s;
+        const bn = (s as any)?.barName;
+        if (typeof bn === 'string') {
+          try { localStorage.setItem('gramolaBarName', bn.trim()); } catch {}
+        }
+      },
       error: () => {}
     });
   }
 
+  saveBarName() {
+    const bn = (this.settings as any)?.barName;
+    const trimmed = (typeof bn === 'string') ? bn.trim() : '';
+    this.saving = true;
+    this.settingsApi.update({ barName: trimmed }).subscribe({
+      next: (s) => {
+        this.settings = s;
+        try { localStorage.setItem('gramolaBarName', (s as any)?.barName ? String((s as any).barName).trim() : ''); } catch {}
+        this.toast.show('Nombre del bar guardado');
+        this.saving = false;
+      },
+      error: (e) => {
+        this.toast.show(this.pickMsg(e));
+        this.saving = false;
+      }
+    });
+  }
+
   saveSettings() {
-    if (!this.settings) return;
-       const uri = (this.settings.spotifyPlaylistUri || '').trim();
+    const uri = this.normalizePlaylistInput(this.settings.spotifyPlaylistUri || '');
+    this.settings.spotifyPlaylistUri = uri;
     // Validación rápida: si está vacío, guardamos como "limpiar" y listo
     if (!uri) {
       this.saving = true;
@@ -78,7 +104,10 @@ export class AccountComponent implements OnInit {
           this.toast.show('Lista por defecto desactivada');
           this.saving = false;
         },
-        error: () => { this.saving = false; }
+        error: (e) => {
+          this.toast.show(this.pickMsg(e));
+          this.saving = false;
+        }
       });
       return;
     }
@@ -96,15 +125,69 @@ export class AccountComponent implements OnInit {
             this.toast.show(count > 0 ? `Playlist guardada (${count} pistas)` : 'Playlist guardada');
             this.saving = false;
           },
-          error: () => { this.saving = false; }
+          error: (e) => {
+            this.toast.show(this.pickMsg(e));
+            this.saving = false;
+          }
         });
       },
       error: (e) => {
+        // If Spotify is temporarily unreachable, allow saving anyway.
+        const status = e?.status;
         const msg = (typeof e?.error === 'string' ? e.error : e?.error?.error) || e?.message || 'No se pudo validar la playlist';
+        // Allow saving when Spotify validation fails (5xx) or when backend reports playlist not found/access issues (often due to token limitations).
+        const allowSaveAnyway = (status && status >= 500)
+          || (status === 400 && typeof msg === 'string' && (msg.includes('Playlist no encontrada') || msg.includes('No se pudo acceder')));
+
+        if (allowSaveAnyway) {
+          this.settingsApi.update({ spotifyPlaylistUri: uri }).subscribe({
+            next: (s) => {
+              this.settings = s;
+              try { localStorage.setItem('gramolaPlaylistUri', s.spotifyPlaylistUri || ''); } catch {}
+              this.toast.show('Playlist guardada (no se pudo validar ahora)');
+              this.saving = false;
+            },
+            error: (e2) => {
+              this.toast.show(this.pickMsg(e2));
+              this.saving = false;
+            }
+          });
+          return;
+        }
+
         this.toast.show(msg);
         this.saving = false;
       }
     });
+  }
+
+  private normalizePlaylistInput(input: string): string {
+    const s = (input || '').trim();
+    if (!s) return '';
+    if (s.startsWith('spotify:playlist:')) return s;
+
+    const urlMatch = s.match(/open\.spotify\.com\/playlist\/([A-Za-z0-9]+)(?:\/)?(?:\?.*)?$/);
+    if (urlMatch?.[1]) {
+      const id = urlMatch[1].replace(/[^A-Za-z0-9]/g, '');
+      return `spotify:playlist:${id}`;
+    }
+
+    // allow raw id
+    if (/^[A-Za-z0-9]{10,}$/.test(s)) return `spotify:playlist:${s}`;
+
+    // fallback: keep as-is (backend can still handle some URL formats)
+    return s;
+  }
+
+  private pickMsg(e: any): string {
+    if (!e) return 'Error guardando la playlist';
+    const raw = e?.error ?? e?.message ?? e;
+    if (typeof raw === 'string') return raw;
+    if (typeof raw === 'object') {
+      const m = (raw as any)?.message || (raw as any)?.error || (raw as any)?.reason;
+      if (typeof m === 'string' && m.trim()) return m;
+    }
+    return 'Error guardando la playlist';
   }
 
 }

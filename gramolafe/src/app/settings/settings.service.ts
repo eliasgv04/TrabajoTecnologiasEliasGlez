@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 export interface AppSettings {
   pricePerSong: number;
   spotifyPlaylistUri?: string | null;
+  barName?: string | null;
 }
 
 @Injectable({ providedIn: 'root' })

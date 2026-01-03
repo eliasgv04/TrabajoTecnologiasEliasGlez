@@ -1,24 +1,36 @@
 # Pagos y Reglas de Negocio
 
 ## Pagos
-- MVP: pago simulado con "monedas" virtuales asociadas a la sesión/sala.
-- Opcional: integrar Stripe Checkout/Payment Links para un flujo real (fuera de alcance inicial de práctica si complica).
-- Precio por canción configurable por el bar; posible "propina" para subir en cola (no MVP si complica).
+
+- La app usa “monedas” (saldo en el usuario) para comprar canciones en la cola.
+- El cobro por canción es dinámico según popularidad Spotify (tier 1–3 monedas).
+- Se puede recargar saldo comprando packs (Stripe test):
+	- `GET /payments/prepay?matches=5|10|20|25` -> devuelve `client_secret` (texto)
+	- `GET /payments/confirm` -> simula confirmación y suma monedas al usuario
+
+Suscripción (Stripe test):
+
+- `GET /subscriptions/plans` lista planes
+- `GET /subscriptions/prepay?planId=...` genera `client_secret`
+- `GET /subscriptions/confirm` activa suscripción y acredita monedas
 
 ## Reglas anti-spam
-- Máximo de canciones pendientes por usuario (p. ej., 2).
-- Cooldown entre encolados (p. ej., 3 minutos).
-- Longitud máxima de cola (p. ej., 50).
-- Moderación del bar: eliminar/reordenar; bloquear usuario.
+
+- Este repo no implementa reglas por usuario (cooldown/límites/roles). La cola es global para el usuario logueado.
 
 ## Estados y errores
-- Estados: pending, playing, played, rejected.
-- Errores típicos: sin dispositivo, token expirado, tema no disponible, rate limit; ofrecer mensajes claros y reintentos.
+
+- Encolado:
+	- Si no hay saldo: 402 “Saldo insuficiente”.
+- Errores de backend en general: JSON homogéneo `{status,error,path}`.
+- Spotify:
+	- Token expirado: refresh automático en backend.
+	- Sin dispositivo o sin Premium: Spotify puede devolver errores al transferir o reproducir.
 
 ## Métricas
-- Ingresos simulados por sesión.
-- Nº de canciones encoladas por usuario.
-- Tiempo medio en cola hasta reproducción.
+
+- Saldo en monedas del usuario.
+- Nº de canciones en cola.
 
 ## Consideraciones legales
 - No distribuir audio ni grabar streams; sólo controlar reproducción y usar previews en demo.

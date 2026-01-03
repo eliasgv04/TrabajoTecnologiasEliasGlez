@@ -197,8 +197,13 @@ export class SubscriptionsComponent implements OnInit {
   }
 
   private pickMsg(e: any): string {
-    const msg = e?.error ?? e?.message ?? 'Error';
-    return typeof msg === 'string' ? msg : msg?.message || 'Error';
+    const raw = e?.error ?? e?.message ?? 'Error';
+    if (typeof raw === 'string') return raw;
+    if (typeof raw === 'object' && raw) {
+      const m = (raw as any)?.error || (raw as any)?.message || (raw as any)?.reason;
+      if (typeof m === 'string' && m.trim()) return m;
+    }
+    return 'Error';
   }
 
   coinsPerMonth(p: SubscriptionPlan): number {

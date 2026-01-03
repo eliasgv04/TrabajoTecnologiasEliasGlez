@@ -1,8 +1,8 @@
 <div class="card">
   <h2>Iniciar sesión</h2>
   <form (ngSubmit)="login()">
-    <label>Email</label>
-    <input type="email" [(ngModel)]="email" name="email" required />
+    <label>Correo o nombre del bar</label>
+    <input type="text" [(ngModel)]="identifier" name="email" required />
     <label>Contraseña</label>
     <input type="password" [(ngModel)]="pwd" name="pwd" required />
     <button class="btn btn-primary" type="submit" [disabled]="loading">{{ loading ? 'Entrando…' : 'Entrar' }}</button>

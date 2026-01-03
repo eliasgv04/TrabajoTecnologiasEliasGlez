@@ -1,17 +1,18 @@
 # No funcionales y KPIs
 
 ## No funcionales
-- Disponibilidad objetivo (MVP local): 99%.
-- Latencia p95 búsqueda: <1.5s con cache.
-- Consistencia de la cola: eventual, con reconciliación al detectar cambio de pista.
-- Seguridad: secretos en backend; HTTPS en despliegues.
-- Observabilidad: logs estructurados y métricas básicas.
+
+- Disponibilidad (entorno local): orientativa.
+- Latencia de búsqueda: depende de Spotify; el backend actúa como proxy.
+- Seguridad:
+	- secretos y refresh tokens sólo en backend (persistidos en MySQL)
+	- HTTPS habilitado en local (requisito práctico para OAuth)
+- Observabilidad: logs del backend a nivel INFO/WARN.
 
 ## KPIs
-- Canciones encoladas/día por sala.
-- Tasa de conversión búsqueda->encolado.
-- Tiempo medio de espera hasta reproducción.
-- Ingresos simulados/día.
+
+- Canciones encoladas por sesión (manual, evidencias en plan de pruebas).
+- % de búsquedas que acaban en encolado.
 
 ## Criterios de éxito MVP
 - Cliente puede encolar y su canción suena en orden correcto.

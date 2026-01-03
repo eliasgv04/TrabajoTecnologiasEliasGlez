@@ -1,6 +1,36 @@
 # Changelog
 
+## 2026-01-03
+
+Backend
+
+- Migración a HTTPS local (`server.ssl.*`) y configuración de redirect seguro para Spotify.
+- Spotify OAuth estable:
+	- `state` firmado (stateless) con `spotify.stateSecret`
+	- tokens persistidos en MySQL (`spotify_tokens`) y refresh automático
+- Endpoints de control de reproducción para Web Playback SDK:
+	- `/spotify/transfer`, `/spotify/play`, `/spotify/pause`, `/spotify/seek`
+- Cola y música:
+	- búsqueda `GET /music/search`
+	- playlist `GET /music/playlist`
+	- cola `GET/POST/DELETE /queue`
+	- cobro por monedas y 402 “Saldo insuficiente”
+- Formato de errores homogéneo en JSON (`status/error/path`).
+- Login soporta “correo o nombre del bar”.
+
+Frontend (Angular)
+
+- Web Playback SDK (“Gramola Player”) integrado.
+- Persistencia/restore de estado de reproducción al navegar entre rutas.
+- Mensajes de error amigables a partir del `error` del backend.
+
+Documentación
+
+- Actualización completa de README y `docs/` para reflejar el estado real del repositorio.
+
 ## 2025-10-09
+
+Nota: esta entrada refleja una fase anterior del proyecto y no describe el estado actual.
 
 Backend
 - Simplificada autenticación: sin verificación por email ni tokens; reset por email directo.

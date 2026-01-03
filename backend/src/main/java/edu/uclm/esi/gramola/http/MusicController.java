@@ -2,6 +2,8 @@ package edu.uclm.esi.gramola.http;
 
 import edu.uclm.esi.gramola.dto.TrackDTO;
 import edu.uclm.esi.gramola.services.SpotifyClient;
+import edu.uclm.esi.gramola.services.SpotifyService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,11 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/music")
 public class MusicController {
     private final SpotifyClient spotify;
+    private final SpotifyService spotifyService;
 
-    public MusicController(SpotifyClient spotify) {
+    public MusicController(SpotifyClient spotify, SpotifyService spotifyService) {
         this.spotify = spotify;
+        this.spotifyService = spotifyService;
     }
 
     @GetMapping("/search")
@@ -32,10 +36,16 @@ public class MusicController {
     }
 
     @GetMapping("/playlist")
-    public ResponseEntity<?> playlist(@RequestParam("uri") String uri) {
+    public ResponseEntity<?> playlist(HttpSession session, @RequestParam("uri") String uri) {
         if (uri == null || uri.trim().isEmpty()) {
             return ResponseEntity.badRequest().body("Parámetro uri requerido");
         }
-        return ResponseEntity.ok(spotify.getPlaylistTracks(uri.trim()));
+        // Prefer the user's Spotify OAuth token when available (more reliable for some playlists).
+        try {
+            String userToken = spotifyService.ensureAccessToken(session);
+            return ResponseEntity.ok(spotify.getPlaylistTracksWithUserToken(uri.trim(), userToken));
+        } catch (Exception ignored) {
+            return ResponseEntity.ok(spotify.getPlaylistTracks(uri.trim()));
+        }
     }
 }

@@ -1,30 +1,27 @@
 # Estructura del Proyecto
 
-.
-- backend/ (Spring Boot, Java 17, Maven)
-  - src/main/java/com/gramola/backend/
-    - config/ (CORS)
-    - controller/ (Auth, Password, Gramola, Playback)
-    - service/ (Auth, Email, Gramola)
-    - repository/ (BarAccountRepository, QueueItemRepository, ...)
-    - domain/ (BarAccount, QueueItem, ...)
-    - dto/ (Auth y Gramola DTOs)
-  - src/main/resources/application.yml (MySQL, Mailhog, Spotify vars)
-  - pom.xml
-- frontend/ (Angular por módulos)
-  - STRUCTURE.md (guía)
-  - src/app/
-    - auth/
-    - gramola/
-    - admin/
-    - shared/services/
-    - shared/models/
-- docs/ (requisitos, arquitectura, integración, pagos, pruebas, etc.)
-- docker-compose.yml (MySQL + Mailhog)
-- .env.example (variables backend)
-- .gitignore
-- README.md
+Raíz del repo:
+
+- `backend/` (Spring Boot, Java 17, Maven)
+  - `src/main/java/edu/uclm/esi/gramola/`
+    - `http/` controladores REST (`/users`, `/queue`, `/spotify`, `/music`, `/settings`, `/payments`, `/subscriptions`, ...)
+    - `services/` servicios de dominio e integraciones (Spotify, settings, suscripciones, usuarios)
+    - `dao/` repositorios JPA
+    - `entities/` entidades JPA
+    - `dto/` DTOs de entrada/salida (p.ej. `TrackDTO`)
+  - `src/main/resources/application.properties` (MySQL, SSL/HTTPS, Spotify, Stripe, Mailtrap)
+  - `src/main/resources/ssl/` (keystore de desarrollo)
+  - `pom.xml`
+
+- `gramolafe/` (Angular 19, standalone)
+  - `src/app/` componentes y servicios
+  - `src/app/app.routes.ts` rutas (home/login/register/reset/queue/account/plans)
+  - `proxy.conf.json` proxy dev (`/api` -> `https://localhost:8000`)
+  - `package.json` scripts (`start`, `start:https`)
+
+- `docs/` documentación del proyecto (requisitos, arquitectura, Spotify, pagos, pruebas)
+- `README.md` guía rápida
 
 Notas
-- Puedes inicializar Angular con CLI y usar esta estructura como guía.
-- El backend ya tiene esqueleto y configuración de desarrollo.
+
+- En desarrollo se usa HTTPS local (backend y opcionalmente frontend) para compatibilidad con Spotify OAuth.

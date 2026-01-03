@@ -23,7 +23,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
 
-import edu.uclm.esi.gramola.services.SubscriptionService;
 import edu.uclm.esi.gramola.services.SpotifyService;
 
 @RestController
@@ -33,7 +32,6 @@ public class SpotifyAuthController {
 
     private final RestTemplate http = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final SubscriptionService subscriptionService;
     private final SpotifyService spotifyService;
 
     @Value("${spotify.clientId:${spring.security.oauth2.client.registration.spotify.client-id:}}")
@@ -51,8 +49,7 @@ public class SpotifyAuthController {
     @Value("${spotify.redirectUri:https://127.0.0.1:8000/spotify/callback}")
     private String redirectUri;
 
-    public SpotifyAuthController(SubscriptionService subscriptionService, SpotifyService spotifyService) {
-        this.subscriptionService = subscriptionService;
+    public SpotifyAuthController(SpotifyService spotifyService) {
         this.spotifyService = spotifyService;
     }
 
@@ -190,7 +187,6 @@ public class SpotifyAuthController {
         try {
             Object userIdObj = session.getAttribute("userId");
             if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
-            subscriptionService.requireActive((Long) userIdObj);
             String token = spotifyService.ensureAccessToken(session);
             String deviceId = (String) body.get("deviceId");
             boolean play = Boolean.TRUE.equals(body.get("play"));
@@ -210,7 +206,6 @@ public class SpotifyAuthController {
     public ResponseEntity<?> play(HttpSession session, @RequestBody Map<String, Object> body) {        try {
             Object userIdObj = session.getAttribute("userId");
             if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
-            subscriptionService.requireActive((Long) userIdObj);
             String token = spotifyService.ensureAccessToken(session);
             String deviceId = body != null ? (String) body.get("deviceId") : null;
             HttpHeaders h = new HttpHeaders();
@@ -235,7 +230,6 @@ public class SpotifyAuthController {
         try {
             Object userIdObj = session.getAttribute("userId");
             if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
-            subscriptionService.requireActive((Long) userIdObj);
             String token = spotifyService.ensureAccessToken(session);
             String deviceId = body != null ? (String) body.get("deviceId") : null;
             HttpHeaders h = new HttpHeaders();
@@ -246,6 +240,34 @@ public class SpotifyAuthController {
         } catch (Exception e) {
             log.warn("pause error", e);
             return ResponseEntity.status(500).body("Error al pausar");
+        }
+    }
+
+    @PutMapping("/seek")
+    public ResponseEntity<?> seek(HttpSession session, @RequestBody Map<String, Object> body) {
+        try {
+            Object userIdObj = session.getAttribute("userId");
+            if (userIdObj == null) return ResponseEntity.status(401).body("Sesión no iniciada");
+            String token = spotifyService.ensureAccessToken(session);
+
+            Object positionMsObj = body != null ? body.get("positionMs") : null;
+            if (positionMsObj == null) return ResponseEntity.badRequest().body("Falta positionMs");
+            long positionMs = (positionMsObj instanceof Number)
+                    ? ((Number) positionMsObj).longValue()
+                    : Long.parseLong(positionMsObj.toString());
+            if (positionMs < 0) positionMs = 0;
+
+            String deviceId = body != null ? (String) body.get("deviceId") : null;
+
+            HttpHeaders h = new HttpHeaders();
+            h.setBearerAuth(token);
+            String url = "https://api.spotify.com/v1/me/player/seek?position_ms=" + positionMs
+                    + (deviceId != null ? ("&device_id=" + deviceId) : "");
+            ResponseEntity<Void> res = http.exchange(url, HttpMethod.PUT, new HttpEntity<>(null, h), Void.class);
+            return ResponseEntity.status(res.getStatusCode()).build();
+        } catch (Exception e) {
+            log.warn("seek error", e);
+            return ResponseEntity.status(500).body("Error al hacer seek");
         }
     }
 }

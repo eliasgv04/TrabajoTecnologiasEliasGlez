@@ -7,11 +7,11 @@ La práctica se puntúa sobre 10 puntos:
    - Nota: si esto no funciona perfectamente, la práctica está suspensa.
 
 2) Buscar una canción e insertarla en la cola — 2 puntos
-   - Búsqueda vía Spotify API (proxy backend) y encolado tras pago simulado (precio desde DB).
+   - Búsqueda vía Spotify API (proxy backend) y encolado tras pago simulado (monedas del usuario; coste por canción 1–3 según popularidad).
    - Nota: si esto no funciona perfectamente, la práctica está suspensa.
 
 3) Reproducir canción — 2 puntos
-   - Control de reproducción con Spotify Connect en dispositivo del bar (Premium). Alternativa si no hay Premium: simulación de reproducción o otro proveedor.
+   - Control de reproducción con Spotify Connect en dispositivo del bar (Premium), usando Web Playback SDK + endpoints backend. Alternativa si no hay Premium: simulación.
 
 4) Casos de prueba funcionales — 2 puntos
    - Se prepararán escenarios de prueba y evidencia (capturas/logs). Ver `docs/09_plan_pruebas_funcionales.md`.

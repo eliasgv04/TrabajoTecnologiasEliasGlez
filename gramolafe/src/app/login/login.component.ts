@@ -14,7 +14,7 @@ import { SpotifyService } from '../spotify.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  email = '';
+  identifier = '';
   pwd = '';
   loading = false;
   error = '';
@@ -24,10 +24,10 @@ export class LoginComponent {
   login() {
     this.error = '';
     this.loading = true;
-    this.userService.login(this.email, this.pwd).subscribe({
+    this.userService.login(this.identifier, this.pwd).subscribe({
       next: async (res) => {
         this.auth.setLoggedIn(true);
-        this.auth.setEmail(res?.email || this.email);
+        this.auth.setEmail(res?.email || this.identifier);
         this.loading = false;
         // Navegar siempre a la cola tras login.
         // La autenticación de Spotify se dispara al entrar en /queue.

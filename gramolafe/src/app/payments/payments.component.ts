@@ -38,7 +38,7 @@ export class PaymentsComponent implements OnInit {
       next: (token) => { this.clientSecret = token; this.loading = false; this.setupStripeIfPossible(); },
       error: (e) => {
         this.loading = false;
-        const msg = (typeof e?.error === 'string' ? e.error : e?.error?.message) || 'Error en preautorización';
+        const msg = (typeof e?.error === 'string' ? e.error : (e?.error?.error || e?.error?.message)) || 'Error en preautorización';
         this.toast.show(msg);
         if (e?.status === 401 || e?.status === 403) {
           this.closed.emit();
@@ -65,7 +65,7 @@ export class PaymentsComponent implements OnInit {
               next: () => { this.loading = false; this.toast.show('Pago confirmado'); this.paid.emit(); this.closed.emit(); },
               error: (e) => {
                 this.loading = false;
-                const msg = (typeof e?.error === 'string' ? e.error : e?.error?.message) || 'Error confirmando pago';
+                const msg = (typeof e?.error === 'string' ? e.error : (e?.error?.error || e?.error?.message)) || 'Error confirmando pago';
                 this.toast.show(msg);
                 if (e?.status === 401 || e?.status === 403) {
                   this.closed.emit();

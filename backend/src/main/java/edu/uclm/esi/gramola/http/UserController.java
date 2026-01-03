@@ -62,14 +62,14 @@ public class UserController {
 
     @PutMapping(path = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> login(HttpSession session, @RequestBody Map<String, Object> info) {
-        String email = (info.getOrDefault("email", "") + "").trim();
+        String identifier = (info.getOrDefault("email", "") + "").trim();
         String pwd = (info.getOrDefault("pwd", "") + "").trim();
-        var opt = this.userService.findUserByEmail(email);
+        var opt = this.userService.findUserByIdentifier(identifier);
         if (opt.isPresent() && !opt.get().isVerified()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                 "Tu cuenta no está verificada. Revisa tu correo y haz clic en el enlace de verificación.");
         }
-        User user = this.userService.loginByEmail(email, pwd);
+        User user = this.userService.loginByIdentifier(identifier, pwd);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Credenciales inválidas");
         }

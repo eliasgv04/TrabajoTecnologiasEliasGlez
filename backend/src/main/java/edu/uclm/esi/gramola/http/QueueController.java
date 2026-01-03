@@ -6,7 +6,6 @@ import edu.uclm.esi.gramola.dto.TrackDTO;
 import edu.uclm.esi.gramola.entities.QueueItem;
 import edu.uclm.esi.gramola.entities.User;
 import org.springframework.beans.factory.annotation.Value;
-import edu.uclm.esi.gramola.services.SubscriptionService;
 import edu.uclm.esi.gramola.services.SettingsService;
 import edu.uclm.esi.gramola.services.SpotifyService;
 import org.springframework.http.ResponseEntity;
@@ -21,17 +20,15 @@ import java.util.List;
 public class QueueController {
     private final QueueItemRepository repo;
     private final UserRepository users;
-    private final SubscriptionService subscriptionService;
     private final SettingsService settingsService;
     private final SpotifyService spotifyService;
 
     @Value("${app.pricePerSong:1}")
     private int defaultPricePerSong;
 
-    public QueueController(QueueItemRepository repo, UserRepository users, SubscriptionService subscriptionService, SettingsService settingsService, SpotifyService spotifyService) {
+    public QueueController(QueueItemRepository repo, UserRepository users, SettingsService settingsService, SpotifyService spotifyService) {
         this.repo = repo;
         this.users = users;
-        this.subscriptionService = subscriptionService;
         this.settingsService = settingsService;
         this.spotifyService = spotifyService;
     }
@@ -51,12 +48,6 @@ public class QueueController {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
         Long userId = (Long) session.getAttribute("userId");
-        // Require an active subscription to add songs
-        try {
-            subscriptionService.requireActive(userId);
-        } catch (org.springframework.web.server.ResponseStatusException ex) {
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
-        }
         User u = users.findById(userId).orElse(null);
         if (u == null) return ResponseEntity.status(404).body("Usuario no encontrado");
         int pricePerSong = settingsService != null ? settingsService.pricePerSong(userId) : defaultPricePerSong;
@@ -91,12 +82,6 @@ public class QueueController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
-        Long userId = (Long) session.getAttribute("userId");
-        try {
-            subscriptionService.requireActive(userId);
-        } catch (org.springframework.web.server.ResponseStatusException ex) {
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
-        }
         repo.deleteAll();
         return ResponseEntity.ok().build();
     }
@@ -105,12 +90,6 @@ public class QueueController {
     public ResponseEntity<?> remove(HttpSession session, @PathVariable("id") Long id) {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body("Sesión no iniciada");
-        }
-        Long userId = (Long) session.getAttribute("userId");
-        try {
-            subscriptionService.requireActive(userId);
-        } catch (org.springframework.web.server.ResponseStatusException ex) {
-            return ResponseEntity.status(ex.getStatusCode()).body(ex.getReason());
         }
         if (!repo.existsById(id)) {
             return ResponseEntity.notFound().build();
