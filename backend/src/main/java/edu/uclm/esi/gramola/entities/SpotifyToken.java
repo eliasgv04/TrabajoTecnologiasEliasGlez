@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA que guarda los tokens OAuth de Spotify por usuario.
+ */
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+/**
+ * Servicio HTTP de pagos/recargas: prepay/confirm y obtención de publishableKey.
+ */
 @Injectable({ providedIn: 'root' })
 export class PaymentsService {
   private baseUrl = '/api/payments';

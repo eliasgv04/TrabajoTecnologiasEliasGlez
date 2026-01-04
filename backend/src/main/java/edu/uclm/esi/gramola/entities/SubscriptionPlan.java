@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA para definir un plan de suscripción.
+ */
+
 import jakarta.persistence.*;
 
 @Entity

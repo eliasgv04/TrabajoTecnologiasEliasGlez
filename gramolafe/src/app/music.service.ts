@@ -27,6 +27,9 @@ export interface QueueItem {
   createdAt: string;
 }
 
+/**
+ * Servicio HTTP de música y cola: encapsula llamadas a /api/music/* y /api/queue/*.
+ */
 @Injectable({ providedIn: 'root' })
 export class MusicService {
   private baseUrl = '/api';

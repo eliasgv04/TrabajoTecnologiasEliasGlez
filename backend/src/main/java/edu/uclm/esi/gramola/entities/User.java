@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA de usuario: credenciales, monedas y estado de verificación.
+ */
+
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;

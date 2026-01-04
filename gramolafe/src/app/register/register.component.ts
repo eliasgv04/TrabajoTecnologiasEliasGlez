@@ -12,6 +12,11 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
+/**
+ * Pantalla de registro.
+ *
+ * Crea un usuario en el backend y muestra el aviso de verificación por email.
+ */
 export class RegisterComponent {
   email = '';
   pwd1 = '';

@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de usuarios: registro, login/logout, verificación y reseteo de contraseña.
+ */
+
 import java.util.Map;
 
 import org.slf4j.Logger;

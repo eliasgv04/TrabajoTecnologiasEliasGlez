@@ -1,6 +1,49 @@
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:2rem;align-items:center;margin:2.5rem auto}
-.copy h1{font-size:3rem;margin:.25rem 0}
-.copy .cta{display:flex;gap:.75rem;margin-top:1rem}
-.jukebox{justify-self:center;width:240px;height:300px;border-radius:18px 18px 150px 150px;background:linear-gradient(180deg,var(--accent),var(--primary));box-shadow:inset 0 -18px 60px rgba(0,0,0,.25),0 14px 40px rgba(0,0,0,.25)}
-.jukebox::before{content:'';display:block;margin:16px auto;width:180px;height:90px;border-radius:90px 90px 0 0;background:#fff2;box-shadow:inset 0 0 0 10px #fff4}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.jukebox{width:200px;height:250px}}
+.hero {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 2rem;
+    align-items: center;
+    margin: 2.5rem auto
+}
+
+.copy h1 {
+    font-size: 3rem;
+    margin: .25rem 0
+}
+
+.copy .cta {
+    display: flex;
+    gap: .75rem;
+    margin-top: 1rem
+}
+
+.jukebox {
+    justify-self: center;
+    width: 240px;
+    height: 300px;
+    border-radius: 18px 18px 150px 150px;
+    background: linear-gradient(180deg, var(--accent), var(--primary));
+    box-shadow: inset 0 -18px 60px rgba(0, 0, 0, .25), 0 14px 40px rgba(0, 0, 0, .25)
+}
+
+.jukebox::before {
+    content: '';
+    display: block;
+    margin: 16px auto;
+    width: 180px;
+    height: 90px;
+    border-radius: 90px 90px 0 0;
+    background: #fff2;
+    box-shadow: inset 0 0 0 10px #fff4
+}
+
+@media(max-width:900px) {
+    .hero {
+        grid-template-columns: 1fr
+    }
+
+    .jukebox {
+        width: 200px;
+        height: 250px
+    }
+}

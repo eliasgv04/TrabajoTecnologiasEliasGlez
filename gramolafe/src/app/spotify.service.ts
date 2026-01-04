@@ -6,6 +6,10 @@ declare global {
   interface Window { onSpotifyWebPlaybackSDKReady?: () => void; Spotify?: any; }
 }
 
+/**
+ * Servicio de Spotify en frontend: integra el Web Playback SDK y llama a endpoints del backend (/api/spotify/*).
+ * Se encarga de cargar el SDK, crear el reproductor y obtener/usar el deviceId.
+ */
 @Injectable({ providedIn: 'root' })
 export class SpotifyService {
   private baseUrl = '/api';
@@ -23,7 +27,7 @@ export class SpotifyService {
     if (!this.player) {
       const token = await this.getToken();
       if (!token) return null;
-      // Create player
+      // Crear el reproductor web
       this.player = new window.Spotify.Player({
         name: 'Gramola Player',
         getOAuthToken: (cb: any) => this.getToken().then(t => t && cb(t)),
@@ -36,15 +40,15 @@ export class SpotifyService {
       this.player.addListener('account_error', ({ message }: any) => console.error(message));
       await this.player.connect();
     }
-    // Wait until the SDK reports a real device id (BehaviorSubject starts as null)
+    // Esperar a que el SDK devuelva un deviceId real (el BehaviorSubject empieza en null)
     return firstValueFrom(this.deviceId$.pipe(filter((v): v is string => !!v && v.length > 0), take(1)));
   }
 
   async connectOrLogin(returnUrl?: string) {
     const finalReturnUrl = returnUrl || `${window.location.origin}/queue`;
 
-    // 1) First check if we are authenticated with Spotify.
-    // Do NOT depend on the Web Playback SDK to decide whether to redirect.
+    // 1) Primero comprobamos si ya estamos autenticados con Spotify.
+    // No dependemos del Web Playback SDK para decidir si redirigir.
     try {
       const token = await this.getToken();
       if (!token) {
@@ -56,13 +60,13 @@ export class SpotifyService {
       return null;
     }
 
-    // 2) We have a token: now try to bring up the player/device.
-    // Guard against SDK load hanging forever.
+    // 2) Si hay token, intentamos levantar el player/dispositivo.
+    // Protegemos contra bloqueos de carga del SDK.
     try {
       const id = await this.withTimeout(this.ensurePlayer(), 7000);
       if (id) return id;
     } catch {
-      // Token exists but player not ready; caller can retry later.
+      // Hay token pero el player no está listo; se puede reintentar más tarde.
     }
     return null;
   }
@@ -96,13 +100,13 @@ export class SpotifyService {
 
   private injectSdk(timeoutMs = 7000): Promise<void> {
     return new Promise((resolve, reject) => {
-      // If already available, resolve immediately
+      // Si ya está disponible, resolvemos al instante
       if ('Spotify' in window) {
         resolve();
         return;
       }
 
-      // If already injecting, just wait for the ready callback (with timeout)
+      // Si ya se está inyectando, esperamos al callback de "ready" (con timeout)
       const existing = document.getElementById('spotify-player-sdk');
       const timer = setTimeout(() => reject(new Error('Spotify SDK load timeout')), timeoutMs);
       window.onSpotifyWebPlaybackSDKReady = () => {

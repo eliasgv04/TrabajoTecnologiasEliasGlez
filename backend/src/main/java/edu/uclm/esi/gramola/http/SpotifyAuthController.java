@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de Spotify: OAuth (login/callback/token) y control de reproducción (play/pause/seek/transfer).
+ */
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;

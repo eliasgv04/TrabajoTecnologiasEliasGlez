@@ -12,6 +12,12 @@ import { Observable } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+/**
+ * Componente raíz de la aplicación.
+ *
+ * - Aloja el `router-outlet` y la navegación.
+ * - Gestiona el cierre de sesión y el comportamiento del "brand".
+ */
 export class AppComponent {
   title = 'gramolafe';
   year = new Date().getFullYear();
@@ -28,7 +34,7 @@ export class AppComponent {
         this.router.navigateByUrl('/home');
       },
       error: () => {
-        // Even if the server fails, clear client session
+        // Aunque el servidor falle, limpiamos la sesión del cliente
         this.auth.logout();
         this.router.navigateByUrl('/home');
       }
@@ -36,14 +42,14 @@ export class AppComponent {
   }
 
   onBrandClick(evt: MouseEvent) {
-    // If logged in, clicking the brand logs out; if not, allow the routerLink to navigate to /home
+    // Si hay sesión, clicar en el brand hace logout; si no, dejamos que el routerLink navegue a /home
     const sub = this.isLoggedIn$.subscribe(is => {
       if (is) {
         evt.preventDefault();
         this.onLogout();
       }
     });
-    // Ensure subscription is short-lived
+    // Aseguramos que la suscripción sea de vida corta
     setTimeout(() => sub.unsubscribe(), 0);
   }
 }

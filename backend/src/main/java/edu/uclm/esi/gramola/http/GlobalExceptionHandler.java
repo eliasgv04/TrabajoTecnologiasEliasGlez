@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Manejador global de excepciones: unifica la respuesta de error en JSON ({status, error, path}).
+ */
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

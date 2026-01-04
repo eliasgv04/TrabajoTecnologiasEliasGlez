@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de suscripciones: listado de planes, estado, pago y activación de suscripción.
+ */
+
 import edu.uclm.esi.gramola.dao.SubscriptionPlanRepository;
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.dao.UserSubscriptionRepository;

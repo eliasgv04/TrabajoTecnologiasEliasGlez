@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+/**
+ * Servicio HTTP de usuarios: encapsula las llamadas al backend (/api/users/*).
+ */
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private baseUrl = '/api/users';

@@ -13,6 +13,13 @@ declare const Stripe: any;
   templateUrl: './subscriptions.component.html',
   styleUrls: ['./subscriptions.component.css']
 })
+/**
+ * Pantalla de suscripciones y recargas.
+ *
+ * Permite:
+ * - Comprar una suscripción (prepay/confirm con Stripe y activación en backend).
+ * - Comprar un pack de monedas (mismo flujo de Stripe usando `PaymentsService`).
+ */
 export class SubscriptionsComponent implements OnInit {
   plans: SubscriptionPlan[] = [];
   error = '';
@@ -22,7 +29,7 @@ export class SubscriptionsComponent implements OnInit {
   hasActiveSub = false;
   activeUntil: string | null = null;
 
-  // Stripe
+  // Stripe (pago con tarjeta)
   publishableKey = '';
   stripe: any;
   elements: any;
@@ -30,7 +37,7 @@ export class SubscriptionsComponent implements OnInit {
   clientSecret = '';
   private cardMounted = false;
 
-  // Recharge
+  // Recarga de monedas
   rechargePacks = [5, 10, 20, 25];
   mode: 'sub' | 'coins' = 'sub';
   selectedPack = 0;
@@ -49,7 +56,7 @@ export class SubscriptionsComponent implements OnInit {
     this.setupStripe();
     this.settings.get().subscribe({
       next: s => {
-        // Use price for UI texts if needed in future
+        // Usar el precio para textos UI si hiciera falta
         this.dynamicPricePerSong = Math.max(1, s.pricePerSong || 1);
       },
       error: () => {}
@@ -167,7 +174,7 @@ export class SubscriptionsComponent implements OnInit {
     if (!this.card) {
       this.card = this.elements.create('card', { hidePostalCode: true });
     }
-    // If previously mounted but container was removed by *ngIf, allow remount
+    // Si estaba montada pero el contenedor se recreó por *ngIf, permitimos volver a montar
     if (this.cardMounted) {
       const container = document.getElementById('card-element');
       if (!container || container.childElementCount === 0) {
@@ -212,7 +219,7 @@ export class SubscriptionsComponent implements OnInit {
     return 30; // MONTHLY u otros por defecto
   }
 
-  // dynamic price to reflect server settings in messages
+  // Precio dinámico para reflejar ajustes del servidor en mensajes
   dynamicPricePerSong = 1;
 
   isSelectedPlan(p: SubscriptionPlan): boolean {

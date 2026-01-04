@@ -4,7 +4,7 @@ import { SubscriptionsService } from './subscriptions.service';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-// Blocks access if the user does not have an active subscription.
+// Guard: bloquea el acceso si el usuario no tiene una suscripción activa.
 export const subscriptionGuard: CanActivateFn = () => {
   const subs = inject(SubscriptionsService);
   const router = inject(Router);
@@ -15,7 +15,7 @@ export const subscriptionGuard: CanActivateFn = () => {
       return false;
     }),
     catchError(() => {
-      // On error assume not active and redirect
+      // Si hay error, asumimos que no está activa y redirigimos
       router.navigateByUrl('/plans');
       return of(false);
     })

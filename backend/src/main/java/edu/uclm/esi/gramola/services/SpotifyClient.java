@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Cliente HTTP hacia Spotify para operaciones "de app" (client credentials): búsqueda y lectura de playlists.
+ */
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.uclm.esi.gramola.dto.TrackDTO;
@@ -84,9 +88,8 @@ public class SpotifyClient {
         String playlistId = extractPlaylistId(uriOrUrl);
         if (playlistId == null || playlistId.isBlank()) {
             throw new org.springframework.web.server.ResponseStatusException(
-                org.springframework.http.HttpStatus.BAD_REQUEST,
-                "URI de playlist inválida"
-            );
+                    org.springframework.http.HttpStatus.BAD_REQUEST,
+                    "URI de playlist inválida");
         }
         String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=50";
         HttpHeaders headers = new HttpHeaders();
@@ -107,45 +110,47 @@ public class SpotifyClient {
             }
             List<TrackDTO> out = new ArrayList<>();
             for (JsonNode item : items) {
-                if (item == null || item.isNull() || item.isMissingNode()) continue;
+                if (item == null || item.isNull() || item.isMissingNode())
+                    continue;
                 JsonNode t = item.path("track");
                 if (t != null && !t.isMissingNode() && !t.isNull()) {
-                    try { out.add(toDto(t)); } catch (Exception ex) { log.debug("Skipping track due to parse issue", ex); }
+                    try {
+                        out.add(toDto(t));
+                    } catch (Exception ex) {
+                        log.debug("Skipping track due to parse issue", ex);
+                    }
                 }
             }
             return out;
         } catch (HttpStatusCodeException e) {
             int code = e.getStatusCode().value();
-            // Common cases: invalid playlist id (404), private playlist (403), bad token (401)
+            // Common cases: invalid playlist id (404), private playlist (403), bad token
+            // (401)
             if (code == 404) {
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_REQUEST,
-                        "Playlist no encontrada"
-                );
+                        "Playlist no encontrada");
             }
             if (code == 401 || code == 403) {
-                // For client-credentials token, 401/403 usually means invalid credentials or private playlist.
+                // For client-credentials token, 401/403 usually means invalid credentials or
+                // private playlist.
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_REQUEST,
-                        "No se pudo acceder a la playlist (¿es privada?)"
-                );
+                        "No se pudo acceder a la playlist (¿es privada?)");
             }
             if (code == 429) {
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_GATEWAY,
-                        "Spotify está limitando peticiones (rate limit). Intenta de nuevo."
-                );
+                        "Spotify está limitando peticiones (rate limit). Intenta de nuevo.");
             }
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_GATEWAY,
-                "Spotify devolvió error " + code
-            );
+                    "Spotify devolvió error " + code);
         } catch (Exception e) {
             log.error("Spotify playlist error", e);
             throw new org.springframework.web.server.ResponseStatusException(
-                org.springframework.http.HttpStatus.BAD_GATEWAY,
-                "No se pudo leer la playlist de Spotify"
-            );
+                    org.springframework.http.HttpStatus.BAD_GATEWAY,
+                    "No se pudo leer la playlist de Spotify");
         }
     }
 
@@ -154,8 +159,7 @@ public class SpotifyClient {
         if (playlistId == null || playlistId.isBlank()) {
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_REQUEST,
-                    "URI de playlist inválida"
-            );
+                    "URI de playlist inválida");
         }
         String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=50";
         HttpHeaders headers = new HttpHeaders();
@@ -166,13 +170,19 @@ public class SpotifyClient {
             ResponseEntity<String> res = http.exchange(url, HttpMethod.GET, req, String.class);
             JsonNode root = mapper.readTree(res.getBody());
             JsonNode items = root.path("items");
-            if (items == null || !items.isArray()) return List.of();
+            if (items == null || !items.isArray())
+                return List.of();
             List<TrackDTO> out = new ArrayList<>();
             for (JsonNode item : items) {
-                if (item == null || item.isNull() || item.isMissingNode()) continue;
+                if (item == null || item.isNull() || item.isMissingNode())
+                    continue;
                 JsonNode t = item.path("track");
                 if (t != null && !t.isMissingNode() && !t.isNull()) {
-                    try { out.add(toDto(t)); } catch (Exception ex) { log.debug("Skipping track due to parse issue", ex); }
+                    try {
+                        out.add(toDto(t));
+                    } catch (Exception ex) {
+                        log.debug("Skipping track due to parse issue", ex);
+                    }
                 }
             }
             return out;
@@ -181,42 +191,39 @@ public class SpotifyClient {
             if (code == 404) {
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_REQUEST,
-                        "Playlist no encontrada"
-                );
+                        "Playlist no encontrada");
             }
             if (code == 401 || code == 403) {
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_REQUEST,
-                        "No se pudo acceder a la playlist (Spotify)"
-                );
+                        "No se pudo acceder a la playlist (Spotify)");
             }
             if (code == 429) {
                 throw new org.springframework.web.server.ResponseStatusException(
                         org.springframework.http.HttpStatus.BAD_GATEWAY,
-                        "Spotify está limitando peticiones (rate limit). Intenta de nuevo."
-                );
+                        "Spotify está limitando peticiones (rate limit). Intenta de nuevo.");
             }
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_GATEWAY,
-                    "Spotify devolvió error " + code
-            );
+                    "Spotify devolvió error " + code);
         } catch (Exception e) {
             log.error("Spotify playlist (user token) error", e);
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.BAD_GATEWAY,
-                    "No se pudo leer la playlist de Spotify"
-            );
+                    "No se pudo leer la playlist de Spotify");
         }
     }
 
     private String extractPlaylistId(String uriOrUrl) {
-        if (uriOrUrl == null) return null;
+        if (uriOrUrl == null)
+            return null;
         String s = uriOrUrl.trim();
         try {
             if (s.startsWith("spotify:playlist:")) {
                 String id = s.substring("spotify:playlist:".length());
                 int slash = id.indexOf('/');
-                if (slash >= 0) id = id.substring(0, slash);
+                if (slash >= 0)
+                    id = id.substring(0, slash);
                 id = id.replaceAll("[^A-Za-z0-9]", "");
                 return id;
             }
@@ -226,13 +233,16 @@ public class SpotifyClient {
                 int q = after.indexOf('?');
                 String id = q >= 0 ? after.substring(0, q) : after;
                 int slash = id.indexOf('/');
-                if (slash >= 0) id = id.substring(0, slash);
+                if (slash >= 0)
+                    id = id.substring(0, slash);
                 id = id.replaceAll("[^A-Za-z0-9]", "");
                 return id;
             }
             // allow raw id
-            if (s.matches("[A-Za-z0-9]{10,}")) return s;
-        } catch (Exception ignore) {}
+            if (s.matches("[A-Za-z0-9]{10,}"))
+                return s;
+        } catch (Exception ignore) {
+        }
         return null;
     }
 
@@ -250,7 +260,8 @@ public class SpotifyClient {
         String url = "https://accounts.spotify.com/api/token";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        String creds = Base64.getEncoder().encodeToString((effClientId + ":" + effClientSecret).getBytes(StandardCharsets.UTF_8));
+        String creds = Base64.getEncoder()
+                .encodeToString((effClientId + ":" + effClientSecret).getBytes(StandardCharsets.UTF_8));
         headers.set("Authorization", "Basic " + creds);
 
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
@@ -278,13 +289,15 @@ public class SpotifyClient {
     }
 
     private String getEffectiveClientId() {
-        if (this.clientId != null && !this.clientId.isBlank()) return this.clientId;
+        if (this.clientId != null && !this.clientId.isBlank())
+            return this.clientId;
         String env = System.getenv("SPOTIFY_CLIENT_ID");
         return (env != null && !env.isBlank()) ? env : null;
     }
 
     private String getEffectiveClientSecret() {
-        if (this.clientSecret != null && !this.clientSecret.isBlank()) return this.clientSecret;
+        if (this.clientSecret != null && !this.clientSecret.isBlank())
+            return this.clientSecret;
         String env = System.getenv("SPOTIFY_CLIENT_SECRET");
         return (env != null && !env.isBlank()) ? env : null;
     }
@@ -293,7 +306,8 @@ public class SpotifyClient {
         String id = t.path("id").asText();
         String title = t.path("name").asText();
         List<String> artists = new ArrayList<>();
-        for (JsonNode a : t.path("artists")) artists.add(a.path("name").asText());
+        for (JsonNode a : t.path("artists"))
+            artists.add(a.path("name").asText());
         String album = t.path("album").path("name").asText();
         String imageUrl = null;
         JsonNode images = t.path("album").path("images");

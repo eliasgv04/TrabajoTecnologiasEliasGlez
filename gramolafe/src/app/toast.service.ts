@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Servicio simple de notificaciones (toasts) para mensajes cortos en pantalla.
+ */
 @Injectable({ providedIn: 'root' })
 export class ToastService {
   message = '';

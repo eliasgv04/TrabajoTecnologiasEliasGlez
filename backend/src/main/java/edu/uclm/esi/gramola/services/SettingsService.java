@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Servicio de negocio para gestionar los ajustes del bar asociados a un usuario.
+ */
+
 import edu.uclm.esi.gramola.dao.BarSettingsRepository;
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.entities.BarSettings;

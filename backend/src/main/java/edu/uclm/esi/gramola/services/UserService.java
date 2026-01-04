@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Servicio de negocio de usuarios: validación, registro, verificación por email y recuperación de contraseña.
+ */
+
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -31,9 +35,10 @@ public class UserService {
 
     private static final Pattern EMAIL_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
-    public UserService(UserRepository userRepository, BarSettingsRepository settingsRepository, PasswordEncoder passwordEncoder,
-                       VerificationTokenRepository tokenRepo, PasswordResetTokenRepository resetRepo,
-                       MailService mail) {
+    public UserService(UserRepository userRepository, BarSettingsRepository settingsRepository,
+            PasswordEncoder passwordEncoder,
+            VerificationTokenRepository tokenRepo, PasswordResetTokenRepository resetRepo,
+            MailService mail) {
         this.userRepository = userRepository;
         this.settingsRepository = settingsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -86,27 +91,33 @@ public class UserService {
     }
 
     public Optional<User> findUserByEmail(String email) {
-        if (email == null) return Optional.empty();
+        if (email == null)
+            return Optional.empty();
         return userRepository.findByEmailIgnoreCase(email.trim());
     }
 
     public Optional<User> findUserByIdentifier(String identifier) {
-        if (identifier == null) return Optional.empty();
+        if (identifier == null)
+            return Optional.empty();
         String id = identifier.trim();
-        if (id.isEmpty()) return Optional.empty();
+        if (id.isEmpty())
+            return Optional.empty();
 
         // 1) Email
         Optional<User> byEmail = userRepository.findByEmailIgnoreCase(id);
-        if (byEmail.isPresent()) return byEmail;
+        if (byEmail.isPresent())
+            return byEmail;
 
         // 2) Bar name (stored in bar_settings)
         return settingsRepository.findFirstByBarNameIgnoreCase(id).map(BarSettings::getUser);
     }
 
     public User loginByEmail(String email, String rawPassword) {
-        if (email == null || rawPassword == null) return null;
+        if (email == null || rawPassword == null)
+            return null;
         Optional<User> opt = userRepository.findByEmailIgnoreCase(email.trim());
-        if (opt.isEmpty()) return null;
+        if (opt.isEmpty())
+            return null;
         User u = opt.get();
         if (!u.isVerified()) {
             return null;
@@ -118,19 +129,24 @@ public class UserService {
     }
 
     public User loginByIdentifier(String identifier, String rawPassword) {
-        if (identifier == null || rawPassword == null) return null;
+        if (identifier == null || rawPassword == null)
+            return null;
         Optional<User> opt = findUserByIdentifier(identifier);
-        if (opt.isEmpty()) return null;
+        if (opt.isEmpty())
+            return null;
         User u = opt.get();
-        if (!u.isVerified()) return null;
+        if (!u.isVerified())
+            return null;
         return passwordEncoder.matches(rawPassword.trim(), u.getPassword()) ? u : null;
     }
 
     @Transactional
     public boolean verifyToken(String token) {
-        if (token == null || token.isBlank()) return false;
+        if (token == null || token.isBlank())
+            return false;
         var opt = tokenRepo.findByToken(token.trim());
-        if (opt.isEmpty()) return false;
+        if (opt.isEmpty())
+            return false;
         VerificationToken vt = opt.get();
         if (vt.getExpiresAt() != null && vt.getExpiresAt().isBefore(LocalDateTime.now())) {
             tokenRepo.delete(vt);
@@ -144,15 +160,19 @@ public class UserService {
     }
 
     public void removeUser(Long userId) {
-        if (userId == null) return;
+        if (userId == null)
+            return;
         userRepository.deleteById(userId);
     }
 
     public boolean resetPasswordByEmail(String email, String newPassword) {
-        if (email == null || email.isBlank()) return false;
-        if (newPassword == null || newPassword.trim().length() <= 5) return false;
+        if (email == null || email.isBlank())
+            return false;
+        if (newPassword == null || newPassword.trim().length() <= 5)
+            return false;
         Optional<User> opt = userRepository.findByEmail(email.trim());
-        if (opt.isEmpty()) return false;
+        if (opt.isEmpty())
+            return false;
         User user = opt.get();
         String trimmed = newPassword.trim();
         if (passwordEncoder.matches(trimmed, user.getPassword())) {
@@ -165,9 +185,11 @@ public class UserService {
 
     @Transactional
     public void requestPasswordReset(String email) {
-        if (email == null || email.isBlank()) return;
+        if (email == null || email.isBlank())
+            return;
         Optional<User> opt = userRepository.findByEmail(email.trim());
-        if (opt.isEmpty()) return; // No revelar si existe o no
+        if (opt.isEmpty())
+            return; // No revelar si existe o no
         User u = opt.get();
         // invalidar tokens previos si quieres (opcional)
         // crear nuevo token
@@ -184,15 +206,20 @@ public class UserService {
 
     @Transactional
     public boolean resetPasswordByToken(String token, String pwd1, String pwd2) {
-        if (token == null || token.isBlank()) return false;
-        if (pwd1 == null || pwd2 == null) return false;
+        if (token == null || token.isBlank())
+            return false;
+        if (pwd1 == null || pwd2 == null)
+            return false;
         String p1 = pwd1.trim();
         String p2 = pwd2.trim();
-        if (!p1.equals(p2)) throw new IllegalArgumentException("Las contraseñas no coinciden");
-        if (p1.length() <= 5) throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
+        if (!p1.equals(p2))
+            throw new IllegalArgumentException("Las contraseñas no coinciden");
+        if (p1.length() <= 5)
+            throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
 
         var opt = resetRepo.findByToken(token.trim());
-        if (opt.isEmpty()) return false;
+        if (opt.isEmpty())
+            return false;
         PasswordResetToken prt = opt.get();
         if (prt.getExpiresAt() != null && prt.getExpiresAt().isBefore(LocalDateTime.now())) {
             resetRepo.delete(prt);

@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 
 export interface SubscriptionPlan { id: number; code: string; name: string; priceEur: number; durationMonths: number; }
 
+/**
+ * Servicio HTTP de suscripciones: planes, estado, prepay y confirmación.
+ */
 @Injectable({ providedIn: 'root' })
 export class SubscriptionsService {
   private baseUrl = '/api/subscriptions';

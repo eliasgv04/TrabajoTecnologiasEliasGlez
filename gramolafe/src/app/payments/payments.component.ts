@@ -13,6 +13,13 @@ declare const Stripe: any;
   templateUrl: './payments.component.html',
   styleUrls: ['./payments.component.css']
 })
+/**
+ * Componente de pago para recargar monedas (Stripe).
+ *
+ * Flujo:
+ * - `prepay`: el backend crea el PaymentIntent y devuelve el `clientSecret`.
+ * - `confirm`: Stripe confirma el pago y el backend acredita las monedas.
+ */
 export class PaymentsComponent implements OnInit {
   @Output() closed = new EventEmitter<void>();
   @Output() paid = new EventEmitter<void>();

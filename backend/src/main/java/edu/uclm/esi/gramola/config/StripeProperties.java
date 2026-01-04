@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.config;
 
+/**
+ * Propiedades de integración con Stripe (claves y parámetros relacionados con pagos).
+ */
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "stripe")

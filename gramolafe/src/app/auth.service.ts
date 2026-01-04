@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+/**
+ * Servicio de estado de autenticación en el frontend.
+ * Ojo: esto no autentica por sí mismo; solo mantiene estado UI (localStorage) tras el login.
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private loggedIn$ = new BehaviorSubject<boolean>(this.readPersisted());

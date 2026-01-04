@@ -10,6 +10,12 @@ import { UserService } from '../user.service';
   templateUrl: './forgot.component.html',
   styleUrls: ['./forgot.component.css']
 })
+/**
+ * Pantalla de recuperación de contraseña.
+ *
+ * Pide al backend que envíe un email de restablecimiento.
+ * Por seguridad, se muestra el mismo mensaje aunque el correo no exista.
+ */
 export class ForgotComponent {
   email = '';
   message = '';

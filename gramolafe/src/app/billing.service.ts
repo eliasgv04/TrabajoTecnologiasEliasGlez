@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+/**
+ * Servicio HTTP de "economía": saldo, precio por canción y estimación de coste por pista.
+ */
 @Injectable({ providedIn: 'root' })
 export class BillingService {
   private baseUrl = '/api/billing';

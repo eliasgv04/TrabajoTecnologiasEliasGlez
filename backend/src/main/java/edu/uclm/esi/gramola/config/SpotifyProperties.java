@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.config;
 
+/**
+ * Propiedades de integración con Spotify (clientId, redirectUri, secretos, etc.).
+ */
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "spotify")

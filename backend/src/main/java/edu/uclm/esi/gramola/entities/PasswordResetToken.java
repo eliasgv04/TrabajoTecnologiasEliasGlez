@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA para tokens de restablecimiento de contraseña.
+ */
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -19,11 +23,31 @@ public class PasswordResetToken {
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    public Long getId() { return id; }
-    public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-    public LocalDateTime getExpiresAt() { return expiresAt; }
-    public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(LocalDateTime expiresAt) {
+        this.expiresAt = expiresAt;
+    }
 }

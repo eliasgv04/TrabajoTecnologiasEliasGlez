@@ -5,6 +5,7 @@ import { credentialsInterceptor } from './credentials.interceptor';
 
 import { routes } from './app.routes';
 
+// Configuración global de Angular (router + HttpClient + interceptores, etc.)
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),

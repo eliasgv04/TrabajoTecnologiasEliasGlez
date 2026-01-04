@@ -1,8 +1,51 @@
-.card{max-width:420px;margin:2rem auto;padding:1.5rem;border-radius:14px;background:var(--card);border:1px solid rgba(255,255,255,.06)}
-.form label{display:block;margin:.5rem 0 .25rem}
-.form input{width:100%;max-width:100%;box-sizing:border-box;padding:.5rem .75rem;border:1px solid rgba(255,255,255,.15);border-radius:8px;background:transparent;color:inherit}
-.form .btn{margin-top:1rem;width:100%;background:#7a57ff;color:#fff;border:0;padding:.6rem 1rem;border-radius:999px;cursor:pointer}
-.form .btn:hover{filter:brightness(.95)}
-.ok{color:#7ef7a1}
-.error{color:#ff7b7e}
-.meta{margin-top:.75rem}
+.card {
+    max-width: 420px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, .06)
+}
+
+.form label {
+    display: block;
+    margin: .5rem 0 .25rem
+}
+
+.form input {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: .5rem .75rem;
+    border: 1px solid rgba(255, 255, 255, .15);
+    border-radius: 8px;
+    background: transparent;
+    color: inherit
+}
+
+.form .btn {
+    margin-top: 1rem;
+    width: 100%;
+    background: #7a57ff;
+    color: #fff;
+    border: 0;
+    padding: .6rem 1rem;
+    border-radius: 999px;
+    cursor: pointer
+}
+
+.form .btn:hover {
+    filter: brightness(.95)
+}
+
+.ok {
+    color: #7ef7a1
+}
+
+.error {
+    color: #ff7b7e
+}
+
+.meta {
+    margin-top: .75rem
+}

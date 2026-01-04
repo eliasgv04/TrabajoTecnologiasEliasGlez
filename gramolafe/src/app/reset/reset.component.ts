@@ -11,6 +11,11 @@ import { UserService } from '../user.service';
   templateUrl: './reset.component.html',
   styleUrls: ['./reset.component.css']
 })
+/**
+ * Pantalla de restablecimiento de contraseña.
+ *
+ * Lee el token desde query params y envía la nueva contraseña al backend.
+ */
 export class ResetComponent {
   token = '';
   pwd1 = '';

@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST para facturación interna: saldo, precio por canción y estimaciones.
+ */
+
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.entities.User;
 import org.springframework.beans.factory.annotation.Value;

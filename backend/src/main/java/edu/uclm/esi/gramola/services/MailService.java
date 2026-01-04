@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Servicio de envío de correos (verificación y recuperación de contraseña).
+ */
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

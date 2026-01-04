@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA con los ajustes del bar asociados a un usuario (precio, playlist y nombre del bar).
+ */
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -41,21 +45,51 @@ public class BarSettings {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public int getPricePerSong() { return pricePerSong; }
-    public void setPricePerSong(int pricePerSong) { this.pricePerSong = pricePerSong; }
+    public User getUser() {
+        return user;
+    }
 
-    public String getSpotifyPlaylistUri() { return spotifyPlaylistUri; }
-    public void setSpotifyPlaylistUri(String spotifyPlaylistUri) { this.spotifyPlaylistUri = spotifyPlaylistUri; }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    public String getBarName() { return barName; }
-    public void setBarName(String barName) { this.barName = barName; }
+    public int getPricePerSong() {
+        return pricePerSong;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setPricePerSong(int pricePerSong) {
+        this.pricePerSong = pricePerSong;
+    }
+
+    public String getSpotifyPlaylistUri() {
+        return spotifyPlaylistUri;
+    }
+
+    public void setSpotifyPlaylistUri(String spotifyPlaylistUri) {
+        this.spotifyPlaylistUri = spotifyPlaylistUri;
+    }
+
+    public String getBarName() {
+        return barName;
+    }
+
+    public void setBarName(String barName) {
+        this.barName = barName;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 }

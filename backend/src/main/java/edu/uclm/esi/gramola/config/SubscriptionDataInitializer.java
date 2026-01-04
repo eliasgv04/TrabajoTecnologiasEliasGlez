@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.config;
 
+/**
+ * Inicializador de datos: crea/carga planes de suscripción por defecto al arrancar.
+ */
+
 import edu.uclm.esi.gramola.dao.SubscriptionPlanRepository;
 import edu.uclm.esi.gramola.entities.SubscriptionPlan;
 import org.slf4j.Logger;

@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA que representa una suscripción de un usuario (activa/caducada).
+ */
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

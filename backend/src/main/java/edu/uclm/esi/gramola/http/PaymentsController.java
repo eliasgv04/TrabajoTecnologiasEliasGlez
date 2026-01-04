@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de pagos/recargas: crea PaymentIntents y confirma recargas de monedas.
+ */
+
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.entities.User;
 import jakarta.servlet.http.HttpSession;

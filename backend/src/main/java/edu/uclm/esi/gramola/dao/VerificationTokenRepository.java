@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.dao;
 
+/**
+ * Repositorio JPA para tokens de verificación de email.
+ */
+
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;

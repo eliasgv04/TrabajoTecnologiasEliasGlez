@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST para operaciones de cuenta (perfil/datos del usuario autenticado).
+ */
+
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.dao.UserSubscriptionRepository;
 import edu.uclm.esi.gramola.entities.User;

@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA para tokens de verificación de email.
+ */
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

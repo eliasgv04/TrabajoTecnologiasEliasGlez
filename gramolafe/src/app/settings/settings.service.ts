@@ -8,6 +8,9 @@ export interface AppSettings {
   barName?: string | null;
 }
 
+/**
+ * Servicio HTTP de ajustes del bar: lee/actualiza configuración en /api/settings.
+ */
 @Injectable({ providedIn: 'root' })
 export class SettingsService {
   private baseUrl = '/api/settings';

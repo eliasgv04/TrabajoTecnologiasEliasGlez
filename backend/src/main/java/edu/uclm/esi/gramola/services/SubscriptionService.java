@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Servicio de negocio relacionado con suscripciones (lógica auxiliar/consultas).
+ */
+
 import edu.uclm.esi.gramola.dao.UserSubscriptionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -16,6 +16,13 @@ import { SubscriptionsService } from '../subscriptions/subscriptions.service';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
+/**
+ * Pantalla de cuenta/ajustes del usuario.
+ *
+ * - Muestra email y estado de suscripción.
+ * - Permite actualizar el nombre del bar y la playlist por defecto.
+ * - Valida la playlist consultando al backend cuando es posible.
+ */
 export class AccountComponent implements OnInit {
   info: AccountInfo | null = null;
   error = '';
@@ -132,10 +139,10 @@ export class AccountComponent implements OnInit {
         });
       },
       error: (e) => {
-        // If Spotify is temporarily unreachable, allow saving anyway.
+        // Si Spotify (o la validación) no está disponible temporalmente, permitimos guardar igualmente.
         const status = e?.status;
         const msg = (typeof e?.error === 'string' ? e.error : e?.error?.error) || e?.message || 'No se pudo validar la playlist';
-        // Allow saving when Spotify validation fails (5xx) or when backend reports playlist not found/access issues (often due to token limitations).
+        // Permitimos guardar cuando la validación falla (5xx) o cuando el backend reporta problemas típicos de acceso/token.
         const allowSaveAnyway = (status && status >= 500)
           || (status === 400 && typeof msg === 'string' && (msg.includes('Playlist no encontrada') || msg.includes('No se pudo acceder')));
 
@@ -172,10 +179,10 @@ export class AccountComponent implements OnInit {
       return `spotify:playlist:${id}`;
     }
 
-    // allow raw id
+    // Permitir ID "en crudo"
     if (/^[A-Za-z0-9]{10,}$/.test(s)) return `spotify:playlist:${s}`;
 
-    // fallback: keep as-is (backend can still handle some URL formats)
+    // Si no encaja, dejamos el valor tal cual (el backend aún puede resolver algunos formatos)
     return s;
   }
 

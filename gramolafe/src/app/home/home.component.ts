@@ -10,6 +10,11 @@ import { AuthService } from '../auth.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+/**
+ * Pantalla de inicio (landing).
+ *
+ * Ajusta la UI según el estado de autenticación.
+ */
 export class HomeComponent {
   constructor(public auth: AuthService) {}
 }

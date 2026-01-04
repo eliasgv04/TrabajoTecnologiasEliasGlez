@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de música: búsqueda de canciones y obtención de tracks/playlists desde Spotify.
+ */
+
 import edu.uclm.esi.gramola.dto.TrackDTO;
 import edu.uclm.esi.gramola.services.SpotifyClient;
 import edu.uclm.esi.gramola.services.SpotifyService;

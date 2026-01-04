@@ -8,6 +8,9 @@ export interface AccountInfo {
   activeUntil: string | null;
 }
 
+/**
+ * Servicio HTTP de cuenta: devuelve datos del usuario autenticado (/api/account).
+ */
 @Injectable({ providedIn: 'root' })
 export class AccountService {
   private baseUrl = '/api/account';

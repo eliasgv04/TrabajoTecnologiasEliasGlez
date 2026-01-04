@@ -9,6 +9,7 @@ import { authGuard } from './auth.guard';
 import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
 import { AccountComponent } from './account/account.component';
 
+// Definición de rutas de la aplicación (navegación entre pantallas)
 export const routes: Routes = [
 	{ path: '', redirectTo: 'home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },

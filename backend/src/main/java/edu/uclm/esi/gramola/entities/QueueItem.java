@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.entities;
 
+/**
+ * Entidad JPA que representa un elemento de la cola de reproducción.
+ */
+
 import jakarta.persistence.*;
 import java.time.Instant;
 

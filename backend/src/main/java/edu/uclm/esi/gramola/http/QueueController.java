@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de la cola de reproducción: listar, añadir y eliminar canciones en cola.
+ */
+
 import edu.uclm.esi.gramola.dao.QueueItemRepository;
 import edu.uclm.esi.gramola.dao.UserRepository;
 import edu.uclm.esi.gramola.dto.TrackDTO;

@@ -13,6 +13,11 @@ import { SpotifyService } from '../spotify.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+/**
+ * Pantalla de inicio de sesión.
+ *
+ * Autentica contra el backend y navega a `/queue` si el login es correcto.
+ */
 export class LoginComponent {
   identifier = '';
   pwd = '';

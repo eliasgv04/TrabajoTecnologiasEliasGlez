@@ -14,6 +14,14 @@ import { SpotifyService } from '../spotify.service';
   templateUrl: './queue.component.html',
   styleUrls: ['./queue.component.css']
 })
+/**
+ * Pantalla principal de la gramola.
+ *
+ * - Permite buscar canciones y añadirlas a la cola.
+ * - Muestra saldo, estimaciones de precio y la cola actual.
+ * - Controla la reproducción a través de Spotify (cuando hay token/dispositivo).
+ * - Incluye un “modo lista por defecto” (playlist) cuando la cola está vacía.
+ */
 export class QueueComponent implements OnDestroy {
   barName = '';
   q = '';
@@ -27,7 +35,7 @@ export class QueueComponent implements OnDestroy {
   estimated: Record<string, { price: number; popularity: number }> = {};
   pendingAddId: string | null = null;
 
-  // Simulated player state
+  // Estado del reproductor (sincronizado con UI y, cuando procede, con Spotify)
   current: QueueItem | null = null;
   totalMs = 0;
   remainingMs = 0;
@@ -40,7 +48,7 @@ export class QueueComponent implements OnDestroy {
   private spotifyDeviceId: string | null = null;
   private noFallbackMsgShown = false;
 
-  // Helpers for counters/ETA
+  // Ayudas para contadores/ETA
   get currentIndex(): number {
     if (!this.current) return -1;
     return this.queue.findIndex(q => q.id === this.current!.id);
@@ -76,7 +84,7 @@ export class QueueComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Avoid background timers modifying queue/state while user is on other routes.
+    // Evita timers en segundo plano modificando estado mientras navega a otras rutas.
     this.stopTick();
     this.saveState();
   }
@@ -90,7 +98,7 @@ export class QueueComponent implements OnDestroy {
     this.music.getQueue().subscribe({
       next: (items) => {
         this.queue = items;
-        // Try to restore player state from localStorage; if not possible, start next
+        // Intentar restaurar el estado del reproductor desde localStorage; si no se puede, arrancar el siguiente
         if (!this.tryRestoreState() && !this.current && this.queue.length) this.startNext();
         if (!this.current && !this.currentFallback && !this.queue.length) this.startNextFallback();
       },
@@ -105,7 +113,7 @@ export class QueueComponent implements OnDestroy {
     this.music.search(this.q).subscribe({
       next: (tracks) => {
         this.results = tracks;
-        // fetch per-song estimates (1-3 coins) for transparency
+        // Obtener estimaciones por canción (1–3 monedas) para transparencia
         this.estimated = {};
         for (const t of tracks) {
           this.billing.estimate(t.id).subscribe({
@@ -142,7 +150,7 @@ export class QueueComponent implements OnDestroy {
       error: (e: any) => {
         if (e?.status === 402) {
           const msg402 = this.pickMsg(e);
-          // 402 is used for both "Saldo insuficiente" and subscription-required.
+          // El 402 se usa tanto para "Saldo insuficiente" como para "requiere suscripción".
           this.toast.show(
             (typeof msg402 === 'string' && msg402.toLowerCase().includes('suscrip'))
               ? msg402
@@ -192,7 +200,7 @@ export class QueueComponent implements OnDestroy {
 
   // Eliminado confirm dialog del navegador; usamos solo toast de éxito
 
-  // Simulated playback engine
+  // Motor de reproducción (gestiona el tiempo y salta al siguiente)
   private startNext() {
     if (this.current || !this.queue.length) return;
     const next = this.queue[0];
@@ -235,7 +243,7 @@ export class QueueComponent implements OnDestroy {
           error: (e) => { this.toast.show(this.pickMsg(e)); }
         });
       },
-      error: (e) => { /* no toast here to avoid noise when not logged in */ }
+      error: (e) => { /* sin toast para evitar ruido cuando no hay sesión */ }
     });
   }
 
@@ -283,7 +291,7 @@ export class QueueComponent implements OnDestroy {
     this.current = null; this.totalMs = 0; this.remainingMs = 0; this.isPaused = false;
     this.saveState();
     if (!finished) {
-      // Could be finishing a fallback track
+      // Puede ser el final de una pista de la lista por defecto
       if (this.currentFallback) {
         const just = this.currentFallback;
         this.currentFallback = null;
@@ -335,8 +343,8 @@ export class QueueComponent implements OnDestroy {
       return;
     }
 
-    // 1) Transfer playback to the web player device (without auto-play), then play
-    // Using play=true can briefly resume the previous track and feel like a “double play”.
+    // 1) Transferir la reproducción al dispositivo del Web Player (sin auto-play) y luego reproducir
+    // Usar play=true puede reanudar brevemente lo anterior y dar sensación de “doble play”.
     this.spotify.transfer(deviceId, false).subscribe({
       next: () => {
         this.spotify.playUris([uri], deviceId).subscribe({
@@ -429,7 +437,7 @@ export class QueueComponent implements OnDestroy {
     this.applySeekElapsedMs(elapsed, true);
   }
 
-  // Drag-to-seek
+  // Arrastrar para mover la posición
   onProgressDown(evt: MouseEvent) {
     if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     this.dragRect = (evt.currentTarget as HTMLElement).getBoundingClientRect();
@@ -455,12 +463,12 @@ export class QueueComponent implements OnDestroy {
     const x = Math.max(0, Math.min(this.dragRect.width, clientX - this.dragRect.left));
     const ratio = x / this.dragRect.width;
     const elapsed = Math.floor(this.totalMs * ratio);
-    // While dragging, keep UI in sync but defer the real Spotify seek until mouseup.
+    // Mientras se arrastra, mantenemos la UI sincronizada pero retrasamos el seek real de Spotify hasta soltar.
     this.pendingSeekElapsedMs = elapsed;
     this.applySeekElapsedMs(elapsed, false);
   }
 
-  // Keyboard shortcuts
+  // Atajos de teclado
   @HostListener('window:keydown', ['$event']) handleKey(e: KeyboardEvent) {
     if (!this.current && !this.currentFallback) return;
     switch (e.key) {
@@ -493,15 +501,15 @@ export class QueueComponent implements OnDestroy {
   }
 
 
-  // Duplicate detection helpers for results list
+  // Ayudas para detectar duplicados en la lista de resultados
   isInQueue(trackId: string): boolean { return this.queue.some(q => q.trackId === trackId); }
   inQueuePosition(trackId: string): number { return this.queue.findIndex(q => q.trackId === trackId); }
   priceFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.price : null; }
   popularityFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.popularity : null; }
 
-  // Persistence
+  // Persistencia (para que al navegar no se reinicie la reproducción)
   private saveState() {
-    // Persist both queue playback and fallback playback so navigation does not restart.
+    // Persistimos tanto cola como lista por defecto para que al navegar no se reinicie.
     if (!this.current && !this.currentFallback) {
       localStorage.removeItem('gramolaPlayer');
       return;
@@ -520,7 +528,7 @@ export class QueueComponent implements OnDestroy {
       return;
     }
 
-    // Fallback track
+    // Pista de lista por defecto
     const fb = this.currentFallback;
     const state = {
       mode: 'fallback',
@@ -544,7 +552,7 @@ export class QueueComponent implements OnDestroy {
     try {
       const s = JSON.parse(raw);
 
-      // Queue track
+      // Pista de cola
       if ((s?.mode === 'queue' || (!s?.mode && (s?.id != null || s?.trackId))) && this.queue.length) {
         const item = this.queue.find(q => q.id === s.id || q.trackId === s.trackId);
         if (!item) return false;
@@ -556,7 +564,7 @@ export class QueueComponent implements OnDestroy {
         return true;
       }
 
-      // Fallback track
+      // Pista de lista por defecto
       if (s?.mode === 'fallback') {
         const restored = {
           id: s.trackId || '',
@@ -606,5 +614,5 @@ export class QueueComponent implements OnDestroy {
     return 'Error';
   }
 
-  // No Spotify integration (simulated playback only)
+  // Sin integración Spotify (solo reproducción “simulada”)
 }

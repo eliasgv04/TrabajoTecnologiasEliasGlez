@@ -1,5 +1,5 @@
--- Truncate all tables in current schema, preserving structure and resetting AUTO_INCREMENT
--- Use in MySQL Workbench against the `gramola` database
+-- Vacía (TRUNCATE) todas las tablas del esquema actual, manteniendo la estructura y reiniciando AUTO_INCREMENT
+-- Úsalo en MySQL Workbench contra la base de datos `gramola`
 
 USE gramola;
 

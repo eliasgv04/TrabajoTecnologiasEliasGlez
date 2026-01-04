@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.http;
 
+/**
+ * Controlador REST de ajustes del bar: precio por canción, playlist de fallback y nombre del bar.
+ */
+
 import edu.uclm.esi.gramola.entities.BarSettings;
 import edu.uclm.esi.gramola.services.SettingsService;
 import jakarta.servlet.http.HttpSession;

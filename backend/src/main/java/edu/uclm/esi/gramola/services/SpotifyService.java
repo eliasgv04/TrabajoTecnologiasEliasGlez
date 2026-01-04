@@ -1,5 +1,9 @@
 package edu.uclm.esi.gramola.services;
 
+/**
+ * Servicio de Spotify para usuarios: persistencia/refresh de tokens OAuth y utilidades (p.ej. popularidad).
+ */
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
@@ -54,7 +58,8 @@ public class SpotifyService {
 
     public String ensureAccessToken(HttpSession session) {
         Object userIdObj = session.getAttribute("userId");
-        if (userIdObj == null) throw new RuntimeException("Sesión no iniciada");
+        if (userIdObj == null)
+            throw new RuntimeException("Sesión no iniciada");
         long userId = (Long) userIdObj;
 
         SpotifyToken current = spotifyTokens.findById(userId).orElse(null);
@@ -67,15 +72,18 @@ public class SpotifyService {
         }
 
         String refresh = current != null ? current.getRefreshToken() : null;
-        if (refresh == null || refresh.isBlank()) throw new RuntimeException("No hay token de Spotify guardado");
+        if (refresh == null || refresh.isBlank())
+            throw new RuntimeException("No hay token de Spotify guardado");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        String basic = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
+        String basic = Base64.getEncoder()
+                .encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
         headers.set("Authorization", "Basic " + basic);
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refresh);
-        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token", new HttpEntity<>(form, headers), String.class);
+        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token",
+                new HttpEntity<>(form, headers), String.class);
         if (!res.getStatusCode().is2xxSuccessful())
             throw new RuntimeException("No se pudo refrescar el token de Spotify");
         try {
@@ -91,16 +99,19 @@ public class SpotifyService {
     }
 
     private String ensureAppToken() {
-        if (appAccessToken != null && appAccessExpiresAt != null && Instant.now().isBefore(appAccessExpiresAt.minusSeconds(30))) {
+        if (appAccessToken != null && appAccessExpiresAt != null
+                && Instant.now().isBefore(appAccessExpiresAt.minusSeconds(30))) {
             return appAccessToken;
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        String basic = Base64.getEncoder().encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
+        String basic = Base64.getEncoder()
+                .encodeToString((clientId + ":" + clientSecret).getBytes(StandardCharsets.UTF_8));
         headers.set("Authorization", "Basic " + basic);
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "client_credentials");
-        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token", new HttpEntity<>(form, headers), String.class);
+        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token",
+                new HttpEntity<>(form, headers), String.class);
         if (!res.getStatusCode().is2xxSuccessful()) {
             throw new RuntimeException("No se pudo obtener token de app de Spotify");
         }
@@ -125,8 +136,10 @@ public class SpotifyService {
         }
         HttpHeaders h = new HttpHeaders();
         h.setBearerAuth(token);
-        ResponseEntity<String> res = http.exchange("https://api.spotify.com/v1/tracks/" + trackId, HttpMethod.GET, new HttpEntity<>(h), String.class);
-        if (!res.getStatusCode().is2xxSuccessful()) return 0;
+        ResponseEntity<String> res = http.exchange("https://api.spotify.com/v1/tracks/" + trackId, HttpMethod.GET,
+                new HttpEntity<>(h), String.class);
+        if (!res.getStatusCode().is2xxSuccessful())
+            return 0;
         try {
             JsonNode node = mapper.readTree(res.getBody());
             return node.path("popularity").asInt(0);
