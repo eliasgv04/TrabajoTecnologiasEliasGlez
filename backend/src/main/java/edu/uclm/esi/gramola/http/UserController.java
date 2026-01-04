@@ -122,7 +122,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Las contraseñas no coinciden");
         }
         if (pwd1.length() <= 5) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña debe tener al menos cinco caracteres");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La contraseña debe tener al menos seis caracteres");
         }
         try {
             boolean ok = this.userService.resetPasswordByEmail(email, pwd1);

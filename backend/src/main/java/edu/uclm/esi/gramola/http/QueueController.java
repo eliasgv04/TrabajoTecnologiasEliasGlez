@@ -12,8 +12,10 @@ import edu.uclm.esi.gramola.entities.User;
 import org.springframework.beans.factory.annotation.Value;
 import edu.uclm.esi.gramola.services.SettingsService;
 import edu.uclm.esi.gramola.services.SpotifyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import jakarta.servlet.http.HttpSession;
@@ -42,7 +44,8 @@ public class QueueController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
-        List<QueueItem> items = repo.findAllByOrderByCreatedAtAsc();
+        Long userId = (Long) session.getAttribute("userId");
+        List<QueueItem> items = repo.findAllByUser_IdOrderByCreatedAtAsc(userId);
         return ResponseEntity.ok(items);
     }
 
@@ -63,11 +66,13 @@ public class QueueController {
         } catch (Exception ignore) {}
         if (pricePerSong <= 0) pricePerSong = defaultPricePerSong;
         if (u.getCoins() < pricePerSong) {
-            return ResponseEntity.status(402).body("Saldo insuficiente");
+            throw new ResponseStatusException(HttpStatus.PAYMENT_REQUIRED,
+                    "Saldo insuficiente para añadir esta canción");
         }
         u.setCoins(u.getCoins() - pricePerSong);
         users.save(u);
         QueueItem qi = new QueueItem();
+        qi.setUser(u);
         qi.setTrackId(track.getId());
         qi.setTitle(track.getTitle());
         qi.setArtists(String.join(", ", track.getArtists()));
@@ -86,7 +91,8 @@ public class QueueController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
-        repo.deleteAll();
+        Long userId = (Long) session.getAttribute("userId");
+        repo.deleteAllByUser_Id(userId);
         return ResponseEntity.ok().build();
     }
 
@@ -95,7 +101,8 @@ public class QueueController {
         if (session.getAttribute("userId") == null) {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
-        if (!repo.existsById(id)) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (!repo.existsByIdAndUser_Id(id, userId)) {
             return ResponseEntity.notFound().build();
         }
         repo.deleteById(id);

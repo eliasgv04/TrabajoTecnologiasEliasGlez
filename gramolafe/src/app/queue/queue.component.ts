@@ -73,11 +73,17 @@ export class QueueComponent implements OnDestroy {
 
   ngOnInit() {
     // Personalización rápida (sin esperar al backend)
-    try { this.barName = (localStorage.getItem('gramolaBarName') || '').trim(); } catch {}
+    try { this.barName = (localStorage.getItem(this.lsKey('barName')) || '').trim(); } catch {}
 
     // Pedir login de Spotify después de login en la Gramola.
     // No bloquea la UI: si hace falta, redirige al flujo OAuth.
-    this.spotify.connectOrLogin().then(id => { if (id) this.spotifyDeviceId = id; }).catch(() => {});
+    // En modo E2E (Selenium), se puede desactivar para evitar redirecciones externas.
+    const e2eDisableSpotify = (() => {
+      try { return localStorage.getItem('e2e:disableSpotify') === '1'; } catch { return false; }
+    })();
+    if (!e2eDisableSpotify) {
+      this.spotify.connectOrLogin().then(id => { if (id) this.spotifyDeviceId = id; }).catch(() => {});
+    }
     this.loadQueue();
     this.loadBilling();
     this.loadFallbackPlaylist();
@@ -151,12 +157,11 @@ export class QueueComponent implements OnDestroy {
         if (e?.status === 402) {
           const msg402 = this.pickMsg(e);
           // El 402 se usa tanto para "Saldo insuficiente" como para "requiere suscripción".
-          this.toast.show(
-            (typeof msg402 === 'string' && msg402.toLowerCase().includes('suscrip'))
-              ? msg402
-              : 'Saldo insuficiente para añadir esta canción.'
-          );
-          this.error = '';
+          const finalMsg = (typeof msg402 === 'string' && msg402.toLowerCase().includes('suscrip'))
+            ? msg402
+            : 'Saldo insuficiente para añadir esta canción.';
+          this.toast.show(finalMsg);
+          this.error = finalMsg;
           return;
         }
         if (e?.status === 401) {
@@ -221,7 +226,7 @@ export class QueueComponent implements OnDestroy {
 
   private loadFallbackPlaylist() {
     // 1) Intentar desde localStorage para reaccionar al guardado sin recargar
-    const uriLS = ((): string | null => { try { return localStorage.getItem('gramolaPlaylistUri'); } catch { return null; } })();
+    const uriLS = ((): string | null => { try { return localStorage.getItem(this.lsKey('playlistUri')); } catch { return null; } })();
     if (uriLS && uriLS.trim()) {
       this.music.getPlaylist(uriLS).subscribe({
         next: (tracks) => { this.fallbackTracks = tracks || []; this.fallbackIndex = 0; if (!this.current && !this.currentFallback && !this.queue.length) this.startNextFallback(); },
@@ -234,7 +239,7 @@ export class QueueComponent implements OnDestroy {
         const bn = (s as any)?.barName;
         if (typeof bn === 'string') {
           this.barName = bn.trim();
-          try { localStorage.setItem('gramolaBarName', this.barName); } catch {}
+          try { localStorage.setItem(this.lsKey('barName'), this.barName); } catch {}
         }
         const uri = s.spotifyPlaylistUri || '';
         if (!uri) return;
@@ -511,7 +516,7 @@ export class QueueComponent implements OnDestroy {
   private saveState() {
     // Persistimos tanto cola como lista por defecto para que al navegar no se reinicie.
     if (!this.current && !this.currentFallback) {
-      localStorage.removeItem('gramolaPlayer');
+      localStorage.removeItem(this.lsKey('player'));
       return;
     }
 
@@ -524,7 +529,7 @@ export class QueueComponent implements OnDestroy {
         totalMs: this.totalMs,
         isPaused: this.isPaused
       };
-      try { localStorage.setItem('gramolaPlayer', JSON.stringify(state)); } catch {}
+      try { localStorage.setItem(this.lsKey('player'), JSON.stringify(state)); } catch {}
       return;
     }
 
@@ -543,11 +548,11 @@ export class QueueComponent implements OnDestroy {
       totalMs: this.totalMs,
       isPaused: this.isPaused
     };
-    try { localStorage.setItem('gramolaPlayer', JSON.stringify(state)); } catch {}
+    try { localStorage.setItem(this.lsKey('player'), JSON.stringify(state)); } catch {}
   }
   private tryRestoreState(): boolean {
     if (this.current || this.currentFallback) return true;
-    const raw = localStorage.getItem('gramolaPlayer');
+    const raw = localStorage.getItem(this.lsKey('player'));
     if (!raw) return false;
     try {
       const s = JSON.parse(raw);
@@ -587,6 +592,14 @@ export class QueueComponent implements OnDestroy {
     } catch {
       return false;
     }
+  }
+
+  private lsKey(suffix: 'barName' | 'playlistUri' | 'player'): string {
+    const email = (() => {
+      try { return (localStorage.getItem('email') || '').trim().toLowerCase(); } catch { return ''; }
+    })();
+    const ns = email ? `gramola:${email}` : 'gramola:anon';
+    return `${ns}:${suffix}`;
   }
 
   private itemDurationMs(item: QueueItem): number {

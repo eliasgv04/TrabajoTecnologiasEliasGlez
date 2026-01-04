@@ -57,7 +57,7 @@ public class UserService {
             throw new IllegalArgumentException("El correo suministrado no tiene un formato válido");
         }
         if (pwd1 == null || pwd2 == null) {
-            throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
+            throw new IllegalArgumentException("La contraseña debe tener al menos seis caracteres");
         }
         pwd1 = pwd1.trim();
         pwd2 = pwd2.trim();
@@ -65,7 +65,7 @@ public class UserService {
             throw new IllegalArgumentException("La contraseña y su confirmación no coinciden");
         }
         if (pwd1.length() <= 5) {
-            throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
+            throw new IllegalArgumentException("La contraseña debe tener al menos seis caracteres");
         }
         if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             throw new DataIntegrityViolationException("Ese correo electrónico ya está siendo utilizado");
@@ -215,7 +215,7 @@ public class UserService {
         if (!p1.equals(p2))
             throw new IllegalArgumentException("Las contraseñas no coinciden");
         if (p1.length() <= 5)
-            throw new IllegalArgumentException("La contraseña debe tener al menos cinco caracteres");
+            throw new IllegalArgumentException("La contraseña debe tener al menos seis caracteres");
 
         var opt = resetRepo.findByToken(token.trim());
         if (opt.isEmpty())

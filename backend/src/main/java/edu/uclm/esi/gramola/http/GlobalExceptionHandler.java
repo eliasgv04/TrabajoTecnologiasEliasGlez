@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
         }
         return ResponseEntity.status(code).body(Map.of(
                 "status", code,
+            "message", msg,
                 "error", msg,
                 "path", safePath(req)
         ));
@@ -40,6 +41,7 @@ public class GlobalExceptionHandler {
         log.error("NullPointerException at {}", safePath(req), ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "status", 500,
+                "message", "Error interno",
                 "error", "Error interno",
                 "path", safePath(req)
         ));
@@ -51,6 +53,7 @@ public class GlobalExceptionHandler {
         log.error("Unhandled exception at {}: {}", safePath(req), msg, ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "status", 500,
+                "message", msg,
                 "error", msg,
                 "path", safePath(req)
         ));

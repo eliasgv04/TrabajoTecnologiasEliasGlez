@@ -66,6 +66,48 @@ Validar que las funcionalidades críticas de la práctica funcionan de extremo a
 
 - Con una canción sonando, ir a “Cuenta” y volver a “Cola”: la reproducción no debe reiniciarse desde 0.
 
+## Pruebas con Selenium (obligatorias)
+
+Los escenarios que deben probarse con Selenium son:
+
+1) Un cliente del bar busca una canción. Paga y la pone.
+    - Se comprobará que el pago se ha confirmado en la base de datos.
+    - Se comprobará que la canción se ha añadido a la lista de canciones que el bar mantiene en el backend.
+
+2) Un cliente del bar busca una canción. Pone mal los datos de pago y se produce un error.
+
+### Enfoque recomendado
+
+- Selenium automatiza el navegador (UI real) para simular al “cliente”.
+- La comprobación de BD se hace desde el propio test (repositorios JPA) contra la misma BD MySQL.
+- Stripe se prueba en modo test con tarjetas de prueba:
+   - Éxito: 4242 4242 4242 4242
+   - Rechazo: 4000 0000 0000 0002
+
+### Prerrequisitos para que funcione
+
+- Backend levantado en HTTPS: `https://localhost:8000`
+- Frontend levantado en: `https://localhost:4200` (con `proxy.conf.json` y `secure:false`)
+- BD MySQL accesible con los datos de `backend/src/main/resources/application.properties`
+- Para que la ruta `/queue` no redirija a Spotify, el usuario del test debe tener token de Spotify válido.
+   - Recomendación práctica: hacer el OAuth una vez manualmente con ese usuario antes de ejecutar Selenium.
+
+### Implementación en el proyecto
+
+- Se ha añadido un test de ejemplo en [backend/src/test/java/edu/uclm/esi/gramola/e2e/PruebasFuncionalesSeleniumIT.java](backend/src/test/java/edu/uclm/esi/gramola/e2e/PruebasFuncionalesSeleniumIT.java)
+- Se ejecuta con Maven en el perfil `e2e` (Failsafe), para no mezclarlo con los unit tests.
+
+### Cómo ejecutar
+
+1) Arrancar backend y frontend.
+2) Ejecutar:
+
+`mvn -Pe2e -DskipTests=false verify`
+
+Si tu frontend no está en `https://localhost:4200`, puedes pasar:
+
+`mvn -Pe2e -DskipTests=false -De2e.frontend=https://localhost:4200 verify`
+
 ## Evidencias
 
 - Capturas de pantalla del front (registro/verificación, cola, reproducción, ajustes).

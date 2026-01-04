@@ -6,6 +6,7 @@ package edu.uclm.esi.gramola.entities;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "queue_items")
@@ -40,6 +41,16 @@ public class QueueItem {
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
+    /**
+     * Usuario/bar al que pertenece este elemento de la cola.
+     *
+     * Nota: se deja nullable para no romper datos antiguos existentes (ddl-auto=update).
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = true)
+    @JsonIgnore
+    private User user;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTrackId() { return trackId; }
@@ -62,4 +73,7 @@ public class QueueItem {
     public void setPopularity(Integer popularity) { this.popularity = popularity; }
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

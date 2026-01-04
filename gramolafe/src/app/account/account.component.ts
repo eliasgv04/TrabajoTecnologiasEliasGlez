@@ -46,10 +46,11 @@ export class AccountComponent implements OnInit {
     this.api.me().subscribe({
       next: (i) => (this.info = i),
       error: (e) => {
-        const msg = (typeof e?.error === 'string'
-          ? e.error
-          : (e?.error?.error || e?.error?.message)) || e?.message || 'Error cargando la cuenta';
-        this.error = msg;
+        // Si falla /account, no mostramos "Error interno" al usuario.
+        // Conservamos lo que tengamos en localStorage y dejamos el estado de suscripción como "no activa".
+        this.error = '';
+        const currentEmail = this.info?.email || localStorage.getItem('email') || '';
+        this.info = { email: currentEmail, active: false, activeUntil: null } as AccountInfo;
         // No redirigimos: mantenemos los datos locales si existen
       }
     });
@@ -73,7 +74,7 @@ export class AccountComponent implements OnInit {
         this.settings = s;
         const bn = (s as any)?.barName;
         if (typeof bn === 'string') {
-          try { localStorage.setItem('gramolaBarName', bn.trim()); } catch {}
+          try { localStorage.setItem(this.lsKey('barName'), bn.trim()); } catch {}
         }
       },
       error: () => {}
@@ -87,7 +88,7 @@ export class AccountComponent implements OnInit {
     this.settingsApi.update({ barName: trimmed }).subscribe({
       next: (s) => {
         this.settings = s;
-        try { localStorage.setItem('gramolaBarName', (s as any)?.barName ? String((s as any).barName).trim() : ''); } catch {}
+        try { localStorage.setItem(this.lsKey('barName'), (s as any)?.barName ? String((s as any).barName).trim() : ''); } catch {}
         this.toast.show('Nombre del bar guardado');
         this.saving = false;
       },
@@ -107,7 +108,7 @@ export class AccountComponent implements OnInit {
       this.settingsApi.update({ spotifyPlaylistUri: '' }).subscribe({
         next: (s) => {
           this.settings = s;
-          try { localStorage.setItem('gramolaPlaylistUri', ''); } catch {}
+          try { localStorage.setItem(this.lsKey('playlistUri'), ''); } catch {}
           this.toast.show('Lista por defecto desactivada');
           this.saving = false;
         },
@@ -128,7 +129,7 @@ export class AccountComponent implements OnInit {
         this.settingsApi.update({ spotifyPlaylistUri: uri }).subscribe({
           next: (s) => {
             this.settings = s;
-            try { localStorage.setItem('gramolaPlaylistUri', s.spotifyPlaylistUri || ''); } catch {}
+            try { localStorage.setItem(this.lsKey('playlistUri'), s.spotifyPlaylistUri || ''); } catch {}
             this.toast.show(count > 0 ? `Playlist guardada (${count} pistas)` : 'Playlist guardada');
             this.saving = false;
           },
@@ -150,7 +151,7 @@ export class AccountComponent implements OnInit {
           this.settingsApi.update({ spotifyPlaylistUri: uri }).subscribe({
             next: (s) => {
               this.settings = s;
-              try { localStorage.setItem('gramolaPlaylistUri', s.spotifyPlaylistUri || ''); } catch {}
+              try { localStorage.setItem(this.lsKey('playlistUri'), s.spotifyPlaylistUri || ''); } catch {}
               this.toast.show('Playlist guardada (no se pudo validar ahora)');
               this.saving = false;
             },
@@ -195,6 +196,14 @@ export class AccountComponent implements OnInit {
       if (typeof m === 'string' && m.trim()) return m;
     }
     return 'Error guardando la playlist';
+  }
+
+  private lsKey(suffix: 'barName' | 'playlistUri'): string {
+    const email = (() => {
+      try { return (localStorage.getItem('email') || '').trim().toLowerCase(); } catch { return ''; }
+    })();
+    const ns = email ? `gramola:${email}` : 'gramola:anon';
+    return `${ns}:${suffix}`;
   }
 
 }

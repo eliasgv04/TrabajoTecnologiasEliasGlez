@@ -95,7 +95,14 @@ export class PaymentsComponent implements OnInit {
           this.stripe = Stripe(this.publishableKey);
           this.elements = this.stripe.elements();
           if (this.card) { try { this.card.unmount(); } catch { /* ignore */ } }
-          this.card = this.elements.create('card');
+          this.card = this.elements.create('card', {
+            style: {
+              base: {
+                color: '#ffffff',
+                '::placeholder': { color: 'rgba(255, 255, 255, 0.6)' }
+              }
+            }
+          });
           const mount = document.getElementById('card-element');
           if (mount) this.card.mount('#card-element');
         }

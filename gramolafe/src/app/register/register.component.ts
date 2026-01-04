@@ -39,8 +39,13 @@ export class RegisterComponent {
         this.message = 'Registro correcto. Revisa tu correo y haz clic en el enlace de verificación.';
       },
       error: (err) => {
-        const backendMsg = err?.error?.message || err?.message;
-        this.error = backendMsg ? `Error en el registro: ${backendMsg}` : 'Error en el registro';
+        const backendMsg = err?.error?.message || err?.error?.error;
+        if (err?.status === 409) {
+          this.error = backendMsg || 'Ese correo electrónico ya está registrado';
+        } else {
+          const msg = backendMsg || err?.message;
+          this.error = msg ? `Error en el registro: ${msg}` : 'Error en el registro';
+        }
         console.error('Error en el registro', err);
       }
     });

@@ -52,7 +52,7 @@ export class ResetComponent {
         setTimeout(() => this.router.navigateByUrl('/login'), 1200);
       },
       error: (err) => {
-        const m = err?.error?.message || err?.message || 'Error al restablecer';
+            const m = err?.error?.message || err?.error?.error || err?.message || 'Error al restablecer';
         this.error = m;
         this.loading = false;
       }

@@ -142,8 +142,8 @@ export class SubscriptionsComponent implements OnInit {
       } else {
         this.payments.confirm().subscribe({
           next: r => {
-            const coins = r && typeof r.coins === 'number' ? r.coins : this.selectedPack;
-            this.message = `Recarga completada. +${coins} moneda(s).`;
+            const purchased = this.selectedPack;
+            this.message = `Recarga completada. +${purchased} moneda(s).`;
             this.loading = false;
             this.clientSecret = '';
           },
@@ -172,7 +172,15 @@ export class SubscriptionsComponent implements OnInit {
   private mountCard() {
     if (!this.elements) return;
     if (!this.card) {
-      this.card = this.elements.create('card', { hidePostalCode: true });
+      this.card = this.elements.create('card', {
+        hidePostalCode: true,
+        style: {
+          base: {
+            color: '#ffffff',
+            '::placeholder': { color: 'rgba(255, 255, 255, 0.6)' }
+          }
+        }
+      });
     }
     // Si estaba montada pero el contenedor se recreó por *ngIf, permitimos volver a montar
     if (this.cardMounted) {

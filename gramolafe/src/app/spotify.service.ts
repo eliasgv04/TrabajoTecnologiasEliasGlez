@@ -85,6 +85,43 @@ export class SpotifyService {
   pause(deviceId?: string) {
     return this.http.put(`${this.baseUrl}/spotify/pause`, { deviceId });
   }
+
+  /**
+   * Para la reproducción actual (best-effort).
+   *
+   * Se usa al cerrar sesión/cambiar de cuenta para evitar que Spotify siga sonando.
+   */
+  async stopPlayback(): Promise<void> {
+    const deviceId = this.deviceId$.value || undefined;
+
+    // 1) Intento vía Web Playback SDK (si está cargado)
+    try {
+      if (this.player && typeof this.player.pause === 'function') {
+        await this.player.pause();
+      }
+    } catch {
+      // ignorar
+    }
+
+    // 2) Intento vía backend (Spotify Web API)
+    try {
+      await firstValueFrom(this.pause(deviceId));
+    } catch {
+      // ignorar
+    }
+
+    // 3) Desconectar el player para cortar audio y liberar recursos
+    try {
+      if (this.player && typeof this.player.disconnect === 'function') {
+        this.player.disconnect();
+      }
+    } catch {
+      // ignorar
+    }
+
+    this.player = null;
+    this.deviceId$.next(null);
+  }
   transfer(deviceId: string, play = true) {
     return this.http.put(`${this.baseUrl}/spotify/transfer`, { deviceId, play });
   }

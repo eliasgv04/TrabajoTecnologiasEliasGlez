@@ -2,8 +2,7 @@
   <h2>Mi cuenta</h2>
   <p class="muted">Correo: <strong>{{ info?.email || '—' }}</strong></p>
   <p class="muted">Bar: <strong>{{ settings.barName || '—' }}</strong></p>
-  <p class="muted">Suscripción activa hasta: <strong>{{ info && info.activeUntil ? (info.activeUntil.split('T')[0]) : '—' }}</strong></p>
-  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="muted">Suscripción activa hasta: <strong>{{ info && info.activeUntil ? (info.activeUntil.split('T')[0]) : 'No hay suscripción activa' }}</strong></p>
   <div class="sep" aria-hidden="true"></div>
 
   <h3>Nombre del bar</h3>
