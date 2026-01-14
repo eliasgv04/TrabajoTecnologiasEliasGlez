@@ -1,3 +1,4 @@
+
 package edu.uclm.esi.gramola.e2e;
 
 import edu.uclm.esi.gramola.dao.BarSettingsRepository;
@@ -33,8 +34,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * NOTA IMPORTANTE (prerrequisitos):
  * - El frontend debe estar levantado en https://localhost:4200
  * - El backend debe estar levantado (vía proxy del frontend) y apuntando a la misma BD que este test.
- * - Para que /queue no redirija a Spotify, el usuario del test debe tener token de Spotify válido en BD.
- *   (Puedes hacer el OAuth una vez manualmente con ese usuario antes de ejecutar Selenium).
+ * - Para que /queue NO redirija a Spotify durante Selenium, el test activa “modo E2E” poniendo
+ *   localStorage.e2e:disableSpotify=1 antes de hacer login.
+ *   (Así evitamos depender de OAuth/Spotify en la ejecución automática.)
  *
  * Ejecución:
  * - mvn -Pe2e -DskipTests=false verify
@@ -114,7 +116,6 @@ class PruebasFuncionalesSeleniumIT {
         });
 
         // 3) Ir a la cola, buscar una canción y añadirla
-        //    (Si te redirige a Spotify, este test fallará: necesitas token válido para el usuario.)
         long queueBefore = queueRepo.findAllByUser_IdOrderByCreatedAtAsc(users.findByEmailIgnoreCase(email).orElseThrow().getId()).size();
         addFirstSearchResultToQueue("Imagine");
 
@@ -207,7 +208,7 @@ class PruebasFuncionalesSeleniumIT {
     private void addFirstSearchResultToQueue(String query) {
         driver.navigate().to(FRONTEND + "/queue");
 
-        // Si falta token Spotify, la app redirige fuera. Detectarlo pronto para que el fallo sea claro.
+        // Si la app redirige fuera de /queue, detectarlo pronto para que el fallo sea claro.
         Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
             String url = driver.getCurrentUrl();
             assertTrue(url.contains("/queue"), "La app no está en /queue (posible redirección Spotify): " + url);

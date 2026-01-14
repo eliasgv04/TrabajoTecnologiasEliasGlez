@@ -89,8 +89,9 @@ Los escenarios que deben probarse con Selenium son:
 - Backend levantado en HTTPS: `https://localhost:8000`
 - Frontend levantado en: `https://localhost:4200` (con `proxy.conf.json` y `secure:false`)
 - BD MySQL accesible con los datos de `backend/src/main/resources/application.properties`
-- Para que la ruta `/queue` no redirija a Spotify, el usuario del test debe tener token de Spotify válido.
-   - Recomendación práctica: hacer el OAuth una vez manualmente con ese usuario antes de ejecutar Selenium.
+- Para que la ruta `/queue` no redirija a Spotify durante Selenium, el test activa “modo E2E”:
+   - Antes del login ejecuta `localStorage.setItem('e2e:disableSpotify','1')`.
+   - Esto evita depender de OAuth/Spotify en la ejecución automática.
 
 ### Implementación en el proyecto
 
@@ -113,3 +114,4 @@ Si tu frontend no está en `https://localhost:4200`, puedes pasar:
 - Capturas de pantalla del front (registro/verificación, cola, reproducción, ajustes).
 - Logs del backend (INFO/WARN) mostrando login, OAuth y control de reproducción.
 - Estado en BD (tablas `users`, `spotify_tokens`, `queue_items`, `bar_settings`, `user_subscriptions`).
+- Informes de Failsafe: `backend/target/failsafe-reports/failsafe-summary.xml` y `TEST-*.xml`.
