@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PaymentsService } from './payments.service';
@@ -14,17 +14,19 @@ declare const Stripe: any;
   styleUrls: ['./payments.component.css']
 })
 /**
- * Componente de pago para recargar monedas (Stripe).
+ * Componente de pago para una canción concreta (Stripe).
  *
  * Flujo:
  * - `prepay`: el backend crea el PaymentIntent y devuelve el `clientSecret`.
- * - `confirm`: Stripe confirma el pago y el backend acredita las monedas.
+ * - `confirm`: Stripe confirma el pago y el backend deja la canción lista para añadirse.
  */
-export class PaymentsComponent implements OnInit {
+export class PaymentsComponent implements OnChanges {
+  @Input() trackId = '';
+  @Input() amount = 1;
+  @Input() title = 'Pagar canción';
   @Output() closed = new EventEmitter<void>();
   @Output() paid = new EventEmitter<void>();
 
-  amount = 10; // 10 o 20
   clientSecret = '';
   loading = false;
   publishableKey = '';
@@ -34,14 +36,16 @@ export class PaymentsComponent implements OnInit {
 
   constructor(private payments: PaymentsService, private toast: ToastService, private router: Router) {}
 
-  ngOnInit(): void {
-    // Arrancar preautorización al abrir el modal
-    this.requestPrepayment();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['trackId'] || changes['amount']) {
+      this.requestPrepayment();
+    }
   }
 
   requestPrepayment() {
+    if (!this.trackId || !this.amount) return;
     this.loading = true;
-    this.payments.prepay(this.amount).subscribe({
+    this.payments.prepay(this.trackId, this.amount).subscribe({
       next: (token) => { this.clientSecret = token; this.loading = false; this.setupStripeIfPossible(); },
       error: (e) => {
         this.loading = false;
@@ -57,7 +61,7 @@ export class PaymentsComponent implements OnInit {
 
   confirmPayment() {
     if (!this.clientSecret) {
-      this.toast.show('Selecciona un importe para generar el pago');
+      this.toast.show('Genera primero el pago');
       return;
     }
     if (this.stripe && this.card) {
@@ -108,13 +112,6 @@ export class PaymentsComponent implements OnInit {
         }
       }
     });
-  }
-
-  onAmountChange(val: number) {
-    if (this.amount === val) return;
-    this.amount = val;
-    // Recalcular intent con nuevo importe
-    this.requestPrepayment();
   }
 
   close() { this.closed.emit(); }

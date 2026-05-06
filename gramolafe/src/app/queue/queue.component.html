@@ -1,8 +1,7 @@
 <section class="queue container">
   <h2>La Gramola de {{ barName || 'tu bar' }}</h2>
   <div class="billing">
-    <span>Precio por canción: 1–3 monedas según popularidad</span>
-    <span>• Saldo: {{ coins }}</span>
+    <span>Precio por canción: 1–3€ según popularidad</span>
   </div>
 
   <form (ngSubmit)="search()" class="search">
@@ -20,18 +19,18 @@
         <div class="meta">
           <div class="title">{{ t.title }}</div>
           <div class="sub">{{ t.artists.join(', ') }} — {{ t.album }}</div>
-          <div class="price-pill" *ngIf="priceFor(t.id) as p">Coste: <strong>{{ p }}</strong> moneda(s) <span class="muted" *ngIf="popularityFor(t.id) as pop">(popularidad {{ pop }})</span></div>
+          <div class="price-pill" *ngIf="priceFor(t.id) as p">Coste: <strong>{{ p }}€</strong> <span class="muted" *ngIf="popularityFor(t.id) as pop">(popularidad {{ pop }})</span></div>
         </div>
         <div class="actions-inline" *ngIf="pendingAddId !== t.id">
           <button class="btn outline" (click)="add(t)" [disabled]="isInQueue(t.id)">
-            {{ isInQueue(t.id) ? ('En cola (pos. ' + (inQueuePosition(t.id)+1) + ')' ) : ('Añadir a cola' + (priceFor(t.id) ? ' (' + priceFor(t.id) + ' moneda/s)' : '')) }}
+            {{ isInQueue(t.id) ? ('En cola (pos. ' + (inQueuePosition(t.id)+1) + ')' ) : ('Añadir a cola' + (priceFor(t.id) ? ' (' + priceFor(t.id) + '€)' : '')) }}
           </button>
         </div>
         <div class="confirm" *ngIf="pendingAddId === t.id">
           <ng-container *ngIf="priceFor(t.id) as p">
-            <span>Esta canción costará <strong>{{ p }}</strong> moneda(s).</span>
+            <span>Esta canción costará <strong>{{ p }}€</strong>.</span>
             <div class="confirm-actions">
-              <button class="btn" (click)="performAdd(t, p)">Confirmar</button>
+              <button class="btn" (click)="openPayment(t, p)">Pagar</button>
               <button class="btn outline" (click)="cancelAdd()">Cancelar</button>
             </div>
           </ng-container>
@@ -53,7 +52,7 @@
         <div class="meta">
           <div class="title">{{ i.title }}</div>
           <div class="sub">{{ i.artists }} — {{ i.album }}</div>
-          <div class="price-pill" *ngIf="i.chargedPrice">Cobró: <strong>{{ i.chargedPrice }}</strong> moneda(s) <span class="muted" *ngIf="i.popularity">(popularidad {{ i.popularity }})</span></div>
+          <div class="price-pill" *ngIf="i.chargedPrice">Cobró: <strong>{{ i.chargedPrice }}€</strong> <span class="muted" *ngIf="i.popularity">(popularidad {{ i.popularity }})</span></div>
         </div>
         <div class="actions-inline">
           <button class="btn outline" (click)="remove(i)">Quitar</button>
@@ -64,6 +63,15 @@
   </div>
 
   <div class="toast" *ngIf="toast.visible">{{ toast.message }}</div>
+
+  <app-payments
+    *ngIf="pendingPaymentTrack as payTrack"
+    [trackId]="payTrack.id"
+    [amount]="pendingPaymentPrice"
+    [title]="'Pagar canción: ' + payTrack.title"
+    (paid)="onSongPaid()"
+    (closed)="cancelPayment()"
+  ></app-payments>
 
   
 

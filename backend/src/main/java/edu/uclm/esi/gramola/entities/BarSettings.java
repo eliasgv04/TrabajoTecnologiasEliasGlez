@@ -19,7 +19,7 @@ public class BarSettings {
     private User user;
 
     @Column(name = "price_per_song", nullable = false)
-    private int pricePerSong = 1; // in coins
+    private int pricePerSong = 1;
 
     @Column(name = "spotify_playlist_uri", length = 120)
     private String spotifyPlaylistUri;

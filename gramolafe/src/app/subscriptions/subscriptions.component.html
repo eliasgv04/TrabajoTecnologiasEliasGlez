@@ -1,24 +1,17 @@
 <div class="card">
-  <h2>Suscripciones</h2>
-  <p class="muted">Elige un plan y confirma el pago con tarjeta (Stripe Test).</p>
+  <h2>Contratación del servicio</h2>
+  <p class="muted">Contrata la suscripción mensual o anual para habilitar la app.</p>
   <div class="plans">
     <button class="plan" *ngFor="let p of plans" (click)="pick(p)" [class.selected]="isSelectedPlan(p)" [disabled]="loading || hasActiveSub">
       <span class="name">{{ p.name }}</span>
       <span class="price">{{ p.priceEur }} €/{{ p.durationMonths === 12 ? 'año' : 'mes' }}</span>
-      <span class="benefit">Incluye {{ coinsPerMonth(p) }} moneda(s)/mes. Las canciones cuestan 1–3 monedas según popularidad en Spotify.</span>
+      <span class="benefit">Activa el servicio del bar y deja lista la gramola para usarla.</span>
     </button>
   </div>
   <p class="muted" *ngIf="hasActiveSub">Ya tienes una suscripción activa{{ activeUntil ? ' hasta ' + (activeUntil | date:'yyyy-MM-dd') : '' }}. No puedes activar otra hasta que expire.</p>
-  <h3 class="section-title">Recargar saldo</h3>
-  <p class="muted">Compra monedas sueltas si no quieres suscripción. Las canciones cuestan 1–3 monedas según popularidad.</p>
-  <div class="packs">
-    <button class="pack" *ngFor="let c of rechargePacks" (click)="startRecharge(c)" [class.selected]="isSelectedPack(c)" [disabled]="loading">
-      +{{ c }} moneda(s) — {{ packPriceEuros(c) | number:'1.2-2' }}€ <span class="per">({{ packEuroPerCoin(c) | number:'1.2-2' }}€/moneda)</span>
-    </button>
-  </div>
   <div *ngIf="clientSecret" class="stripe">
     <div id="card-element" class="card-el"></div>
-    <button class="btn" (click)="pay()" [disabled]="loading">{{ loading ? 'Procesando…' : (mode === 'sub' ? 'Pagar y activar' : 'Pagar y recargar') }}</button>
+    <button class="btn" (click)="pay()" [disabled]="loading">{{ loading ? 'Procesando…' : 'Pagar y activar' }}</button>
   </div>
   <p class="ok" *ngIf="message">{{ message }}</p>
   <p class="error" *ngIf="error">{{ error }}</p>

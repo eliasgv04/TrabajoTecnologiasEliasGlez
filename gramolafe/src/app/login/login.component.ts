@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UserService } from '../user.service';
 import { AuthService } from '../auth.service';
-import { SpotifyService } from '../spotify.service';
+import { SubscriptionsService } from '../subscriptions/subscriptions.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,8 @@ import { SpotifyService } from '../spotify.service';
 /**
  * Pantalla de inicio de sesión.
  *
- * Autentica contra el backend y navega a `/queue` si el login es correcto.
+ * Autentica contra el backend y envía primero a la contratación del servicio
+ * si el bar todavía no tiene una suscripción activa.
  */
 export class LoginComponent {
   identifier = '';
@@ -24,7 +25,13 @@ export class LoginComponent {
   loading = false;
   error = '';
 
-  constructor(private userService: UserService, private auth: AuthService, private router: Router, private spotify: SpotifyService, private route: ActivatedRoute) {}
+  constructor(
+    private userService: UserService,
+    private auth: AuthService,
+    private router: Router,
+    private subs: SubscriptionsService,
+    private route: ActivatedRoute
+  ) {}
 
   login() {
     this.error = '';
@@ -34,10 +41,15 @@ export class LoginComponent {
         this.auth.setLoggedIn(true);
         this.auth.setEmail(res?.email || this.identifier);
         this.loading = false;
-        // Navegar siempre a la cola tras login.
-        // La autenticación de Spotify se dispara al entrar en /queue.
-        const nextUrl = this.route.snapshot.queryParamMap.get('next') || '/queue';
-        this.router.navigateByUrl(nextUrl);
+        const nextUrl = this.route.snapshot.queryParamMap.get('next') || '';
+        if (nextUrl && nextUrl.startsWith('/')) {
+          this.router.navigateByUrl(nextUrl);
+          return;
+        }
+        this.subs.status().subscribe({
+          next: s => this.router.navigateByUrl(s.active ? '/queue' : '/plans'),
+          error: () => this.router.navigateByUrl('/plans')
+        });
       },
       error: (err) => {
         this.loading = false;

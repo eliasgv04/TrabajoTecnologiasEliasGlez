@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SubscriptionsService, SubscriptionPlan } from './subscriptions.service';
-import { SettingsService } from '../settings/settings.service';
-import { PaymentsService } from '../payments/payments.service';
 
 declare const Stripe: any;
 
@@ -14,11 +12,10 @@ declare const Stripe: any;
   styleUrls: ['./subscriptions.component.css']
 })
 /**
- * Pantalla de suscripciones y recargas.
+ * Pantalla de contratación del servicio y pago de canciones.
  *
  * Permite:
- * - Comprar una suscripción (prepay/confirm con Stripe y activación en backend).
- * - Comprar un pack de monedas (mismo flujo de Stripe usando `PaymentsService`).
+ * - Contratar la suscripción del bar (prepay/confirm con Stripe y activación en backend).
  */
 export class SubscriptionsComponent implements OnInit {
   plans: SubscriptionPlan[] = [];
@@ -37,12 +34,7 @@ export class SubscriptionsComponent implements OnInit {
   clientSecret = '';
   private cardMounted = false;
 
-  // Recarga de monedas
-  rechargePacks = [5, 10, 20, 25];
-  mode: 'sub' | 'coins' = 'sub';
-  selectedPack = 0;
-
-  constructor(private api: SubscriptionsService, private payments: PaymentsService, private settings: SettingsService) {}
+  constructor(private api: SubscriptionsService) {}
 
   ngOnInit() {
     this.api.plans().subscribe({ next: p => (this.plans = p), error: e => (this.error = this.pickMsg(e)) });
@@ -54,13 +46,6 @@ export class SubscriptionsComponent implements OnInit {
       error: () => {}
     });
     this.setupStripe();
-    this.settings.get().subscribe({
-      next: s => {
-        // Usar el precio para textos UI si hiciera falta
-        this.dynamicPricePerSong = Math.max(1, s.pricePerSong || 1);
-      },
-      error: () => {}
-    });
   }
 
   pick(plan: SubscriptionPlan) {
@@ -73,31 +58,9 @@ export class SubscriptionsComponent implements OnInit {
     }
     this.loading = true;
     this.selectedPlan = plan;
-    this.mode = 'sub';
     this.unmountCard();
     this.clientSecret = '';
     this.api.prepay(plan.id).subscribe({
-      next: cs => {
-        this.clientSecret = cs;
-        this.loading = false;
-        this.mountCard();
-      },
-      error: e => {
-        this.error = this.pickMsg(e);
-        this.loading = false;
-      }
-    });
-  }
-
-  startRecharge(pack: number) {
-    this.error = '';
-    this.message = '';
-    this.loading = true;
-    this.mode = 'coins';
-    this.selectedPack = pack;
-    this.unmountCard();
-    this.clientSecret = '';
-    this.payments.prepay(pack).subscribe({
       next: cs => {
         this.clientSecret = cs;
         this.loading = false;
@@ -119,40 +82,18 @@ export class SubscriptionsComponent implements OnInit {
         this.loading = false;
         return;
       }
-      if (this.mode === 'sub') {
-        this.api.confirm().subscribe({
-          next: r => {
-            const onlyDate = (r.activeUntil || '').toString().split('T')[0];
-            const credited = (r as any).creditedCoins as number | undefined;
-            const creditedText =
-              typeof credited === 'number'
-                ? ` Se han abonado ${credited} moneda(s).`
-                : this.selectedPlan
-                ? ` Se han abonado ${this.coinsPerMonth(this.selectedPlan) * (this.selectedPlan.durationMonths || 1)} moneda(s).`
-                : '';
-            this.message = `${r.message} (activa hasta ${onlyDate}).${creditedText}`;
-            this.loading = false;
-            this.clientSecret = '';
-          },
-          error: e => {
-            this.error = this.pickMsg(e);
-            this.loading = false;
-          }
-        });
-      } else {
-        this.payments.confirm().subscribe({
-          next: r => {
-            const purchased = this.selectedPack;
-            this.message = `Recarga completada. +${purchased} moneda(s).`;
-            this.loading = false;
-            this.clientSecret = '';
-          },
-          error: e => {
-            this.error = this.pickMsg(e);
-            this.loading = false;
-          }
-        });
-      }
+      this.api.confirm().subscribe({
+        next: r => {
+          const onlyDate = (r.activeUntil || '').toString().split('T')[0];
+          this.message = `${r.message}${onlyDate ? ` (activa hasta ${onlyDate}).` : '.'}`;
+          this.loading = false;
+          this.clientSecret = '';
+        },
+        error: e => {
+          this.error = this.pickMsg(e);
+          this.loading = false;
+        }
+      });
     }
   }
 
@@ -221,29 +162,7 @@ export class SubscriptionsComponent implements OnInit {
     return 'Error';
   }
 
-  coinsPerMonth(p: SubscriptionPlan): number {
-    const code = (p.code || '').toUpperCase();
-    if (code === 'ANNUAL') return 30; // 30/mes -> 360 al año
-    return 30; // MONTHLY u otros por defecto
-  }
-
-  // Precio dinámico para reflejar ajustes del servidor en mensajes
-  dynamicPricePerSong = 1;
-
   isSelectedPlan(p: SubscriptionPlan): boolean {
-    return !!this.selectedPlan && this.selectedPlan.id === p.id && this.mode === 'sub';
-  }
-  isSelectedPack(c: number): boolean {
-    return this.mode === 'coins' && this.selectedPack === c;
-  }
-
-  packPriceEuros(c: number): number {
-    // Igual que en backend: <20 ⇒ 1€/moneda; >=20 ⇒ 0,75€/moneda
-    const per = c >= 20 ? 0.75 : 1.0;
-    return Math.round(c * per * 100) / 100; // redondeo a céntimos
-  }
-
-  packEuroPerCoin(c: number): number {
-    return c >= 20 ? 0.75 : 1.0;
+    return !!this.selectedPlan && this.selectedPlan.id === p.id;
   }
 }

@@ -31,8 +31,7 @@ public class SubscriptionsController {
     @Value("${stripe.secretKey:}")
     private String stripeSecretKey;
 
-    public SubscriptionsController(SubscriptionPlanRepository plans, UserRepository users,
-                                   UserSubscriptionRepository subsRepo) {
+    public SubscriptionsController(SubscriptionPlanRepository plans, UserRepository users, UserSubscriptionRepository subsRepo) {
         this.plans = plans;
         this.users = users;
         this.subsRepo = subsRepo;
@@ -122,23 +121,8 @@ public class SubscriptionsController {
         sub.setStartAt(now);
         sub.setEndAt(end);
         subsRepo.save(sub);
-
-        // Credit monthly coins upfront for the plan duration (benefit of subscription)
-        int monthlyCoins;
-        String code = plan.getCode() != null ? plan.getCode().toUpperCase() : "";
-        if ("ANNUAL".equals(code)) {
-            monthlyCoins = 30; // más valor para el usuario
-        } else {
-            monthlyCoins = 30; // default / MONTHLY
-        }
-        int creditedCoins = monthlyCoins * Math.max(1, plan.getDurationMonths());
-        try {
-            u.setCoins(u.getCoins() + creditedCoins);
-            users.save(u);
-        } catch (Exception ignore) {}
-
         session.removeAttribute("sub_client_secret");
         session.removeAttribute("sub_plan_id");
-        return Map.of("message", "Suscripción activada", "activeUntil", end.toString(), "creditedCoins", creditedCoins);
+        return Map.of("message", "Suscripción activada", "activeUntil", end.toString());
     }
 }

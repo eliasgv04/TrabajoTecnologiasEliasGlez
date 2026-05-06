@@ -6,19 +6,20 @@ import { ToastService } from '../toast.service';
 import { BillingService } from '../billing.service';
 import { SettingsService } from '../settings/settings.service';
 import { SpotifyService } from '../spotify.service';
+import { PaymentsComponent } from '../payments/payments.component';
 
 @Component({
   selector: 'app-queue',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaymentsComponent],
   templateUrl: './queue.component.html',
   styleUrls: ['./queue.component.css']
 })
 /**
  * Pantalla principal de la gramola.
  *
- * - Permite buscar canciones y añadirlas a la cola.
- * - Muestra saldo, estimaciones de precio y la cola actual.
+ * - Permite buscar canciones, pagarlas y añadirlas a la cola.
+ * - Muestra estimaciones de precio y la cola actual.
  * - Controla la reproducción a través de Spotify (cuando hay token/dispositivo).
  * - Incluye un “modo lista por defecto” (playlist) cuando la cola está vacía.
  */
@@ -31,9 +32,10 @@ export class QueueComponent implements OnDestroy {
   error = '';
 
   pricePerSong = 1;
-  coins = 0;
   estimated: Record<string, { price: number; popularity: number }> = {};
   pendingAddId: string | null = null;
+  pendingPaymentTrack: TrackDTO | null = null;
+  pendingPaymentPrice = 0;
 
   // Estado del reproductor (sincronizado con UI y, cuando procede, con Spotify)
   current: QueueItem | null = null;
@@ -97,7 +99,6 @@ export class QueueComponent implements OnDestroy {
 
   loadBilling() {
     this.billing.getPrice().subscribe({ next: r => (this.pricePerSong = r.pricePerSong) });
-    this.billing.getBalance().subscribe({ next: r => (this.coins = r.coins) });
   }
 
   loadQueue() {
@@ -119,7 +120,7 @@ export class QueueComponent implements OnDestroy {
     this.music.search(this.q).subscribe({
       next: (tracks) => {
         this.results = tracks;
-        // Obtener estimaciones por canción (1–3 monedas) para transparencia
+        // Obtener estimaciones por canción (1–3 euros) para transparencia
         this.estimated = {};
         for (const t of tracks) {
           this.billing.estimate(t.id).subscribe({
@@ -139,10 +140,30 @@ export class QueueComponent implements OnDestroy {
   add(track: TrackDTO) {
     const p = this.priceFor(track.id);
     if (p != null) {
-      this.pendingAddId = track.id; // muestra confirmación inline
+      this.pendingAddId = track.id;
       return;
     }
-    this.performAdd(track, null);
+    this.openPayment(track, this.pricePerSong);
+  }
+
+  openPayment(track: TrackDTO, amount: number) {
+    this.pendingAddId = null;
+    this.pendingPaymentTrack = track;
+    this.pendingPaymentPrice = amount;
+  }
+
+  onSongPaid() {
+    if (!this.pendingPaymentTrack) return;
+    const track = this.pendingPaymentTrack;
+    const amount = this.pendingPaymentPrice;
+    this.pendingPaymentTrack = null;
+    this.pendingPaymentPrice = 0;
+    this.performAdd(track, amount);
+  }
+
+  cancelPayment() {
+    this.pendingPaymentTrack = null;
+    this.pendingPaymentPrice = 0;
   }
 
   performAdd(track: TrackDTO, priceHint: number | null) {
@@ -151,15 +172,14 @@ export class QueueComponent implements OnDestroy {
       next: (item) => { 
         this.loadQueue(); this.loadBilling();
         const charged = (item as any)?.chargedPrice ?? priceHint ?? this.pricePerSong;
-        this.toast.show(`Añadido a la cola (−${charged} moneda(s))`);
+        this.toast.show(`Añadido a la cola (${charged}€)`);
       },
       error: (e: any) => {
         if (e?.status === 402) {
           const msg402 = this.pickMsg(e);
-          // El 402 se usa tanto para "Saldo insuficiente" como para "requiere suscripción".
           const finalMsg = (typeof msg402 === 'string' && msg402.toLowerCase().includes('suscrip'))
             ? msg402
-            : 'Saldo insuficiente para añadir esta canción.';
+            : 'Debes pagar esta canción antes de añadirla.';
           this.toast.show(finalMsg);
           this.error = finalMsg;
           return;

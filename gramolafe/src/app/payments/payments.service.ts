@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 /**
- * Servicio HTTP de pagos/recargas: prepay/confirm y obtención de publishableKey.
+ * Servicio HTTP de pagos de canciones: prepay/confirm y obtención de publishableKey.
  */
 @Injectable({ providedIn: 'root' })
 export class PaymentsService {
@@ -14,11 +14,11 @@ export class PaymentsService {
     return this.http.get<{ publishableKey: string }>(`${this.baseUrl}/public-key`);
   }
 
-  prepay(matches: number): Observable<string> {
-    return this.http.get(`${this.baseUrl}/prepay`, { params: { matches }, responseType: 'text' });
+  prepay(trackId: string, amountEur: number): Observable<string> {
+    return this.http.get(`${this.baseUrl}/prepay`, { params: { trackId, amountEur }, responseType: 'text' });
   }
 
-  confirm(): Observable<{ message: string; coins: number }> {
-    return this.http.get<{ message: string; coins: number }>(`${this.baseUrl}/confirm`);
+  confirm(): Observable<{ message: string; trackId: string; amountEur: number }> {
+    return this.http.get<{ message: string; trackId: string; amountEur: number }>(`${this.baseUrl}/confirm`);
   }
 }

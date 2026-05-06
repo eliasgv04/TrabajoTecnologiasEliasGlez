@@ -1,10 +1,12 @@
 package edu.uclm.esi.gramola.http;
 
 /**
- * Controlador REST de pagos/recargas: crea PaymentIntents y confirma recargas de monedas.
+ * Controlador REST de pagos de canciones: crea PaymentIntents y confirma pagos puntuales.
  */
 
+import edu.uclm.esi.gramola.dao.SongPaymentRepository;
 import edu.uclm.esi.gramola.dao.UserRepository;
+import edu.uclm.esi.gramola.entities.SongPayment;
 import edu.uclm.esi.gramola.entities.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,12 +15,14 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/payments")
 public class PaymentsController {
     private final UserRepository users;
+    private final SongPaymentRepository songPayments;
 
     @Value("${stripe.secretKey:}")
     private String stripeSecretKey; // no usada en modo simulado
@@ -26,8 +30,9 @@ public class PaymentsController {
     @Value("${stripe.publishableKey:}")
     private String stripePublishableKey; // expuesta al front opcionalmente
 
-    public PaymentsController(UserRepository users) {
+    public PaymentsController(UserRepository users, SongPaymentRepository songPayments) {
         this.users = users;
+        this.songPayments = songPayments;
     }
 
     // Devuelve la publishable key por si el front quiere mostrarla o usar Stripe real
@@ -36,22 +41,19 @@ public class PaymentsController {
         return Map.of("publishableKey", stripePublishableKey == null ? "" : stripePublishableKey);
     }
 
-    // Simulación del prepay: valida la compra (packs admitidos 5/10/20/25), genera un client_secret y lo guarda en sesión
+    // Simulación del prepay: valida el pago de una canción concreta, genera un client_secret y lo guarda en sesión
     @GetMapping(path = "/prepay", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String prepay(HttpSession session, @RequestParam("matches") int matches) {
+    public String prepay(HttpSession session, @RequestParam("trackId") String trackId, @RequestParam("amountEur") int amountEur) {
         if (session.getAttribute("userId") == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Debes iniciar sesión");
         }
-        if (matches != 5 && matches != 10 && matches != 20 && matches != 25) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Packs permitidos: 5, 10, 20 o 25 canciones");
+        if (trackId == null || trackId.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "trackId obligatorio");
         }
-        // Precio base 1€/canción y descuento 25% para packs >= 20
-        long amountCents;
-        if (matches >= 20) {
-            amountCents = matches * 100L * 75 / 100; // 0,75€/canción
-        } else {
-            amountCents = matches * 100L; // 1€/canción
+        if (amountEur < 1 || amountEur > 3) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Importe de canción no válido");
         }
+        long amountCents = amountEur * 100L;
         if (stripeSecretKey == null || stripeSecretKey.isBlank()) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Stripe no configurado en el servidor");
         }
@@ -64,35 +66,45 @@ public class PaymentsController {
                             .build();
             com.stripe.model.PaymentIntent intent = com.stripe.model.PaymentIntent.create(params);
             String clientSecret = intent.getClientSecret();
-            session.setAttribute("client_secret", clientSecret);
-            session.setAttribute("matches", matches);
-            session.setAttribute("amount_cents", amountCents);
+            Long userId = (Long) session.getAttribute("userId");
+            User user = users.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+            SongPayment payment = new SongPayment();
+            payment.setUser(user);
+            payment.setTrackId(trackId);
+            payment.setAmountEur(amountEur);
+            payment.setClientSecret(clientSecret);
+            payment.setStatus(SongPayment.Status.PENDING);
+            songPayments.save(payment);
+
+            session.setAttribute("song_payment_client_secret", clientSecret);
+            session.setAttribute("song_payment_track_id", trackId);
+            session.setAttribute("song_payment_amount_eur", amountEur);
             return clientSecret;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stripe error: " + e.getMessage());
         }
     }
 
-    // Confirmación simulada: añade 'matches' monedas al usuario activo
+    // Confirmación simulada: marca el pago de la canción como completado
     @GetMapping("/confirm")
     public Map<String, Object> confirm(HttpSession session) {
-        Object userIdObj = session.getAttribute("userId");
-        Object cs = session.getAttribute("client_secret");
-        Object matchesObj = session.getAttribute("matches");
-        if (userIdObj == null || cs == null || matchesObj == null) {
+        Object cs = session.getAttribute("song_payment_client_secret");
+        if (cs == null) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Transacción no iniciada");
         }
-    Long userId = (Long) userIdObj;
-    int matches = (Integer) matchesObj;
-    User u = users.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
-    // En un flujo real, Stripe confirmaría el intent en el cliente con la publishable key.
-    // Aquí asumimos que ha sido 'succeeded' y recargamos monedas.
-    u.setCoins(u.getCoins() + matches); // añadimos monedas como "canciones prepagadas"
-    users.save(u);
-        // limpiar la transacción de la sesión
-        session.removeAttribute("client_secret");
-        session.removeAttribute("matches");
-        session.removeAttribute("amount_cents");
-        return Map.of("message", "Pago confirmado", "coins", u.getCoins());
+        String clientSecret = cs.toString();
+        SongPayment payment = songPayments.findByClientSecret(clientSecret)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pago no encontrado"));
+
+        payment.setStatus(SongPayment.Status.CONFIRMED);
+        payment.setConfirmedAt(Instant.now());
+        songPayments.save(payment);
+
+        session.removeAttribute("song_payment_client_secret");
+        session.removeAttribute("song_payment_track_id");
+        session.removeAttribute("song_payment_amount_eur");
+
+        return Map.of("message", "Pago confirmado", "trackId", payment.getTrackId(), "amountEur", payment.getAmountEur(), "paymentId", payment.getId());
     }
 }

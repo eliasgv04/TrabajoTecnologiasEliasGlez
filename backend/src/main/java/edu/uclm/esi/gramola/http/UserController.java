@@ -106,7 +106,7 @@ public class UserController {
         boolean ok = this.userService.verifyToken(token);
         if (!ok) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token inválido o caducado");
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "https://localhost:4200/login?verified=1");
+        headers.add("Location", "https://localhost:4200/login?verified=1&next=/plans");
         return ResponseEntity.status(302).headers(headers).build();
     }
 
