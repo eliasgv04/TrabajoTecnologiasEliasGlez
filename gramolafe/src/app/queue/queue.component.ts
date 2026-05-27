@@ -140,7 +140,25 @@ export class QueueComponent implements OnDestroy {
   add(track: TrackDTO) {
     const p = this.priceFor(track.id);
     if (p != null) {
-      this.pendingAddId = track.id;
+      // Try to add directly: if a confirmed payment already exists in the backend,
+      // the add will succeed. If the backend responds 402 (payment required),
+      // fall back to the normal payment confirmation flow.
+      this.music.addToQueue(track).subscribe({
+        next: (item) => {
+          this.loadQueue(); this.loadBilling();
+          const charged = (item as any)?.chargedPrice ?? p ?? this.pricePerSong;
+          this.toast.show(`Añadido a la cola (${charged}€)`);
+        },
+        error: (e: any) => {
+          if (e?.status === 402) {
+            this.pendingAddId = track.id; // show confirm/payment UI
+            return;
+          }
+          const msg = this.pickMsg(e);
+          this.toast.show(msg);
+          this.error = msg;
+        }
+      });
       return;
     }
     this.openPayment(track, this.pricePerSong);

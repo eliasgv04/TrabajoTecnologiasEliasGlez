@@ -38,7 +38,9 @@ FROM (
     ) t5
     LIMIT 1000
 ) numbers
-ON DUPLICATE KEY UPDATE verified = 1;
+ON DUPLICATE KEY UPDATE
+    password = @password_hash,
+    verified = 1;
 
 -- Verificar
 SELECT COUNT(*) AS total_usuarios_creados FROM users WHERE email LIKE 'user_%@test.local';

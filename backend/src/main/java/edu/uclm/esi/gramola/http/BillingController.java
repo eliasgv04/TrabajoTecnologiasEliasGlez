@@ -6,7 +6,6 @@ package edu.uclm.esi.gramola.http;
 
 import org.springframework.beans.factory.annotation.Value;
 import edu.uclm.esi.gramola.services.SpotifyService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 

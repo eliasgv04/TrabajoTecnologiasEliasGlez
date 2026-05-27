@@ -22,7 +22,7 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean verified = false;
 
     @Column(name = "created_at", nullable = true)
@@ -30,6 +30,14 @@ public class User {
 
     @Column(name = "updated_at", nullable = true)
     private LocalDateTime updatedAt;
+
+    /**
+     * Coins field kept for backward compatibility.
+     * In the new payment model, coins are no longer used.
+     * All transactions are handled through subscriptions and per-song payments.
+     */
+    @Transient
+    private int coins = 0;
 
     @PrePersist
     protected void onCreate() {
@@ -60,4 +68,7 @@ public class User {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public int getCoins() { return coins; }
+    public void setCoins(int coins) { this.coins = coins; }
 }

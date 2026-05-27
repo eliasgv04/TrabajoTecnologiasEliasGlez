@@ -12,3 +12,5 @@ export class BillingService {
   getPrice(): Observable<{ pricePerSong: number }> { return this.http.get<{ pricePerSong: number }>(`${this.baseUrl}/price`); }
   estimate(trackId: string): Observable<{ trackId: string; price: number; popularity: number }> { return this.http.get<{ trackId: string; price: number; popularity: number }>(`${this.baseUrl}/estimate`, { params: { trackId } }); }
 }
+
+

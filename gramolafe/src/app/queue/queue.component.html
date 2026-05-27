@@ -14,7 +14,7 @@
   <div *ngIf="results.length" class="results">
     <h3>Resultados</h3>
     <ul>
-      <li *ngFor="let t of results">
+    <li *ngFor="let t of results" [attr.data-track-id]="t.id">
         <img *ngIf="t.imageUrl" [src]="t.imageUrl" alt="" />
         <div class="meta">
           <div class="title">{{ t.title }}</div>

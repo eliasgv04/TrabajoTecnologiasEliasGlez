@@ -64,6 +64,7 @@ export class PaymentsComponent implements OnChanges {
       this.toast.show('Genera primero el pago');
       return;
     }
+
     if (this.stripe && this.card) {
       this.loading = true;
       this.stripe.confirmCardPayment(this.clientSecret, { payment_method: { card: this.card } })
