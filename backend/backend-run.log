@@ -1,0 +1,1227 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< edu.uclm.esi:gramola-backend >--------------------
+[INFO] Building gramola-backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.4.10:run (default-cli) > test-compile @ gramola-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ gramola-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ gramola-backend ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ gramola-backend ---
+[INFO] skip non existing resourceDirectory C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ gramola-backend ---
+[INFO] Recompiling the module because of added or removed source files.
+[INFO] Compiling 6 source files with javac [debug parameters release 17] to target\test-classes
+[INFO] 
+[INFO] <<< spring-boot:3.4.10:run (default-cli) < test-compile @ gramola-backend <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.4.10:run (default-cli) @ gramola-backend ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T17:56:33.916+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T17:56:33.917+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T17:56:33.990+02:00  INFO 17372 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-06-07T17:56:33.990+02:00  INFO 17372 --- [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-06-07T17:56:35.638+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T17:56:35.768+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 121 ms. Found 10 JPA repository interfaces.
+2026-06-07T17:56:36.956+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T17:56:36.978+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T17:56:36.978+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T17:56:37.050+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T17:56:37.053+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3060 ms
+2026-06-07T17:56:37.548+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T17:56:37.714+02:00  INFO 17372 --- [  restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.29.Final
+2026-06-07T17:56:37.798+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T17:56:38.317+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T17:56:38.378+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-07T17:56:38.782+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@385c45d5
+2026-06-07T17:56:38.782+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-07T17:56:38.914+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T17:56:38.914+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T17:56:38.950+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T17:56:40.714+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T17:56:41.048+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T17:56:41.820+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T17:56:42.338+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T17:56:42.340+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T17:56:42.684+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T17:56:42.712+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T17:56:42.728+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 9.412 seconds (process running for 10.057)
+2026-06-07T17:56:43.078+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+? Database migration completed: coins column fixed
+2026-06-07T18:00:25.412+02:00  INFO 17372 --- [nio-8000-exec-5] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-07T18:00:25.412+02:00  INFO 17372 --- [nio-8000-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-07T18:00:25.412+02:00  INFO 17372 --- [nio-8000-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-06-07T18:00:25.572+02:00  INFO 17372 --- [nio-8000-exec-5] e.uclm.esi.gramola.http.UserController   : Login correcto
+2026-06-07T18:01:50.187+02:00  WARN 17372 --- [nio-8000-exec-6] e.u.e.g.http.GlobalExceptionHandler      : RSE 403 at /subscriptions/status: Debes iniciar sesión
+2026-06-07T18:01:50.189+02:00  WARN 17372 --- [nio-8000-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.server.ResponseStatusException: 403 FORBIDDEN "Debes iniciar sesión"]
+2026-06-07T18:01:52.488+02:00  WARN 17372 --- [nio-8000-exec-9] e.u.e.g.http.GlobalExceptionHandler      : RSE 403 at /subscriptions/status: Debes iniciar sesión
+2026-06-07T18:01:52.488+02:00  WARN 17372 --- [nio-8000-exec-6] e.u.e.g.http.GlobalExceptionHandler      : RSE 403 at /account: Debes iniciar sesión
+2026-06-07T18:01:52.489+02:00  WARN 17372 --- [nio-8000-exec-9] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.server.ResponseStatusException: 403 FORBIDDEN "Debes iniciar sesión"]
+2026-06-07T18:01:52.489+02:00  WARN 17372 --- [nio-8000-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.server.ResponseStatusException: 403 FORBIDDEN "Debes iniciar sesión"]
+2026-06-07T18:01:52.492+02:00  WARN 17372 --- [nio-8000-exec-2] e.u.e.g.http.GlobalExceptionHandler      : RSE 403 at /settings: Debes iniciar sesión
+2026-06-07T18:01:52.493+02:00  WARN 17372 --- [nio-8000-exec-2] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.server.ResponseStatusException: 403 FORBIDDEN "Debes iniciar sesión"]
+2026-06-07T18:01:56.602+02:00  INFO 17372 --- [nio-8000-exec-2] e.uclm.esi.gramola.http.UserController   : Logout correcto
+2026-06-07T18:02:03.662+02:00  INFO 17372 --- [io-8000-exec-10] e.uclm.esi.gramola.http.UserController   : Login correcto
+2026-06-07T18:11:20.417+02:00  INFO 17372 --- [nio-8000-exec-7] e.u.esi.gramola.services.SpotifyClient   : Spotify app token acquired (expires in 3600s)
+2026-06-07T18:47:11.194+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2026-06-07T18:47:11.215+02:00  INFO 17372 --- [       Thread-5] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:47:11.312+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:47:11.329+02:00  INFO 17372 --- [       Thread-5] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:11.329+02:00  INFO 17372 --- [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-06-07T18:47:11.329+02:00  INFO 17372 --- [       Thread-5] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:47:11.495+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:47:11.495+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:47:11.769+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:47:11.787+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 10 JPA repository interfaces.
+2026-06-07T18:47:11.897+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:47:11.897+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:47:11.897+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:47:11.915+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:47:11.915+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 420 ms
+2026-06-07T18:47:11.965+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:47:11.967+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:47:11.975+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:47:11.976+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-06-07T18:47:11.980+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7eaa7008
+2026-06-07T18:47:11.980+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-06-07T18:47:11.980+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:47:11.980+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:47:11.980+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:47:12.079+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:47:12.140+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:12.301+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:47:12.468+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:47:12.471+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:47:12.546+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:47:12.546+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:47:12.554+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 1.08 seconds (process running for 3039.843)
+2026-06-07T18:47:12.577+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:47:12.579+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:47:17.983+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2026-06-07T18:47:17.985+02:00  INFO 17372 --- [       Thread-7] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:47:18.091+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:47:18.093+02:00  INFO 17372 --- [       Thread-7] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:18.094+02:00  INFO 17372 --- [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-06-07T18:47:18.096+02:00  INFO 17372 --- [       Thread-7] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:47:18.161+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:47:18.161+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:47:18.356+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:47:18.377+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:47:18.458+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:47:18.459+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:47:18.459+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:47:18.470+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:47:18.470+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 309 ms
+2026-06-07T18:47:18.494+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:47:18.494+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:47:18.510+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:47:18.510+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-06-07T18:47:18.510+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2f416dcf
+2026-06-07T18:47:18.510+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-06-07T18:47:18.510+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:47:18.510+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:47:18.510+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:47:18.602+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:47:18.627+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:18.786+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:47:18.895+02:00  INFO 17372 --- [  restartedMain] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-06-07T18:47:19.010+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:47:19.010+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:47:19.079+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:47:19.094+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:47:19.094+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.948 seconds (process running for 3046.389)
+2026-06-07T18:47:19.110+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:47:19.110+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:47:26.594+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (1 addition, 0 deletions, 0 modifications)
+2026-06-07T18:47:26.595+02:00  INFO 17372 --- [      Thread-11] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:47:26.694+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:47:26.696+02:00  INFO 17372 --- [      Thread-11] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:26.696+02:00  INFO 17372 --- [      Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-06-07T18:47:26.698+02:00  INFO 17372 --- [      Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:47:26.760+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:47:26.760+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:47:27.011+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:47:27.041+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:47:27.135+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:47:27.135+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:47:27.135+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:47:27.149+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:47:27.149+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 387 ms
+2026-06-07T18:47:27.180+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:47:27.180+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:47:27.197+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:47:27.197+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-06-07T18:47:27.200+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5b8ba6fe
+2026-06-07T18:47:27.200+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-06-07T18:47:27.200+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:47:27.200+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:47:27.200+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-4)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:47:27.278+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:47:27.332+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:27.509+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:47:27.597+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:47:27.597+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:47:27.670+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:47:27.670+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:47:27.679+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.933 seconds (process running for 3054.967)
+2026-06-07T18:47:27.712+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:47:27.724+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:47:41.361+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:47:41.362+02:00  INFO 17372 --- [      Thread-15] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:47:41.467+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:47:41.470+02:00  INFO 17372 --- [      Thread-15] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:41.470+02:00  INFO 17372 --- [      Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-06-07T18:47:41.472+02:00  INFO 17372 --- [      Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:47:41.540+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:47:41.540+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:47:41.737+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:47:41.757+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:47:41.846+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:47:41.846+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:47:41.846+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:47:41.858+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:47:41.858+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 318 ms
+2026-06-07T18:47:41.898+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:47:41.899+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:47:41.904+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:47:41.904+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-06-07T18:47:41.923+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection com.mysql.cj.jdbc.ConnectionImpl@10978e21
+2026-06-07T18:47:41.924+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-06-07T18:47:41.924+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:47:41.924+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:47:41.924+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:47:41.995+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:47:42.038+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:42.187+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:47:42.442+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:47:42.449+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:47:42.590+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:47:42.592+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:47:42.603+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 1.083 seconds (process running for 3069.892)
+2026-06-07T18:47:42.637+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:47:42.638+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:47:55.146+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:47:55.147+02:00  INFO 17372 --- [      Thread-19] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:47:55.270+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:47:55.271+02:00  INFO 17372 --- [      Thread-19] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:55.272+02:00  INFO 17372 --- [      Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-06-07T18:47:55.274+02:00  INFO 17372 --- [      Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:47:55.338+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:47:55.338+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:47:55.530+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:47:55.547+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:47:55.635+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:47:55.635+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:47:55.635+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:47:55.645+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:47:55.645+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 305 ms
+2026-06-07T18:47:55.684+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:47:55.685+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:47:55.689+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:47:55.690+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2026-06-07T18:47:55.697+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Added connection com.mysql.cj.jdbc.ConnectionImpl@68788eba
+2026-06-07T18:47:55.697+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2026-06-07T18:47:55.698+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:47:55.698+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:47:55.698+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-6)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:47:55.762+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:47:55.815+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:47:55.960+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:47:56.048+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:47:56.048+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:47:56.130+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:47:56.132+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:47:56.138+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.816 seconds (process running for 3083.426)
+2026-06-07T18:47:56.163+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:47:56.163+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:48:12.912+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:48:12.913+02:00  INFO 17372 --- [      Thread-23] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:48:13.033+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:48:13.033+02:00  INFO 17372 --- [      Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:13.033+02:00  INFO 17372 --- [      Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-06-07T18:48:13.033+02:00  INFO 17372 --- [      Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:48:13.098+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:48:13.098+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:48:13.329+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:48:13.348+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:48:13.432+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:48:13.433+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:48:13.433+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:48:13.442+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:48:13.442+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 342 ms
+2026-06-07T18:48:13.482+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:48:13.482+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:48:13.489+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:48:13.489+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2026-06-07T18:48:13.491+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5ed588e4
+2026-06-07T18:48:13.491+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2026-06-07T18:48:13.491+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:48:13.491+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:48:13.491+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-7)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:48:13.561+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:48:13.601+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:13.747+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:48:13.843+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:48:13.843+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:48:13.911+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:48:13.911+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:48:13.929+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.845 seconds (process running for 3101.217)
+2026-06-07T18:48:13.943+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:48:13.943+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:48:29.593+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:48:29.595+02:00  INFO 17372 --- [      Thread-27] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:48:29.688+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:48:29.688+02:00  INFO 17372 --- [      Thread-27] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:29.688+02:00  INFO 17372 --- [      Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2026-06-07T18:48:29.695+02:00  INFO 17372 --- [      Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:48:29.760+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:48:29.761+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:48:29.929+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:48:29.948+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:48:30.029+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:48:30.029+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:48:30.029+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:48:30.029+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:48:30.029+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 268 ms
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Starting...
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-8 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7117b477
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Start completed.
+2026-06-07T18:48:30.080+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:48:30.080+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:48:30.080+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-8)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:48:30.158+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:48:30.201+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:30.374+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:48:30.471+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:48:30.473+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:48:30.541+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:48:30.543+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:48:30.549+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.802 seconds (process running for 3117.837)
+2026-06-07T18:48:30.566+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:48:30.574+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:48:39.078+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:48:39.079+02:00  INFO 17372 --- [      Thread-31] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:48:39.180+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:48:39.180+02:00  INFO 17372 --- [      Thread-31] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:39.180+02:00  INFO 17372 --- [      Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown initiated...
+2026-06-07T18:48:39.180+02:00  INFO 17372 --- [      Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:48:39.252+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:48:39.252+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:48:39.417+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:48:39.432+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:48:39.513+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:48:39.513+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:48:39.513+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:48:39.524+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:48:39.524+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 271 ms
+2026-06-07T18:48:39.564+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:48:39.565+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:48:39.570+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:48:39.570+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Starting...
+2026-06-07T18:48:39.574+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-9 - Added connection com.mysql.cj.jdbc.ConnectionImpl@499523f8
+2026-06-07T18:48:39.574+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Start completed.
+2026-06-07T18:48:39.574+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:48:39.574+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:48:39.574+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-9)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:48:39.632+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:48:39.670+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:39.797+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:48:39.886+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:48:39.888+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:48:39.963+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:48:39.965+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:48:39.971+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.733 seconds (process running for 3127.259)
+2026-06-07T18:48:39.989+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:48:39.996+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-07T18:48:46.460+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-07T18:48:46.460+02:00  INFO 17372 --- [      Thread-35] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-07T18:48:46.548+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-07T18:48:46.548+02:00  INFO 17372 --- [      Thread-35] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:46.548+02:00  INFO 17372 --- [      Thread-35] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown initiated...
+2026-06-07T18:48:46.548+02:00  INFO 17372 --- [      Thread-35] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:48:46.626+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:48:46.626+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:48:46.787+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:48:46.803+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:48:46.882+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:48:46.882+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:48:46.882+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:48:46.890+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:48:46.890+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 263 ms
+2026-06-07T18:48:46.924+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:48:46.926+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:48:46.930+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:48:46.930+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Starting...
+2026-06-07T18:48:46.930+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-10 - Added connection com.mysql.cj.jdbc.ConnectionImpl@779c04cb
+2026-06-07T18:48:46.930+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Start completed.
+2026-06-07T18:48:46.930+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:48:46.930+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:48:46.930+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-10)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:48:46.988+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:48:47.023+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:47.094+02:00  WARN 17372 --- [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'queueController': Resolution of declared constructors on bean Class [edu.uclm.esi.gramola.http.QueueController] from ClassLoader [org.springframework.boot.devtools.restart.classloader.RestartClassLoader@71ddd364] failed
+2026-06-07T18:48:47.095+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:47.095+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown initiated...
+2026-06-07T18:48:47.111+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-10 - Shutdown completed.
+2026-06-07T18:48:47.111+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-06-07T18:48:47.119+02:00  INFO 17372 --- [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-06-07T18:48:47.136+02:00 ERROR 17372 --- [  restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'queueController': Resolution of declared constructors on bean Class [edu.uclm.esi.gramola.http.QueueController] from ClassLoader [org.springframework.boot.devtools.restart.classloader.RestartClassLoader@71ddd364] failed
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:384) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.determineConstructorsFromBeanPostProcessors(AbstractAutowireCapableBeanFactory.java:1334) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1229) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1221) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1187) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123) ~[spring-beans-6.2.11.jar:6.2.11]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987) ~[spring-context-6.2.11.jar:6.2.11]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.11.jar:6.2.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.4.10.jar:3.4.10]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.10.jar:3.4.10]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.10.jar:3.4.10]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.10.jar:3.4.10]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.4.10.jar:3.4.10]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.4.10.jar:3.4.10]
+	at edu.uclm.esi.gramola.App.main(App.java:17) ~[classes/:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.4.10.jar:3.4.10]
+Caused by: java.lang.NoClassDefFoundError: SettingsService
+	at java.base/java.lang.Class.getDeclaredConstructors0(Native Method) ~[na:na]
+	at java.base/java.lang.Class.privateGetDeclaredConstructors(Class.java:3373) ~[na:na]
+	at java.base/java.lang.Class.getDeclaredConstructors(Class.java:2555) ~[na:na]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.determineCandidateConstructors(AutowiredAnnotationBeanPostProcessor.java:379) ~[spring-beans-6.2.11.jar:6.2.11]
+	... 25 common frames omitted
+Caused by: java.lang.ClassNotFoundException: SettingsService
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641) ~[na:na]
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188) ~[na:na]
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[na:na]
+	at java.base/java.lang.Class.forName0(Native Method) ~[na:na]
+	at java.base/java.lang.Class.forName(Class.java:467) ~[na:na]
+	at org.springframework.boot.devtools.restart.classloader.RestartClassLoader.loadClass(RestartClassLoader.java:121) ~[spring-boot-devtools-3.4.10.jar:3.4.10]
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525) ~[na:na]
+	... 29 common frames omitted
+
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-07T18:48:56.777+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-07T18:48:56.777+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-07T18:48:56.930+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-07T18:48:56.953+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2026-06-07T18:48:57.026+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-07T18:48:57.026+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-07T18:48:57.026+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-07T18:48:57.038+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-07T18:48:57.038+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 261 ms
+2026-06-07T18:48:57.076+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-07T18:48:57.077+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-07T18:48:57.081+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-07T18:48:57.082+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Starting...
+2026-06-07T18:48:57.084+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-11 - Added connection com.mysql.cj.jdbc.ConnectionImpl@668788cc
+2026-06-07T18:48:57.085+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Start completed.
+2026-06-07T18:48:57.085+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-07T18:48:57.085+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-07T18:48:57.085+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-11)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-07T18:48:57.137+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-07T18:48:57.172+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-07T18:48:57.297+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-07T18:48:57.397+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-07T18:48:57.403+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-07T18:48:57.480+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-07T18:48:57.480+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-07T18:48:57.487+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.726 seconds (process running for 3144.777)
+2026-06-07T18:48:57.512+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-07T18:48:57.516+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T05:59:38.986+02:00  INFO 17372 --- [nio-8000-exec-5] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-08T05:59:38.986+02:00  INFO 17372 --- [nio-8000-exec-5] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-08T05:59:38.988+02:00  INFO 17372 --- [nio-8000-exec-5] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-06-08T05:59:45.831+02:00  WARN 17372 --- [-11 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-11 - Thread starvation or clock leap detected (housekeeper delta=10h53m48s305ms896µs).
+2026-06-08T09:00:06.831+02:00  WARN 17372 --- [-11 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-11 - Thread starvation or clock leap detected (housekeeper delta=2h58m47s901ms207µs100ns).
+2026-06-08T09:04:42.233+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T09:04:42.234+02:00  INFO 17372 --- [      Thread-39] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T09:04:42.348+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T09:04:42.349+02:00  INFO 17372 --- [      Thread-39] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T09:04:42.350+02:00  INFO 17372 --- [      Thread-39] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown initiated...
+2026-06-08T09:04:42.351+02:00  INFO 17372 --- [      Thread-39] com.zaxxer.hikari.HikariDataSource       : HikariPool-11 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T09:04:42.417+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T09:04:42.417+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T09:04:42.678+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T09:04:42.694+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 11 JPA repository interfaces.
+2026-06-08T09:04:42.809+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T09:04:42.809+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T09:04:42.809+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T09:04:42.841+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T09:04:42.841+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 424 ms
+2026-06-08T09:04:42.890+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T09:04:42.892+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T09:04:42.898+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T09:04:42.898+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Starting...
+2026-06-08T09:04:42.902+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-12 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7b9771ad
+2026-06-08T09:04:42.902+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Start completed.
+2026-06-08T09:04:42.902+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T09:04:42.902+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T09:04:42.902+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-12)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T09:04:42.965+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T09:04:43.012+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T09:04:43.147+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T09:04:43.261+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T09:04:43.261+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T09:04:43.346+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T09:04:43.348+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T09:04:43.353+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.948 seconds (process running for 54490.635)
+2026-06-08T09:04:43.378+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T09:04:43.378+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T09:56:04.268+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T09:56:04.289+02:00  INFO 17372 --- [      Thread-46] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T09:56:04.400+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T09:56:04.400+02:00  INFO 17372 --- [      Thread-46] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T09:56:04.407+02:00  INFO 17372 --- [      Thread-46] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown initiated...
+2026-06-08T09:56:04.407+02:00  INFO 17372 --- [      Thread-46] com.zaxxer.hikari.HikariDataSource       : HikariPool-12 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T09:56:04.552+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T09:56:04.552+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T09:56:04.747+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T09:56:04.768+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 11 JPA repository interfaces.
+2026-06-08T09:56:04.874+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T09:56:04.875+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T09:56:04.875+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T09:56:04.886+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T09:56:04.886+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 332 ms
+2026-06-08T09:56:04.944+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T09:56:04.946+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T09:56:04.951+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T09:56:04.951+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Starting...
+2026-06-08T09:56:04.957+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-13 - Added connection com.mysql.cj.jdbc.ConnectionImpl@676f581e
+2026-06-08T09:56:04.957+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Start completed.
+2026-06-08T09:56:04.957+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T09:56:04.957+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T09:56:04.957+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-13)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T09:56:05.020+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T09:56:05.077+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T09:56:05.227+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T09:56:05.362+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T09:56:05.366+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T09:56:05.451+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T09:56:05.453+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T09:56:05.459+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.922 seconds (process running for 57572.401)
+2026-06-08T09:56:05.487+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T09:56:05.487+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:07:40.003+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:07:40.003+02:00  INFO 17372 --- [      Thread-50] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:07:40.116+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:07:40.118+02:00  INFO 17372 --- [      Thread-50] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:07:40.119+02:00  INFO 17372 --- [      Thread-50] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown initiated...
+2026-06-08T11:07:40.120+02:00  INFO 17372 --- [      Thread-50] com.zaxxer.hikari.HikariDataSource       : HikariPool-13 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:07:40.187+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:07:40.187+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:07:40.360+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:07:40.390+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:07:40.484+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:07:40.485+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:07:40.485+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:07:40.494+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:07:40.494+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 306 ms
+2026-06-08T11:07:40.537+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:07:40.539+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:07:40.545+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:07:40.545+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Starting...
+2026-06-08T11:07:40.548+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-14 - Added connection com.mysql.cj.jdbc.ConnectionImpl@18d55ec4
+2026-06-08T11:07:40.549+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Start completed.
+2026-06-08T11:07:40.549+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:07:40.549+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:07:40.549+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-14)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:07:40.604+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:07:40.643+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:07:40.777+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:07:40.883+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:07:40.885+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:07:40.952+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:07:40.958+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:07:40.958+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.785 seconds (process running for 61867.684)
+2026-06-08T11:07:40.995+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:07:41.000+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:08:29.593+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:08:29.596+02:00  INFO 17372 --- [      Thread-54] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:08:29.688+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:08:29.688+02:00  INFO 17372 --- [      Thread-54] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:08:29.688+02:00  INFO 17372 --- [      Thread-54] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown initiated...
+2026-06-08T11:08:29.688+02:00  INFO 17372 --- [      Thread-54] com.zaxxer.hikari.HikariDataSource       : HikariPool-14 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:08:29.758+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:08:29.758+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:08:29.929+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:08:29.947+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:08:30.025+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:08:30.025+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:08:30.025+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:08:30.030+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:08:30.030+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 272 ms
+2026-06-08T11:08:30.077+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:08:30.078+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:08:30.082+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:08:30.083+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Starting...
+2026-06-08T11:08:30.086+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-15 - Added connection com.mysql.cj.jdbc.ConnectionImpl@43600497
+2026-06-08T11:08:30.086+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Start completed.
+2026-06-08T11:08:30.086+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:08:30.086+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:08:30.086+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-15)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:08:30.138+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:08:30.174+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:08:30.293+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:08:30.376+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:08:30.376+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:08:30.461+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:08:30.462+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:08:30.468+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.711 seconds (process running for 61917.181)
+2026-06-08T11:08:30.494+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:08:30.495+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:08:42.065+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:08:42.066+02:00  INFO 17372 --- [      Thread-58] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:08:42.164+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:08:42.166+02:00  INFO 17372 --- [      Thread-58] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:08:42.166+02:00  INFO 17372 --- [      Thread-58] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown initiated...
+2026-06-08T11:08:42.167+02:00  INFO 17372 --- [      Thread-58] com.zaxxer.hikari.HikariDataSource       : HikariPool-15 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:08:42.231+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:08:42.231+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:08:42.398+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:08:42.408+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:08:42.490+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:08:42.490+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:08:42.490+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:08:42.490+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:08:42.490+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 257 ms
+2026-06-08T11:08:42.546+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:08:42.547+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:08:42.552+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:08:42.552+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Starting...
+2026-06-08T11:08:42.555+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-16 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6fc04a11
+2026-06-08T11:08:42.555+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Start completed.
+2026-06-08T11:08:42.556+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:08:42.556+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:08:42.556+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-16)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:08:42.609+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:08:42.636+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:08:42.772+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:08:42.861+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:08:42.873+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:08:42.943+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:08:42.945+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:08:42.950+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.731 seconds (process running for 61929.662)
+2026-06-08T11:08:42.958+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:08:42.974+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:08:59.607+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:08:59.608+02:00  INFO 17372 --- [      Thread-62] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:08:59.720+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:08:59.720+02:00  INFO 17372 --- [      Thread-62] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:08:59.723+02:00  INFO 17372 --- [      Thread-62] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown initiated...
+2026-06-08T11:08:59.723+02:00  INFO 17372 --- [      Thread-62] com.zaxxer.hikari.HikariDataSource       : HikariPool-16 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:08:59.792+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:08:59.792+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:09:00.028+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:09:00.046+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:09:00.146+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:09:00.146+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:09:00.146+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:09:00.155+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:09:00.156+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 364 ms
+2026-06-08T11:09:00.200+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:09:00.201+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:09:00.208+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:09:00.209+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Starting...
+2026-06-08T11:09:00.212+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-17 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34bc3907
+2026-06-08T11:09:00.212+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Start completed.
+2026-06-08T11:09:00.213+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:09:00.213+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:09:00.213+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-17)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:09:00.272+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:09:00.300+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:00.446+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:09:00.536+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:09:00.538+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:09:00.613+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:09:00.614+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:09:00.619+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.839 seconds (process running for 61947.331)
+2026-06-08T11:09:00.626+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:09:00.647+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:09:10.157+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:09:10.159+02:00  INFO 17372 --- [      Thread-66] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:09:10.262+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:09:10.264+02:00  INFO 17372 --- [      Thread-66] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:10.264+02:00  INFO 17372 --- [      Thread-66] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Shutdown initiated...
+2026-06-08T11:09:10.266+02:00  INFO 17372 --- [      Thread-66] com.zaxxer.hikari.HikariDataSource       : HikariPool-17 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:09:10.326+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:09:10.326+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:09:10.507+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:09:10.525+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:09:10.605+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:09:10.606+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:09:10.606+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:09:10.609+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:09:10.609+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 283 ms
+2026-06-08T11:09:10.643+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:09:10.643+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:09:10.643+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:09:10.643+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Starting...
+2026-06-08T11:09:10.660+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-18 - Added connection com.mysql.cj.jdbc.ConnectionImpl@a9e253b
+2026-06-08T11:09:10.660+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Start completed.
+2026-06-08T11:09:10.660+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:09:10.660+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:09:10.660+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-18)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:09:10.726+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:09:10.758+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:10.892+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:09:10.960+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:09:10.974+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:09:11.043+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:09:11.043+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:09:11.049+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.727 seconds (process running for 61957.761)
+2026-06-08T11:09:11.078+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:09:11.079+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:09:19.555+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:09:19.556+02:00  INFO 17372 --- [      Thread-70] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:09:19.653+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:09:19.655+02:00  INFO 17372 --- [      Thread-70] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:19.655+02:00  INFO 17372 --- [      Thread-70] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Shutdown initiated...
+2026-06-08T11:09:19.656+02:00  INFO 17372 --- [      Thread-70] com.zaxxer.hikari.HikariDataSource       : HikariPool-18 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:09:19.722+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:09:19.722+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:09:19.874+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:09:19.890+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:09:19.969+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:09:19.969+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:09:19.969+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:09:19.969+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:09:19.969+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 247 ms
+2026-06-08T11:09:20.025+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:09:20.025+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:09:20.025+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:09:20.033+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Starting...
+2026-06-08T11:09:20.037+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-19 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d206ce0
+2026-06-08T11:09:20.037+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Start completed.
+2026-06-08T11:09:20.038+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:09:20.038+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:09:20.038+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-19)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:09:20.116+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:09:20.143+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:20.289+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:09:20.375+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:09:20.377+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:09:20.451+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:09:20.454+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:09:20.464+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.756 seconds (process running for 61967.175)
+2026-06-08T11:09:20.477+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:09:20.493+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:09:30.004+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:09:30.004+02:00  INFO 17372 --- [      Thread-74] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:09:30.124+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:09:30.124+02:00  INFO 17372 --- [      Thread-74] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:30.124+02:00  INFO 17372 --- [      Thread-74] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Shutdown initiated...
+2026-06-08T11:09:30.124+02:00  INFO 17372 --- [      Thread-74] com.zaxxer.hikari.HikariDataSource       : HikariPool-19 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:09:30.200+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:09:30.200+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:09:30.358+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:09:30.388+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 16 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:09:30.478+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:09:30.480+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:09:30.480+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:09:30.491+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:09:30.491+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 290 ms
+2026-06-08T11:09:30.529+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:09:30.530+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:09:30.534+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:09:30.535+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Starting...
+2026-06-08T11:09:30.538+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-20 - Added connection com.mysql.cj.jdbc.ConnectionImpl@30fb3c08
+2026-06-08T11:09:30.538+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Start completed.
+2026-06-08T11:09:30.538+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:09:30.538+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:09:30.538+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-20)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:09:30.593+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:09:30.636+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:30.778+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:09:30.868+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:09:30.871+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:09:30.944+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:09:30.944+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:09:30.944+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.758 seconds (process running for 61977.666)
+2026-06-08T11:09:30.971+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:09:30.979+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:09:41.508+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:09:41.509+02:00  INFO 17372 --- [      Thread-78] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:09:41.652+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:09:41.652+02:00  INFO 17372 --- [      Thread-78] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:41.652+02:00  INFO 17372 --- [      Thread-78] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Shutdown initiated...
+2026-06-08T11:09:41.652+02:00  INFO 17372 --- [      Thread-78] com.zaxxer.hikari.HikariDataSource       : HikariPool-20 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:09:41.723+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:09:41.723+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:09:41.894+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:09:41.910+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:09:41.988+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:09:41.989+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:09:41.989+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:09:41.991+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:09:41.991+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 267 ms
+2026-06-08T11:09:42.034+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:09:42.036+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:09:42.040+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:09:42.040+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Starting...
+2026-06-08T11:09:42.042+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-21 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5fe0b56
+2026-06-08T11:09:42.042+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Start completed.
+2026-06-08T11:09:42.042+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:09:42.042+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:09:42.042+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-21)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:09:42.096+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:09:42.131+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:09:42.252+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:09:42.342+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:09:42.342+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:09:42.415+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:09:42.417+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:09:42.427+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.716 seconds (process running for 61989.138)
+2026-06-08T11:09:42.447+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:09:42.453+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed
+2026-06-08T11:10:20.626+02:00  INFO 17372 --- [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-06-08T11:10:20.627+02:00  INFO 17372 --- [      Thread-82] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-06-08T11:10:20.727+02:00  INFO 17372 --- [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-06-08T11:10:20.727+02:00  INFO 17372 --- [      Thread-82] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:10:20.727+02:00  INFO 17372 --- [      Thread-82] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Shutdown initiated...
+2026-06-08T11:10:20.727+02:00  INFO 17372 --- [      Thread-82] com.zaxxer.hikari.HikariDataSource       : HikariPool-21 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::               (v3.4.10)
+
+2026-06-08T11:10:20.794+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Starting App using Java 17.0.16 with PID 17372 (C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend\target\classes started by Elias in C:\Users\Elias\OneDrive - Universidad de Castilla-La Mancha\Escritorio\musicfinder\TrabajoTecnologiasEliasGlez\backend)
+2026-06-08T11:10:20.794+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : No active profile set, falling back to 1 default profile: "default"
+2026-06-08T11:10:20.967+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-06-08T11:10:20.982+02:00  INFO 17372 --- [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 11 JPA repository interfaces.
+2026-06-08T11:10:21.060+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8000 (https)
+2026-06-08T11:10:21.060+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-08T11:10:21.060+02:00  INFO 17372 --- [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-06-08T11:10:21.072+02:00  INFO 17372 --- [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-06-08T11:10:21.072+02:00  INFO 17372 --- [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 278 ms
+2026-06-08T11:10:21.114+02:00  INFO 17372 --- [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-06-08T11:10:21.116+02:00  INFO 17372 --- [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-06-08T11:10:21.120+02:00  INFO 17372 --- [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-06-08T11:10:21.120+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Starting...
+2026-06-08T11:10:21.122+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-22 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2cf864cb
+2026-06-08T11:10:21.122+02:00  INFO 17372 --- [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-22 - Start completed.
+2026-06-08T11:10:21.123+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-06-08T11:10:21.123+02:00  WARN 17372 --- [  restartedMain] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-06-08T11:10:21.123+02:00  INFO 17372 --- [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-22)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-06-08T11:10:21.175+02:00  INFO 17372 --- [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-06-08T11:10:21.209+02:00  INFO 17372 --- [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-06-08T11:10:21.331+02:00  WARN 17372 --- [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-06-08T11:10:21.432+02:00  INFO 17372 --- [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-06-08T11:10:21.434+02:00  INFO 17372 --- [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-06-08T11:10:21.512+02:00  INFO 17372 --- [  restartedMain] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8000], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [C:\Users\Elias\.keystore] using alias [gramola] with trust store [null]
+2026-06-08T11:10:21.514+02:00  INFO 17372 --- [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8000 (https) with context path '/'
+2026-06-08T11:10:21.519+02:00  INFO 17372 --- [  restartedMain] edu.uclm.esi.gramola.App                 : Started App in 0.735 seconds (process running for 62028.229)
+2026-06-08T11:10:21.542+02:00  INFO 17372 --- [  restartedMain] e.u.e.g.c.SubscriptionDataInitializer    : Subscription plans seeded
+2026-06-08T11:10:21.548+02:00  INFO 17372 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+? Database migration completed: coins column fixed

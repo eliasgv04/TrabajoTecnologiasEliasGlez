@@ -28,6 +28,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
 
 import edu.uclm.esi.gramola.services.SpotifyService;
+import edu.uclm.esi.gramola.services.UrlService;
 
 @RestController
 @RequestMapping("/spotify")
@@ -37,6 +38,7 @@ public class SpotifyAuthController {
     private final RestTemplate http = new RestTemplate();
     private final ObjectMapper mapper = new ObjectMapper();
     private final SpotifyService spotifyService;
+    private final UrlService urlService;
 
     @Value("${spotify.clientId:${spring.security.oauth2.client.registration.spotify.client-id:}}")
     private String clientId;
@@ -47,14 +49,9 @@ public class SpotifyAuthController {
     @Value("${spotify.stateSecret:}")
     private String stateSecret;
 
-    // Important for local dev with Angular proxy:
-    // If you start OAuth from https://localhost:4200 via /api, the session cookie lives on :4200.
-    // The callback must also come back through :4200 (/api/...) so the same cookie is sent.
-    @Value("${spotify.redirectUri:https://127.0.0.1:8000/spotify/callback}")
-    private String redirectUri;
-
-    public SpotifyAuthController(SpotifyService spotifyService) {
+    public SpotifyAuthController(SpotifyService spotifyService, UrlService urlService) {
         this.spotifyService = spotifyService;
+        this.urlService = urlService;
     }
 
     private record OAuthState(long userId, String returnUrl, long exp) {
@@ -124,18 +121,18 @@ public class SpotifyAuthController {
             return ResponseEntity.status(401).body("Sesión no iniciada");
         }
         long userId = (Long) userIdObj;
-        String safeReturnUrl = (returnUrl == null || returnUrl.isBlank()) ? "https://localhost:4200/queue" : returnUrl;
+        String safeReturnUrl = (returnUrl == null || returnUrl.isBlank()) ? this.urlService.getRequired("Queue Page") : returnUrl;
         String state = createState(userId, safeReturnUrl);
         String scopes = String.join(" ", new String[]{
                 "user-read-playback-state",
                 "user-modify-playback-state",
                 "streaming"
         });
-        String url = "https://accounts.spotify.com/authorize?client_id=" + clientId
-                + "&response_type=code"
-                + "&redirect_uri=" + java.net.URLEncoder.encode(redirectUri, StandardCharsets.UTF_8)
-                + "&scope=" + java.net.URLEncoder.encode(scopes, StandardCharsets.UTF_8)
-                + "&state=" + state;
+        String url = this.urlService.withPath("Spotify Accounts", "/authorize?client_id=") + clientId
+            + "&response_type=code"
+            + "&redirect_uri=" + java.net.URLEncoder.encode(this.urlService.getRequired("Auth Callback"), StandardCharsets.UTF_8)
+            + "&scope=" + java.net.URLEncoder.encode(scopes, StandardCharsets.UTF_8)
+            + "&state=" + state;
         return ResponseEntity.status(302).location(URI.create(url)).build();
     }
 
@@ -152,8 +149,8 @@ public class SpotifyAuthController {
         MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
         form.add("grant_type", "authorization_code");
         form.add("code", code);
-        form.add("redirect_uri", redirectUri);
-        ResponseEntity<String> res = http.postForEntity("https://accounts.spotify.com/api/token", new HttpEntity<>(form, headers), String.class);
+        form.add("redirect_uri", this.urlService.getRequired("Auth Callback"));
+        ResponseEntity<String> res = http.postForEntity(this.urlService.withPath("Spotify Accounts", "/api/token"), new HttpEntity<>(form, headers), String.class);
         if (!res.getStatusCode().is2xxSuccessful()) {
             return ResponseEntity.status(400).body("No se pudo obtener el token de Spotify");
         }
@@ -166,7 +163,7 @@ public class SpotifyAuthController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error parseando token de Spotify");
         }
-        String returnUrl = (parsed.returnUrl() == null || parsed.returnUrl().isBlank()) ? "https://localhost:4200/queue" : parsed.returnUrl();
+        String returnUrl = (parsed.returnUrl() == null || parsed.returnUrl().isBlank()) ? this.urlService.getRequired("Queue Page") : parsed.returnUrl();
         return ResponseEntity.status(302).location(URI.create(returnUrl)).build();
     }
 
@@ -198,7 +195,7 @@ public class SpotifyAuthController {
             h.setBearerAuth(token);
             h.setContentType(MediaType.APPLICATION_JSON);
             String payload = "{\"device_ids\":[\"" + deviceId + "\"],\"play\":" + (play ? "true" : "false") + "}";
-            ResponseEntity<Void> res = http.exchange("https://api.spotify.com/v1/me/player", HttpMethod.PUT, new HttpEntity<>(payload, h), Void.class);
+            ResponseEntity<Void> res = http.exchange(this.urlService.withPath("Spotify API", "/v1/me/player"), HttpMethod.PUT, new HttpEntity<>(payload, h), Void.class);
             return ResponseEntity.status(res.getStatusCode()).build();
         } catch (Exception e) {
             log.warn("transfer error", e);
@@ -219,7 +216,7 @@ public class SpotifyAuthController {
             Map<String, Object> payloadMap = body == null ? Map.of() : new java.util.HashMap<>(body);
             payloadMap.remove("deviceId");
             String payload = mapper.writeValueAsString(payloadMap);
-            String url = "https://api.spotify.com/v1/me/player/play" + (deviceId != null ? ("?device_id=" + deviceId) : "");
+            String url = this.urlService.withPath("Spotify API", "/v1/me/player/play") + (deviceId != null ? ("?device_id=" + deviceId) : "");
             ResponseEntity<Void> res = http.exchange(url, HttpMethod.PUT, new HttpEntity<>(payload, h), Void.class);
             return ResponseEntity.status(res.getStatusCode()).build();
         } catch (Exception e) {
@@ -238,7 +235,7 @@ public class SpotifyAuthController {
             String deviceId = body != null ? (String) body.get("deviceId") : null;
             HttpHeaders h = new HttpHeaders();
             h.setBearerAuth(token);
-            String url = "https://api.spotify.com/v1/me/player/pause" + (deviceId != null ? ("?device_id=" + deviceId) : "");
+            String url = this.urlService.withPath("Spotify API", "/v1/me/player/pause") + (deviceId != null ? ("?device_id=" + deviceId) : "");
             ResponseEntity<Void> res = http.exchange(url, HttpMethod.PUT, new HttpEntity<>(null, h), Void.class);
             return ResponseEntity.status(res.getStatusCode()).build();
         } catch (Exception e) {
@@ -265,7 +262,7 @@ public class SpotifyAuthController {
 
             HttpHeaders h = new HttpHeaders();
             h.setBearerAuth(token);
-            String url = "https://api.spotify.com/v1/me/player/seek?position_ms=" + positionMs
+                String url = this.urlService.withPath("Spotify API", "/v1/me/player/seek?position_ms=") + positionMs
                     + (deviceId != null ? ("&device_id=" + deviceId) : "");
             ResponseEntity<Void> res = http.exchange(url, HttpMethod.PUT, new HttpEntity<>(null, h), Void.class);
             return ResponseEntity.status(res.getStatusCode()).build();

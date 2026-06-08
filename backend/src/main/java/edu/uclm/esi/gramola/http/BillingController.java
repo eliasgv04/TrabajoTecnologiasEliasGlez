@@ -5,6 +5,7 @@ package edu.uclm.esi.gramola.http;
  */
 
 import org.springframework.beans.factory.annotation.Value;
+import edu.uclm.esi.gramola.dao.PriceTierRepository;
 import edu.uclm.esi.gramola.services.SpotifyService;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
@@ -15,17 +16,19 @@ import java.util.Map;
 @RequestMapping("/billing")
 public class BillingController {
     private final SpotifyService spotifyService;
+    private final PriceTierRepository priceTiers;
 
     @Value("${app.pricePerSong:1}")
-    private int pricePerSong;
+    private int defaultPrice;
 
-    public BillingController(SpotifyService spotifyService) {
+    public BillingController(SpotifyService spotifyService, PriceTierRepository priceTiers) {
         this.spotifyService = spotifyService;
+        this.priceTiers = priceTiers;
     }
 
     @GetMapping("/price")
     public Map<String, Integer> price() {
-        return Map.of("pricePerSong", pricePerSong);
+        return Map.of("pricePerSong", defaultPrice);
     }
 
     @GetMapping("/estimate")
@@ -34,7 +37,13 @@ public class BillingController {
         try {
             popularity = spotifyService.getTrackPopularity(session, trackId);
         } catch (Exception ignored) {}
-        int price = (popularity <= 40) ? 1 : (popularity <= 70 ? 2 : 3);
+        int price = priceForPopularity(popularity);
         return Map.of("trackId", trackId, "price", price, "popularity", popularity);
+    }
+
+    public int priceForPopularity(int popularity) {
+        return priceTiers.findByPopularity(popularity)
+                .map(t -> t.getPriceEur())
+                .orElse(defaultPrice);
     }
 }

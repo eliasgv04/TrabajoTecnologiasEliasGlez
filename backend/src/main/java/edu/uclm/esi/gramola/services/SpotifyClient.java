@@ -37,9 +37,15 @@ public class SpotifyClient {
     private String appAccessToken;
     private Instant appTokenExpiresAt = Instant.EPOCH;
 
+    private final UrlService urlService;
+
+    public SpotifyClient(UrlService urlService) {
+        this.urlService = urlService;
+    }
+
     public List<TrackDTO> searchTracks(String query) {
         ensureAppToken();
-        String url = "https://api.spotify.com/v1/search?type=track&limit=10&q=" + urlEncode(query);
+        String url = this.urlService.withPath("Spotify API", "/v1/search?type=track&limit=10&q=") + urlEncode(query);
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appAccessToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -65,7 +71,7 @@ public class SpotifyClient {
 
     public Optional<TrackDTO> getTrackById(String id) {
         ensureAppToken();
-        String url = "https://api.spotify.com/v1/tracks/" + id;
+        String url = this.urlService.withPath("Spotify API", "/v1/tracks/") + id;
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appAccessToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -91,7 +97,7 @@ public class SpotifyClient {
                     org.springframework.http.HttpStatus.BAD_REQUEST,
                     "URI de playlist inválida");
         }
-        String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=50";
+        String url = this.urlService.withPath("Spotify API", "/v1/playlists/") + playlistId + "/tracks?limit=50";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(appAccessToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -161,7 +167,7 @@ public class SpotifyClient {
                     org.springframework.http.HttpStatus.BAD_REQUEST,
                     "URI de playlist inválida");
         }
-        String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks?limit=50";
+        String url = this.urlService.withPath("Spotify API", "/v1/playlists/") + playlistId + "/tracks?limit=50";
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(userAccessToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -257,7 +263,7 @@ public class SpotifyClient {
                     org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR,
                     "Faltan credenciales de Spotify: configura spotify.clientId/spotify.clientSecret o variables de entorno SPOTIFY_CLIENT_ID/SPOTIFY_CLIENT_SECRET");
         }
-        String url = "https://accounts.spotify.com/api/token";
+        String url = this.urlService.withPath("Spotify Accounts", "/api/token");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         String creds = Base64.getEncoder()

@@ -32,21 +32,27 @@ public class UserService {
     private final VerificationTokenRepository tokenRepo;
     private final PasswordResetTokenRepository resetRepo;
     private final MailService mail;
+    private final UrlService urlService;
 
+    // Expresión regular para validar que el email tiene formato correcto antes de guardarlo.
     private static final Pattern EMAIL_REGEX = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
 
     public UserService(UserRepository userRepository, BarSettingsRepository settingsRepository,
             PasswordEncoder passwordEncoder,
             VerificationTokenRepository tokenRepo, PasswordResetTokenRepository resetRepo,
-            MailService mail) {
+            MailService mail, UrlService urlService) {
         this.userRepository = userRepository;
         this.settingsRepository = settingsRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenRepo = tokenRepo;
         this.resetRepo = resetRepo;
         this.mail = mail;
+        this.urlService = urlService;
     }
 
+    // Valida email y contraseña, crea el usuario con contraseña hasheada, genera un token de
+    // verificación con 2 días de validez, lo persiste y envía el email. El usuario queda
+    // en estado no verificado hasta que haga clic en el enlace.
     @Transactional
     public RegisterResult register(String email, String pwd1, String pwd2) {
         if (email == null || email.isBlank()) {
@@ -72,11 +78,11 @@ public class UserService {
         }
         User u = new User();
         u.setEmail(email);
-        u.setPassword(passwordEncoder.encode(pwd1));
+        u.setPassword(passwordEncoder.encode(pwd1)); // BCrypt: nunca se guarda la contraseña en claro
         u.setVerified(false);
         u = userRepository.save(u);
 
-        // Crear token y enviar email de verificación
+        // Token UUID sin guiones: más limpio en la URL del email
         String tokenStr = UUID.randomUUID().toString().replace("-", "");
         VerificationToken vt = new VerificationToken();
         vt.setToken(tokenStr);
@@ -84,7 +90,7 @@ public class UserService {
         vt.setExpiresAt(LocalDateTime.now().plusDays(2));
         tokenRepo.save(vt);
 
-        String verifyUrl = "https://localhost:8000/users/verify?token=" + tokenStr;
+        String verifyUrl = this.urlService.withPath("User Verify Endpoint", "?token=" + tokenStr);
         mail.sendVerificationEmail(u.getEmail(), verifyUrl);
 
         return new RegisterResult(u.getId(), u.getEmail(), null);
@@ -96,6 +102,8 @@ public class UserService {
         return userRepository.findByEmailIgnoreCase(email.trim());
     }
 
+    // Busca un usuario por email o por nombre de bar. Permite que el login funcione
+    // tanto con el email del propietario como con el nombre del local.
     public Optional<User> findUserByIdentifier(String identifier) {
         if (identifier == null)
             return Optional.empty();
@@ -103,12 +111,12 @@ public class UserService {
         if (id.isEmpty())
             return Optional.empty();
 
-        // 1) Email
+        // Intenta primero por email (caso más frecuente)
         Optional<User> byEmail = userRepository.findByEmailIgnoreCase(id);
         if (byEmail.isPresent())
             return byEmail;
 
-        // 2) Bar name (stored in bar_settings)
+        // Si no hay email coincidente, busca por nombre de bar en bar_settings
         return settingsRepository.findFirstByBarNameIgnoreCase(id).map(BarSettings::getUser);
     }
 
@@ -140,6 +148,8 @@ public class UserService {
         return passwordEncoder.matches(rawPassword.trim(), u.getPassword()) ? u : null;
     }
 
+    // Valida el token del enlace de verificación. Si es válido y no ha caducado,
+    // marca al usuario como verificado y elimina el token para que no pueda usarse dos veces.
     @Transactional
     public boolean verifyToken(String token) {
         if (token == null || token.isBlank())
@@ -149,13 +159,13 @@ public class UserService {
             return false;
         VerificationToken vt = opt.get();
         if (vt.getExpiresAt() != null && vt.getExpiresAt().isBefore(LocalDateTime.now())) {
-            tokenRepo.delete(vt);
+            tokenRepo.delete(vt); // token caducado: se limpia de BD
             return false;
         }
         User u = vt.getUser();
         u.setVerified(true);
         userRepository.save(u);
-        tokenRepo.delete(vt);
+        tokenRepo.delete(vt); // token consumido: se elimina para evitar reuso
         return true;
     }
 
@@ -183,16 +193,17 @@ public class UserService {
         return true;
     }
 
+    // Genera un token de recuperación con 2 horas de validez y envía el email.
+    // Si el email no existe, el método retorna sin hacer nada y sin lanzar error,
+    // para no revelar al atacante qué cuentas están registradas.
     @Transactional
     public void requestPasswordReset(String email) {
         if (email == null || email.isBlank())
             return;
         Optional<User> opt = userRepository.findByEmail(email.trim());
         if (opt.isEmpty())
-            return; // No revelar si existe o no
+            return;
         User u = opt.get();
-        // invalidar tokens previos si quieres (opcional)
-        // crear nuevo token
         String tokenStr = UUID.randomUUID().toString().replace("-", "");
         PasswordResetToken prt = new PasswordResetToken();
         prt.setToken(tokenStr);
@@ -200,7 +211,7 @@ public class UserService {
         prt.setExpiresAt(LocalDateTime.now().plusHours(2));
         resetRepo.save(prt);
 
-        String resetUrl = "https://localhost:4200/reset?token=" + tokenStr;
+        String resetUrl = this.urlService.withPath("Password Reset", "?token=" + tokenStr);
         mail.sendPasswordResetEmail(u.getEmail(), resetUrl);
     }
 
