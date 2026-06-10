@@ -16,48 +16,64 @@ import { PaymentsComponent } from '../payments/payments.component';
   styleUrls: ['./queue.component.css']
 })
 /**
- * Pantalla principal de la gramola.
+ * Componente principal de la gramola: pantalla de búsqueda, pago y reproducción.
  *
- * - Permite buscar canciones, pagarlas y añadirlas a la cola.
- * - Muestra estimaciones de precio y la cola actual.
- * - Controla la reproducción a través de Spotify (cuando hay token/dispositivo).
- * - Incluye un “modo lista por defecto” (playlist) cuando la cola está vacía.
+ * Responsabilidades:
+ * - Buscar canciones en Spotify a través del backend.
+ * - Gestionar el flujo de pago con Stripe antes de encolar una canción.
+ * - Mantener y mostrar la cola de reproducción (obtenida del backend).
+ * - Controlar la reproducción en Spotify (play, pause, seek, siguiente).
+ * - Reproducir una playlist de fallback cuando la cola está vacía.
  */
 export class QueueComponent implements OnDestroy {
+  // Nombre del bar (se muestra en la cabecera, se carga desde settings del backend)
   barName = '';
+  // Texto del buscador
   q = '';
   loading = false;
+  // Resultados de la última búsqueda
   results: TrackDTO[] = [];
+  // Copia local de la cola cargada desde el backend (fuente de verdad: BD del servidor)
   queue: QueueItem[] = [];
   error = '';
 
+  // Precio base por canción (cargado desde /billing/price)
   pricePerSong = 1;
+  // Estimaciones de precio por trackId (cargadas desde /billing/estimate para cada resultado)
   estimated: Record<string, { price: number; popularity: number }> = {};
+  // trackId cuyo botón “Añadir” está esperando confirmación de pago (muestra el diálogo Pagar/Cancelar)
   pendingAddId: string | null = null;
+  // Track y precio del pago en curso (renderiza el PaymentsComponent con Stripe)
   pendingPaymentTrack: TrackDTO | null = null;
   pendingPaymentPrice = 0;
 
-  // Estado del reproductor (sincronizado con UI y, cuando procede, con Spotify)
+  // Canción de la cola que está sonando en este momento
   current: QueueItem | null = null;
+  // Duración total y tiempo restante en ms (base del temporizador de cuenta atrás)
   totalMs = 0;
   remainingMs = 0;
   isPaused = false;
+  // Referencia al setInterval del temporizador para poder detenerlo
   private tickHandle: any = null;
+  // Control del arrastre de la barra de progreso con el ratón
   private dragging = false;
   private dragRect: DOMRect | null = null;
   private pendingSeekElapsedMs: number | null = null;
 
+  // ID del dispositivo Spotify (Web Player en el navegador) donde se reproduce
   private spotifyDeviceId: string | null = null;
   private noFallbackMsgShown = false;
 
-  // Ayudas para contadores/ETA
+  // Posición de la canción actual dentro del array queue (-1 si no hay ninguna)
   get currentIndex(): number {
     if (!this.current) return -1;
     return this.queue.findIndex(q => q.id === this.current!.id);
   }
+  // Número de canciones pendientes en la cola (sin contar la que está sonando)
   get remainingSongs(): number {
     return Math.max(0, this.queue.length - (this.current ? 1 : 0));
   }
+  // Tiempo total restante en ms sumando la canción actual y todas las pendientes
   get remainingQueueMs(): number {
     let rest = this.current ? this.remainingMs : 0;
     const startIdx = this.currentIndex >= 0 ? this.currentIndex + 1 : 0;
@@ -74,12 +90,11 @@ export class QueueComponent implements OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Personalización rápida (sin esperar al backend)
+    // Carga el nombre del bar desde localStorage para mostrarlo rápido sin esperar al backend
     try { this.barName = (localStorage.getItem(this.lsKey('barName')) || '').trim(); } catch {}
 
-    // Pedir login de Spotify después de login en la Gramola.
-    // No bloquea la UI: si hace falta, redirige al flujo OAuth.
-    // En modo E2E (Selenium), se puede desactivar para evitar redirecciones externas.
+    // Conecta con Spotify (o redirige al OAuth si no hay token guardado).
+    // En tests E2E con Selenium se desactiva para evitar redirecciones externas.
     const e2eDisableSpotify = (() => {
       try { return localStorage.getItem('e2e:disableSpotify') === '1'; } catch { return false; }
     })();
@@ -92,20 +107,24 @@ export class QueueComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Evita timers en segundo plano modificando estado mientras navega a otras rutas.
+    // Al salir de la pantalla se para el temporizador para que no siga corriendo en segundo plano
     this.stopTick();
     this.saveState();
   }
 
+  // Pide al backend el precio base por canción (GET /billing/price)
   loadBilling() {
     this.billing.getPrice().subscribe({ next: r => (this.pricePerSong = r.pricePerSong) });
   }
 
+  // Carga la cola desde el backend (GET /queue).
+  // Cuando llega, intenta restaurar el estado del reproductor desde localStorage
+  // (para que al navegar y volver no se reinicie la canción). Si no hay estado guardado
+  // y hay canciones, arranca la primera. Si la cola está vacía, arranca la playlist de fallback.
   loadQueue() {
     this.music.getQueue().subscribe({
       next: (items) => {
         this.queue = items;
-        // Intentar restaurar el estado del reproductor desde localStorage; si no se puede, arrancar el siguiente
         if (!this.tryRestoreState() && !this.current && this.queue.length) this.startNext();
         if (!this.current && !this.currentFallback && !this.queue.length) this.startNextFallback();
       },
@@ -113,6 +132,9 @@ export class QueueComponent implements OnDestroy {
     });
   }
 
+  // Busca canciones en Spotify a través del backend (GET /music/search?q=).
+  // Después de recibir los resultados, pide la estimación de precio de cada canción
+  // a GET /billing/estimate para mostrarla junto a cada resultado.
   search() {
     if (!this.q.trim()) return;
     this.loading = true;
@@ -120,7 +142,6 @@ export class QueueComponent implements OnDestroy {
     this.music.search(this.q).subscribe({
       next: (tracks) => {
         this.results = tracks;
-        // Obtener estimaciones por canción (1–3 euros) para transparencia
         this.estimated = {};
         for (const t of tracks) {
           this.billing.estimate(t.id).subscribe({
@@ -137,12 +158,14 @@ export class QueueComponent implements OnDestroy {
     });
   }
 
+  // Punto de entrada cuando el usuario pulsa "Añadir a cola".
+  // Si ya hay un precio estimado: intenta añadir directamente al backend (POST /queue).
+  //   - Si el backend acepta (ya existe pago confirmado): refresca la cola.
+  //   - Si el backend devuelve 402: muestra el diálogo "Pagar / Cancelar" poniendo pendingAddId.
+  // Si no hay precio estimado aún: abre directamente el formulario de pago.
   add(track: TrackDTO) {
     const p = this.priceFor(track.id);
     if (p != null) {
-      // Try to add directly: if a confirmed payment already exists in the backend,
-      // the add will succeed. If the backend responds 402 (payment required),
-      // fall back to the normal payment confirmation flow.
       this.music.addToQueue(track).subscribe({
         next: (item) => {
           this.loadQueue(); this.loadBilling();
@@ -151,7 +174,8 @@ export class QueueComponent implements OnDestroy {
         },
         error: (e: any) => {
           if (e?.status === 402) {
-            this.pendingAddId = track.id; // show confirm/payment UI
+            // El backend no tiene pago confirmado: muestra el diálogo de confirmación de precio
+            this.pendingAddId = track.id;
             return;
           }
           const msg = this.pickMsg(e);
@@ -164,12 +188,18 @@ export class QueueComponent implements OnDestroy {
     this.openPayment(track, this.pricePerSong);
   }
 
+  // Abre el formulario de pago de Stripe para una canción concreta.
+  // Poner valores en pendingPaymentTrack y pendingPaymentPrice hace que Angular
+  // renderice el PaymentsComponent via *ngIf en la plantilla.
   openPayment(track: TrackDTO, amount: number) {
     this.pendingAddId = null;
     this.pendingPaymentTrack = track;
     this.pendingPaymentPrice = amount;
   }
 
+  // Callback que llama PaymentsComponent cuando el pago de Stripe se completó.
+  // En este punto el SongPayment ya está en estado CONFIRMED en BD,
+  // así que llama a performAdd para hacer el segundo POST /queue que sí será aceptado.
   onSongPaid() {
     if (!this.pendingPaymentTrack) return;
     const track = this.pendingPaymentTrack;
@@ -179,16 +209,21 @@ export class QueueComponent implements OnDestroy {
     this.performAdd(track, amount);
   }
 
+  // El usuario pulsó "Cancelar" en el formulario de pago: limpia el estado.
   cancelPayment() {
     this.pendingPaymentTrack = null;
     this.pendingPaymentPrice = 0;
   }
 
+  // Hace el POST /queue definitivo sabiendo que el pago ya está confirmado en BD.
+  // Si el backend devuelve 402 aquí sería un error inesperado (pago no encontrado o suscripción caducada).
+  // Si devuelve 401 la sesión ha caducado y hay que volver a hacer login.
   performAdd(track: TrackDTO, priceHint: number | null) {
     this.pendingAddId = null;
     this.music.addToQueue(track).subscribe({
-      next: (item) => { 
+      next: (item) => {
         this.loadQueue(); this.loadBilling();
+        // Muestra el precio real que cobró el backend (chargedPrice), no el estimado
         const charged = (item as any)?.chargedPrice ?? priceHint ?? this.pricePerSong;
         this.toast.show(`Añadido a la cola (${charged}€)`);
       },
@@ -214,8 +249,10 @@ export class QueueComponent implements OnDestroy {
     });
   }
 
+  // El usuario pulsó "Cancelar" en el diálogo de confirmación de precio
   cancelAdd() { this.pendingAddId = null; }
 
+  // Vacía toda la cola del usuario (DELETE /queue/clear) y para la reproducción actual
   clear() {
     this.music.clearQueue().subscribe({
       next: () => { this.queue = []; this.toast.show('Cola vaciada'); if (!this.current && !this.currentFallback) this.startNextFallback(); },
@@ -223,8 +260,8 @@ export class QueueComponent implements OnDestroy {
     });
   }
 
-  // Eliminado confirm dialog del navegador; usamos solo toast de éxito
-
+  // Elimina una canción concreta de la cola (DELETE /queue/{id}).
+  // Si es la que está sonando, para el temporizador y pausa Spotify antes de borrarla.
   remove(item: QueueItem) {
     this.music.deleteFromQueue(item.id).subscribe({
       next: () => {
@@ -241,9 +278,8 @@ export class QueueComponent implements OnDestroy {
     });
   }
 
-  // Eliminado confirm dialog del navegador; usamos solo toast de éxito
-
-  // Motor de reproducción (gestiona el tiempo y salta al siguiente)
+  // Arranca la reproducción de la primera canción de la cola.
+  // Le ordena a Spotify que reproduzca la URI y arranca el temporizador de cuenta atrás.
   private startNext() {
     if (this.current || !this.queue.length) return;
     const next = this.queue[0];
@@ -257,13 +293,16 @@ export class QueueComponent implements OnDestroy {
     this.saveState();
   }
 
-  // ==== Fallback playlist (when queue is empty) ====
+  // ==== Playlist de fallback (se reproduce cuando la cola de canciones pagadas está vacía) ====
   fallbackTracks: TrackDTO[] = [];
   private fallbackIndex = 0;
+  // Canción de la playlist de fallback que está sonando (null si está sonando una canción de la cola)
   currentFallback: TrackDTO | null = null;
 
+  // Carga la playlist de fallback configurada por el bar.
+  // Intenta primero desde localStorage (respuesta rápida) y luego desde el backend
+  // (GET /settings → spotifyPlaylistUri → GET /music/playlist) para estar siempre actualizado.
   private loadFallbackPlaylist() {
-    // 1) Intentar desde localStorage para reaccionar al guardado sin recargar
     const uriLS = ((): string | null => { try { return localStorage.getItem(this.lsKey('playlistUri')); } catch { return null; } })();
     if (uriLS && uriLS.trim()) {
       this.music.getPlaylist(uriLS).subscribe({
@@ -271,7 +310,6 @@ export class QueueComponent implements OnDestroy {
         error: (e) => { this.toast.show(this.pickMsg(e)); }
       });
     }
-    // 2) También desde settings del servidor por si LS no está o cambia en otro dispositivo
     this.settings.get().subscribe({
       next: (s) => {
         const bn = (s as any)?.barName;
@@ -286,10 +324,12 @@ export class QueueComponent implements OnDestroy {
           error: (e) => { this.toast.show(this.pickMsg(e)); }
         });
       },
-      error: (e) => { /* sin toast para evitar ruido cuando no hay sesión */ }
+      error: (e) => { /* sin toast: puede que no haya sesión activa todavía */ }
     });
   }
 
+  // Arranca la siguiente canción de la playlist de fallback en orden secuencial.
+  // Solo actúa si no hay ninguna canción de la cola ni de fallback sonando.
   private startNextFallback() {
     if (this.current || this.currentFallback || this.queue.length || !this.fallbackTracks.length) return;
     if (this.fallbackIndex >= this.fallbackTracks.length) this.fallbackIndex = 0;
@@ -316,6 +356,8 @@ export class QueueComponent implements OnDestroy {
     this.saveState();
   }
 
+  // Arranca el temporizador de cuenta atrás. Cada segundo descuenta 1000ms de remainingMs.
+  // Cuando llega a 0 llama a onTrackEnd() para pasar a la siguiente canción.
   private startTick() {
     this.stopTick();
     this.tickHandle = setInterval(() => {
@@ -326,15 +368,19 @@ export class QueueComponent implements OnDestroy {
     }, 1000);
   }
 
+  // Para el temporizador y libera la referencia al intervalo.
   private stopTick() { if (this.tickHandle) { clearInterval(this.tickHandle); this.tickHandle = null; } }
 
+  // Se ejecuta cuando una canción termina (temporizador a 0) o cuando el usuario pulsa "Siguiente".
+  // Si era una canción de la cola: llama a DELETE /queue/{id} para borrarla del backend
+  // y luego arranca la siguiente. Si era de la playlist de fallback: la descarta y arranca la siguiente.
   private onTrackEnd() {
     const finished = this.current;
     this.stopTick();
     this.current = null; this.totalMs = 0; this.remainingMs = 0; this.isPaused = false;
     this.saveState();
     if (!finished) {
-      // Puede ser el final de una pista de la lista por defecto
+      // Era una pista de la playlist de fallback (current era null, currentFallback tenía valor)
       if (this.currentFallback) {
         const just = this.currentFallback;
         this.currentFallback = null;
@@ -343,6 +389,7 @@ export class QueueComponent implements OnDestroy {
       }
       return;
     }
+    // Era una canción de la cola: la borra del backend y arranca la siguiente
     this.music.deleteFromQueue(finished.id).subscribe({
       next: () => {
         this.queue = this.queue.filter(q => q.id !== finished.id);
@@ -377,17 +424,16 @@ export class QueueComponent implements OnDestroy {
     return (t.uri && t.uri.trim()) ? t.uri.trim() : (t.id ? `spotify:track:${t.id}` : '');
   }
 
+  // Ordena a Spotify que reproduzca una URI concreta en el dispositivo del navegador.
+  // Primero transfiere la reproducción al dispositivo con play=false (para evitar doble play),
+  // y luego lanza la reproducción de la URI.
   private async startSpotifyPlaybackUri(uri: string) {
     if (!uri) return;
-
     const deviceId = await this.ensureSpotifyDevice();
     if (!deviceId) {
       this.toast.show('Spotify: no se detecta el dispositivo. Espera 1–2s y reintenta.');
       return;
     }
-
-    // 1) Transferir la reproducción al dispositivo del Web Player (sin auto-play) y luego reproducir
-    // Usar play=true puede reanudar brevemente lo anterior y dar sensación de “doble play”.
     this.spotify.transfer(deviceId, false).subscribe({
       next: () => {
         this.spotify.playUris([uri], deviceId).subscribe({
@@ -433,7 +479,9 @@ export class QueueComponent implements OnDestroy {
     return `${m}:${sec.toString().padStart(2,'0')}`;
   }
 
-  // Controls
+  // ===== Controles del reproductor =====
+
+  // Vuelve al inicio de la canción actual (reinicia el temporizador y hace seek en Spotify)
   restart() {
     if (!this.current && !this.currentFallback) return;
     this.remainingMs = this.totalMs;
@@ -444,6 +492,8 @@ export class QueueComponent implements OnDestroy {
     }
     this.saveState();
   }
+  // Si hay canción de la cola: vuelve al inicio (en la cola no se puede retroceder a la anterior).
+  // Si hay canción de fallback: retrocede una posición en la playlist.
   previous() {
     if (this.current) {
       this.restart();
@@ -457,7 +507,9 @@ export class QueueComponent implements OnDestroy {
       this.startNextFallback();
     }
   }
+  // Salta a la siguiente canción llamando directamente a onTrackEnd()
   next() { this.onTrackEnd(); }
+  // Para la reproducción y vuelve al inicio de la canción (pero no la elimina de la cola)
   stop() {
     if (!this.current && !this.currentFallback) return;
     this.stopTick();
@@ -466,6 +518,7 @@ export class QueueComponent implements OnDestroy {
     this.pauseSpotify();
     this.saveState();
   }
+  // Elimina de la cola la canción que está sonando actualmente
   removeCurrent() {
     if (!this.current) return;
     this.remove(this.current);
@@ -480,7 +533,7 @@ export class QueueComponent implements OnDestroy {
     this.applySeekElapsedMs(elapsed, true);
   }
 
-  // Arrastrar para mover la posición
+  // Inicia el arrastre de la barra de progreso con el ratón
   onProgressDown(evt: MouseEvent) {
     if ((!this.current && !this.currentFallback) || this.totalMs <= 0) return;
     this.dragRect = (evt.currentTarget as HTMLElement).getBoundingClientRect();
@@ -506,12 +559,12 @@ export class QueueComponent implements OnDestroy {
     const x = Math.max(0, Math.min(this.dragRect.width, clientX - this.dragRect.left));
     const ratio = x / this.dragRect.width;
     const elapsed = Math.floor(this.totalMs * ratio);
-    // Mientras se arrastra, mantenemos la UI sincronizada pero retrasamos el seek real de Spotify hasta soltar.
+    // Durante el arrastre solo actualiza la UI; el seek real a Spotify se lanza al soltar el ratón
     this.pendingSeekElapsedMs = elapsed;
     this.applySeekElapsedMs(elapsed, false);
   }
 
-  // Atajos de teclado
+  // Atajos de teclado: espacio=pausa, flechas=±5s, n=siguiente, p=anterior, s=stop
   @HostListener('window:keydown', ['$event']) handleKey(e: KeyboardEvent) {
     if (!this.current && !this.currentFallback) return;
     switch (e.key) {
@@ -544,15 +597,19 @@ export class QueueComponent implements OnDestroy {
   }
 
 
-  // Ayudas para detectar duplicados en la lista de resultados
+  // ===== Helpers para la plantilla =====
+
+  // Indica si una canción ya está en la cola (para deshabilitar el botón "Añadir")
   isInQueue(trackId: string): boolean { return this.queue.some(q => q.trackId === trackId); }
   inQueuePosition(trackId: string): number { return this.queue.findIndex(q => q.trackId === trackId); }
+  // Devuelve el precio estimado de una canción (null si aún no se ha cargado)
   priceFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.price : null; }
   popularityFor(trackId: string): number | null { const e = this.estimated[trackId]; return e ? e.popularity : null; }
 
-  // Persistencia (para que al navegar no se reinicie la reproducción)
+  // ===== Persistencia del estado del reproductor en localStorage =====
+  // Guarda el estado actual (canción, tiempo restante, pausa) para que al navegar
+  // a otra ruta y volver la reproducción continúe donde estaba.
   private saveState() {
-    // Persistimos tanto cola como lista por defecto para que al navegar no se reinicie.
     if (!this.current && !this.currentFallback) {
       localStorage.removeItem(this.lsKey('player'));
       return;
@@ -632,6 +689,8 @@ export class QueueComponent implements OnDestroy {
     }
   }
 
+  // Genera la clave de localStorage con namespace por usuario para que dos usuarios
+  // en el mismo navegador no se pisen el estado del reproductor.
   private lsKey(suffix: 'barName' | 'playlistUri' | 'player'): string {
     const email = (() => {
       try { return (localStorage.getItem('email') || '').trim().toLowerCase(); } catch { return ''; }
@@ -640,12 +699,12 @@ export class QueueComponent implements OnDestroy {
     return `${ns}:${suffix}`;
   }
 
+  // Devuelve la duración de un item en ms; si no tiene duración usa 3 minutos como valor por defecto
   private itemDurationMs(item: QueueItem): number {
     return (item.durationMs && item.durationMs > 0) ? item.durationMs : 180_000;
   }
 
-  // Pagos directos desactivados en la UI.
-
+  // Extrae el mensaje de error legible de cualquier tipo de respuesta de error HTTP o excepción
   private pickMsg(e: any): string {
     if (!e) return 'Error';
     const raw = e?.error ?? e?.message ?? e;
